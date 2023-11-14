@@ -1,0 +1,60 @@
+from rest_framework import serializers
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .models import User
+
+from rest_framework.validators import ValidationError
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields=['id', 'email', 'first_name','last_name', 'password', 'profile_img','cover_img','role','is_completed','bio']
+        extra_kwargs={
+            'password':{'write_only':True},
+        }
+
+
+    # def create(self,validated_data):
+
+    #     password=validated_data['password']
+    #     user=super().create(validated_data)
+    #     user.set_password(password)
+    #     user.save()
+    #     return user
+
+
+class UserGoogleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields=['id','email', 'first_name','last_name','role','is_active','is_google']
+        extra_kwargs={
+            'password':{'write_only':True}
+        }
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+
+    def get_token(cls,user):
+        token=super().get_token(user)
+
+        if not user.is_active:
+            raise ValidationError('User is not active', code='inactive_user')
+
+        token['id']=user.id
+        token['email']=user.email
+        token['role']=user.role
+        token['is_active']=user.is_active
+        token['is_completed']=user.is_completed
+
+        return token
+    
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields='__all__'
+        
+
+
+        
+

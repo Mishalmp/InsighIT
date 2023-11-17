@@ -16,6 +16,12 @@ urlpatterns=[
     path('reset-passsword/',ResetPassword.as_view(),name='reset-password'),
     path('updateuser/<int:pk>/',UpdateUser.as_view(),name='updateuser'),
 
+    path('skills/',CreateSkills.as_view(),name='skill-create'),
+    path('skillview/<int:pk>/',SkillView.as_view(),name='skill-view'),
+    path('listskills/<int:user_id>',ListSkills.as_view(),name='list-skills'),
+
+
+
 
 
 ]

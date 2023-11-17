@@ -4,13 +4,14 @@ import Bloggingimg from '../../assets/Computer login-bro.png'
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { UserSignin,UserGoogleSignin,GetUserInfo } from '../../services/UserApi';
+import { GetPremiuminfo } from '../../services/PremiumApi';
 import {jwtDecode} from "jwt-decode";
 import { Loader } from '../../components/Loading/Loader';
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from 'axios';
 import "react-toastify/dist/ReactToastify.css";
 import NavBar from '../../components/Userside/NavBarhome/NavBar';
-import { setUserInfo } from '../../Redux/UserSlice';
+import { setUserInfo,setPremiumUserInfo } from '../../Redux/UserSlice';
 import { useDispatch } from 'react-redux';
 
 
@@ -81,6 +82,7 @@ function LoginPage() {
     try{
       const id =token.id
       const res=await GetUserInfo(id)
+      
       const data={
         id:res.data.id,
         first_name:res.data.first_name,
@@ -91,10 +93,17 @@ function LoginPage() {
         is_google:res.data.is_google,
         bio:res.data.bio,
         profile_img:res.data.profile_img,
-        cover_img:res.data.cover_img
+        cover_img:res.data.cover_img,
+        tag_name:res.data.tag_name,
+        is_premium:res.data.is_premium
       }
       dispatch(setUserInfo({
         userinfo:data
+      }))
+      const pre=await GetPremiuminfo(id)
+      console.log(pre.data,'premium dataa');
+      dispatch(setPremiumUserInfo({
+        premiumuserinfo:pre.data
       }))
       console.log(Userinfo,'userinfo')
     

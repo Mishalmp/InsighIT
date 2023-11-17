@@ -15,7 +15,7 @@ import Blogdetail from "../pages/User/Blogs/Blogdetail"
 import MyBlogs from "../pages/User/Blogs/MyBlogs"
 import EditBlog from "../pages/User/Blogs/EditBlog"
 import Dummy from "../pages/User/Blogs/Dummy"
-import ProfileUser from "../pages/User/Profile/ProfileUser"
+import Upgradationform from "../pages/PremiumUser.jsx/Upgradationform"
 function UserRoutes() {
     
 
@@ -38,9 +38,10 @@ function UserRoutes() {
             <Route path="usercreateblog" element={<UserBlogCreate/>}/>
             <Route path="detailblog/:blogId" element={<Blogdetail/>}/>
             <Route path="myblogs/:userId" element={<MyBlogs/>}/>
-            <Route path="editblog/:blogId" element={<EditBlog/>}/>ProfileUser
+            <Route path="editblog/:blogId" element={<EditBlog/>}/>
             <Route path="dummy/" element={<Dummy/>}/>
-            <Route path="profile/" element={<ProfileUser/>}/>
+            <Route path="upgradeform/" element={<Upgradationform/>}/>
+          
             
         </Route>
         
@@ -49,4 +50,4 @@ function UserRoutes() {
     )
 }
 
-export default UserRoutes
+export default UserRoutes   

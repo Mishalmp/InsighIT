@@ -44,5 +44,18 @@ const UpdateUser=(id,value)=>{
     )
 }
 
+const CreateSkill=(values)=>{
+    return UserAxiosInstant.post("accounts/skills/",values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
 
-export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser}
+const ListSkills=(user_id)=>{
+    return UserAxiosInstant.get(`accounts/listskills/${user_id}`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+
+
+export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills}

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   userinfo: {},
+  premiumuserinfo: null,
 };
 
 const userSlice = createSlice({
@@ -11,8 +12,12 @@ const userSlice = createSlice({
     setUserInfo: (state, action) => {
       state.userinfo = action.payload.userinfo;
     },
+    setPremiumUserInfo: (state, action) => {
+      state.premiumuserinfo = action.payload.premiumuserinfo;
+    },
     LogoutDetails: (state, action) => {
       state.userinfo = {};
+      state.premiumuserinfo=null;
     },
     setUpdateInfo:(state,action)=>{
         state.userinfo={
@@ -23,5 +28,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUserInfo, LogoutDetails,setUpdateInfo } = userSlice.actions;
+export const { setUserInfo, LogoutDetails,setUpdateInfo,setPremiumUserInfo } = userSlice.actions;
 export default userSlice.reducer;

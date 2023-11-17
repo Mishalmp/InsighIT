@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { accountsapi,adminapi,blogsapi } from "../constants/constants";
+import { accountsapi,adminapi,blogsapi,premiumapi } from "../constants/constants";
 
 
 const CreateAxiosClient=(baseURL)=>{
@@ -16,7 +16,7 @@ const CreateAxiosClient=(baseURL)=>{
 const attachToken=(req,tokenName)=>{
     let authToken = localStorage.getItem(tokenName.access)
     if (authToken){
-        req.headers.Authorization=`Bearer${authToken}`;
+        req.headers.Authorization=`Bearer ${authToken}`;
     }
     return req
 }
@@ -40,4 +40,10 @@ BlogsAxiosInstant.interceptors.request.use(async(req)=>{
     return modifiedReq
 })
 
-export {UserAxiosInstant,AdminAxiosInstant,BlogsAxiosInstant}
+const PremiumAxiosInstant=CreateAxiosClient(premiumapi)
+PremiumAxiosInstant.interceptors.request.use(async(req)=>{
+    const modifiedReq=attachToken(req,'token')
+    return modifiedReq
+})
+
+export {UserAxiosInstant,AdminAxiosInstant,BlogsAxiosInstant,PremiumAxiosInstant}

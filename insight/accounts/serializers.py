@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import User
+from .models import *
 
 from rest_framework.validators import ValidationError
 
@@ -9,7 +9,7 @@ from rest_framework.validators import ValidationError
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
-        fields=['id', 'email', 'first_name','last_name', 'password', 'profile_img','cover_img','role','is_completed','bio']
+        fields=['id', 'email', 'first_name','last_name', 'password', 'profile_img','cover_img','role','is_completed','bio','tag_name']
         extra_kwargs={
             'password':{'write_only':True},
         }
@@ -57,4 +57,9 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
         
+
+class SkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Skills
+        fields='__all__'
 

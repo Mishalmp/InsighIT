@@ -98,7 +98,7 @@ class BlogsByUserListView(ListAPIView):
     search_fields = ['title', 'topic__topic']
     filterset_fields = ['user_id'] 
     
-
+    
     def get_queryset(self):
         queryset = Blogs.objects.all().order_by('-created_at')
         user_id = self.kwargs.get('user_id')

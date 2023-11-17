@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../../components/Userside/NavBar/NavBar";
 import Footer from "../../../components/Userside/footer/footer";
-import userico from "../../../assets/userico.png";
+
 import EditIcon from "@mui/icons-material/Edit";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import Styled from "@emotion/styled";
+import "react-toastify/dist/ReactToastify.css";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Crown from "../../../assets/Userprofile/crown.png";
@@ -14,6 +15,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Progress } from "@material-tailwind/react";
+import { ToastContainer, toast } from "react-toastify";
 import {
   Card,
   CardHeader,
@@ -23,6 +25,15 @@ import {
   Tooltip,
   Alert,
   Avatar,
+  Slider,
+} from "@material-tailwind/react";
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  IconButton,
 } from "@material-tailwind/react";
 import {
   Tabs,
@@ -31,33 +42,43 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import {
   Square3Stack3DIcon,
   UserCircleIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
+import { Input, Checkbox } from "@material-tailwind/react";
 import { Loader } from "../../../components/Loading/Loader";
 import { useSelector, useDispatch } from "react-redux";
 import { setUpdateInfo } from "../../../Redux/UserSlice";
-import { UpdateUser } from "../../../services/UserApi";
+import { UpdateUser, CreateSkill, ListSkills } from "../../../services/UserApi";
+import { Link } from "react-router-dom";
 
 function UserProfile() {
   const { userinfo } = useSelector((state) => state.user);
-
+  const { premiumuserinfo } = useSelector((state) => state.user);
+  const [skills, setSkills] = useState([]);
   //   console.log(userinfo, "ddddddddddd");
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (userinfo) {
-        // console.log(userinfo, "successsss");
-      } else {
-        // console.log("mooonji");
+    const fetchskills = async () => {
+      try {
+        const response = await ListSkills(userinfo.id);
+        setSkills(response.data);
+        console.log(skills, response.data, "silslslslslssl");
+      } catch (error) {
+        console.error("error ! couldn't fectch skills ", error);
       }
     };
-    fetchUserInfo();
+
+    fetchskills();
   }, [userinfo]);
+
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const handleloading = () => setLoading((cur) => !cur);
+  const [opencover, setOpencover] = useState(false);
+  const handleOpen = () => setOpencover((cur) => !cur);
 
   const handlecoverimgUpload = async (file) => {
     handleloading();
@@ -108,6 +129,55 @@ function UserProfile() {
     }
   };
 
+  const [bio, setBio] = useState("");
+  const [aboutopen, setaboutOpen] = useState(false);
+  const handleaboutOpen = () => setaboutOpen((cur) => !cur);
+
+  const Handlesavebio = async () => {
+    try {
+      const response = await UpdateUser(userinfo.id, { bio });
+      console.log(response.data);
+      toast.success("bio updated succussfully");
+
+      dispatch(
+        setUpdateInfo({
+          updatedData: {
+            userinfo: { bio: response.data.bio },
+          },
+        })
+      );
+      // handleloading()
+      setaboutOpen(false);
+    } catch (error) {
+      // handleloading()
+      console.error(error);
+    }
+  };
+
+  const [skillopen, setskillOpen] = useState(false);
+  const [skill, setSkill] = useState({ skill: "", rateofskills: 0 });
+  const handleskillopen = () => setskillOpen((cur) => !cur);
+
+  const [skilleditopen, setskilleditopen] = useState(false);
+  const handleskilleditopen = () => setskilleditopen((cur) => !cur);
+
+  const HandleSkillSubmit = async () => {
+    console.log(skill, "skiiiiiiiiiiilllllllll");
+
+    const user_id = userinfo.id;
+    const skillData = { ...skill, user_id };
+    try {
+      const response = CreateSkill(skillData);
+      console.log(response.data);
+      toast.success("Blog created succussfully!");
+      // handleloading()
+      setskillOpen(false);
+    } catch (error) {
+      console.error("error occured during skill creation", error);
+      toast.error("Error occured during skill creation");
+    }
+  };
+
   const data = [
     {
       label: "Subscriptions",
@@ -139,28 +209,27 @@ function UserProfile() {
             <div className="w-[30rem]   flex relative">
               {userinfo.cover_img ? (
                 <>
-                <img
-                  className="absolute top-0 left-0 h-48 w-full rounded-lg object-cover object-center"
-                  src={userinfo.cover_img}
-                  alt="Banner img"
+                  <img
+                    className="absolute top-0 left-0 h-48 w-full rounded-lg object-cover object-center"
+                    src={userinfo.cover_img}
+                    alt="Banner img"
                   />
-                      <input
-                      id="dropzone-file"
-                      type="file"
-                      class="hidden"
-                      onChange={(e) => handlecoverimgUpload(e.target.files[0])}
-                    />
-                  </>
-                
+                  <input
+                    id="dropzone-file"
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => handlecoverimgUpload(e.target.files[0])}
+                  />
+                </>
               ) : (
                 <div className="absolute top-0 left-0 mt-2 w-full h-48 flex items-center justify-center">
                   <label
                     htmlFor="dropzone-file"
                     className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                   >
-                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <svg
-                        class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                        className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -174,16 +243,17 @@ function UserProfile() {
                           d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                         />
                       </svg>
-                      <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                        <span class="font-semibold">upload Cover Image</span>{" "}
+                      <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                        <span className="font-semibold">
+                          upload Cover Image
+                        </span>{" "}
                       </p>
                     </div>
-                
 
                     <input
                       id="dropzone-file"
                       type="file"
-                      class="hidden"
+                      className="hidden"
                       onChange={(e) => handlecoverimgUpload(e.target.files[0])}
                     />
                   </label>
@@ -195,6 +265,41 @@ function UserProfile() {
                 onClick={() => document.getElementById("dropzone-file").click()}
               />
             </div>
+            <Dialog size="xl" open={opencover} handler={handleOpen}>
+              <DialogHeader className="justify-between">
+                <div className="flex items-center gap-3">
+                  <Avatar
+                    size="sm"
+                    variant="circular"
+                    alt="username"
+                    src={userinfo.profile_img}
+                  />
+                  <div className="-mt-px flex flex-col">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-medium"
+                    >
+                      {userinfo.first_name} {userinfo.last_name}
+                    </Typography>
+                    <Typography
+                      variant="small"
+                      color="gray"
+                      className="text-xs font-normal"
+                    >
+                      @{userinfo.first_name}
+                    </Typography>
+                  </div>
+                </div>
+              </DialogHeader>
+              <DialogBody>
+                <img
+                  alt="nature"
+                  className="h-[30rem] w-full rounded-lg object-cover object-center"
+                  src={userinfo.cover_img}
+                />
+              </DialogBody>
+            </Dialog>
 
             <div className="flex relative">
               <CardHeader
@@ -295,156 +400,190 @@ function UserProfile() {
             />
             <CardBody className="text-center relative">
               <Typography variant="h4" color="blue-gray" className="mb-2 ">
-                {userinfo.first_name} {userinfo.last_name} <EditIcon />
+                {userinfo.first_name} {userinfo.last_name}  {userinfo.is_premium && <VerifiedIcon className="-mt-1" color="primary"/>}
               </Typography>
-
-              <Typography
-                className="font-medium w-full text-gray-600"
-                textGradient
-              >
-                Hi my name is {userinfo.first_name}, I am a Python Full Stack
-                Developer and has a passion about tech and productivity among
-                other things.
+              <Typography className="mt-2 font-thin text-lg text-gray-500">
+                {userinfo.tag_name}
               </Typography>
+              <div className="flex gap-6 ml-24 -mb-4">
+                <Typography className="mt-4 font-semibold text-lg text-blue-800">
+                  100 Followers
+                </Typography>
+                <Typography className="mt-4  font-semibold text-lg text-blue-800">
+                  50 Following
+                </Typography>
+              </div>
             </CardBody>
             <CardFooter className="flex justify-center gap-7">
               {/* <span>
             Edit
             </span> */}
-              <InstagramIcon />
+              <InstagramIcon onClick={handleOpen} />
               <GitHubIcon />
               <LinkedInIcon />
+              <Cog6ToothIcon className="w-6 h-6" />
             </CardFooter>
+            
+            {premiumuserinfo &&  premiumuserinfo.is_approved  ? ''
+            :(
+              <Link to="/User/upgradeform/">
+                {" "}
+                <Typography className="mt-4 ml-64 font-thin text-lg text-blue-800">
+                  need to upgrage?
+                </Typography>
+              </Link>
+            )}
           </Card>
 
           <Card className="w-[30rem] m-3 mt-5 bg-gray-100">
             <Typography variant="h5" color="blue-gray" className="m-5 ml-12">
-              Skills <EditIcon />
+              Skills <EditIcon onClick={handleskillopen} />
             </Typography>
 
             <CardBody>
               <ul className="grid grid-cols-2 gap-2">
-                <li className="bg-green-200 w-auto h-[2.5rem] text-center text-blue-900  rounded-md">
-                  Web Developer
-                </li>
-                <li className="bg-green-200 w-auto  h-[2.5rem] text-center text-blue-900  rounded-md">
-                  React Developer
-                </li>
-                <li className="bg-green-200 w-auto  h-[2.5rem] text-center text-blue-900  rounded-md">
-                  UI/UX Design
-                </li>
-                <li className="bg-green-200 w-auto  h-[2.5rem] text-center text-blue-900  rounded-md">
-                  Mobile App Design
+                {skills.map((skill) => (
+                  <li
+                    className="bg-green-200 w-auto  h-[2.5rem] flex justify-center items-center text-blue-900  rounded-md"
+                    onDoubleClick={handleskilleditopen}
+                  >
+                    {skill.skill}
+                  </li>
+                ))}
+                <li
+                  className="bg-green-200 w-auto  h-[2.5rem]  flex justify-center items-center text-blue-900 font-semibold  rounded-md"
+                  onClick={handleskillopen}
+                >
+                  <AddCircleOutlineIcon /> Add Skill
                 </li>
               </ul>
             </CardBody>
           </Card>
-          {/* <Card className="w-[38rem] m-3 overflow-hidden">
-            <CardHeader
-              floated={false}
-              className="h-12 flex gap-12 text-center"
-            >
-              <Typography className="text-2xl font-semibold  ml-36">
-                Subscriptions
-              </Typography>{" "}
-              <CardMembershipIcon />
-            </CardHeader>
+        </div>
+        <Dialog
+          size="xs"
+          open={skilleditopen}
+          // handler={handleaboutOpen}
+          className="bg-transparent shadow-none"
+        >
+          <Card className="mx-auto w-[30rem]">
+            <CardBody className="flex flex-col gap-4">
+              <Typography variant="h4" color="blue-gray">
+                Add Skill
+              </Typography>
 
-            <CardBody className="overflow-y-auto max-h-[20rem]">
-              <div className="text-center flex gap-36 m-6">
-                <Avatar
-                  src="https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg"
-                  alt="user name"
-                  size="sm"
-                />{" "}
-                <span className="flex gap-3">
-                  {" "}
-                  <Typography>First name </Typography>{" "}
-                  <VerifiedIcon color="blue" />
-                </span>{" "}
-                <MoreHorizIcon />
-              </div>
-              <div className="text-center flex gap-36 m-6">
-                <Avatar
-                  src="https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg"
-                  alt="user name"
-                  size="sm"
-                />{" "}
-                <span className="flex gap-3">
-                  {" "}
-                  <Typography>First name </Typography>{" "}
-                  <VerifiedIcon color="blue" />
-                </span>{" "}
-                <MoreHorizIcon />
-              </div>
-              <div className="text-center flex gap-36 m-6">
-                <Avatar
-                  src="https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg"
-                  alt="user name"
-                  size="sm"
-                />{" "}
-                <span className="flex gap-3">
-                  {" "}
-                  <Typography>First name </Typography>{" "}
-                  <VerifiedIcon color="blue" />
-                </span>{" "}
-                <MoreHorizIcon />
-              </div>
-              <div className="text-center flex gap-36 m-6">
-                <Avatar
-                  src="https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg"
-                  alt="user name"
-                  size="sm"
-                />{" "}
-                <span className="flex gap-3">
-                  {" "}
-                  <Typography>First name </Typography>{" "}
-                  <VerifiedIcon color="blue" />
-                </span>{" "}
-                <MoreHorizIcon />
-              </div>
-              <div className="text-center flex gap-36 m-6">
-                <Avatar
-                  src="https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg"
-                  alt="user name"
-                  size="sm"
-                />{" "}
-                <span className="flex gap-3">
-                  {" "}
-                  <Typography>First name </Typography>{" "}
-                  <VerifiedIcon color="blue" />
-                </span>{" "}
-                <MoreHorizIcon />
-              </div>
-              <div className="text-center flex gap-36 m-6">
-                <Avatar
-                  src="https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg"
-                  alt="user name"
-                  size="sm"
-                />{" "}
-                <span className="flex gap-3">
-                  {" "}
-                  <Typography>First name </Typography>{" "}
-                  <VerifiedIcon color="blue" />
-                </span>{" "}
-                <MoreHorizIcon />
-              </div>
-              <div className="text-center flex gap-36 m-6">
-                <Avatar
-                  src="https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg"
-                  alt="user name"
-                  size="sm"
-                />{" "}
-                <span className="flex gap-3">
-                  {" "}
-                  <Typography>First name </Typography>{" "}
-                  <VerifiedIcon color="blue" />
-                </span>{" "}
-                <MoreHorizIcon />
+              <Typography className="-mb-2" variant="h6">
+                Skill Name
+              </Typography>
+              <Input
+                label="skill"
+                name="skill"
+                value={skill.skill}
+                size="lg"
+                onChange={(e) => {
+                  setSkill({ ...skill, [e.target.name]: e.target.value });
+                }}
+              />
+
+              <Typography className="-mb-2" variant="h6">
+                Skill Rating
+              </Typography>
+              <div className="w-96 mb-3">
+                <Slider
+                  color="black"
+                  Value={skill.rateofskills}
+                  name="rateofskills"
+                  onChange={(e) => {
+                    setSkill({
+                      ...skill,
+                      ["rateofskills"]: parseInt(e.target.value),
+                    });
+                  }}
+                />
               </div>
             </CardBody>
-          </Card> */}
-        </div>
+            <CardFooter className="pt-0">
+              <Button variant="gradient" fullWidth>
+                Save
+              </Button>
+              <Typography variant="small" className="mt-4 flex justify-center">
+                <Typography
+                  as="a"
+                  href="#signup"
+                  variant="small"
+                  color="black"
+                  className="ml-1 font-bold"
+                  onClick={handleskilleditopen}
+                >
+                  Don't Save
+                </Typography>
+              </Typography>
+            </CardFooter>
+          </Card>
+        </Dialog>
+
+        <Dialog
+          size="xs"
+          open={skillopen}
+          // handler={handleaboutOpen}
+          className="bg-transparent shadow-none"
+        >
+          <Card className="mx-auto w-[30rem]">
+            <CardBody className="flex flex-col gap-4">
+              <Typography variant="h4" color="blue-gray">
+                Add Skill
+              </Typography>
+
+              <Typography className="-mb-2" variant="h6">
+                Skill Name
+              </Typography>
+              <Input
+                label="skill"
+                name="skill"
+                value={skill.skill}
+                size="lg"
+                onChange={(e) => {
+                  setSkill({ ...skill, [e.target.name]: e.target.value });
+                }}
+              />
+
+              <Typography className="-mb-2" variant="h6">
+                Skill Rating
+              </Typography>
+              <div className="w-96 mb-3">
+                <Slider
+                  color="black"
+                  Value={skill.rateofskills}
+                  name="rateofskills"
+                  onChange={(e) => {
+                    setSkill({
+                      ...skill,
+                      ["rateofskills"]: parseInt(e.target.value),
+                    });
+                  }}
+                />
+              </div>
+            </CardBody>
+            <CardFooter className="pt-0">
+              <Button variant="gradient" onClick={HandleSkillSubmit} fullWidth>
+                Save
+              </Button>
+              <Typography variant="small" className="mt-4 flex justify-center">
+                <Typography
+                  as="a"
+                  href="#signup"
+                  variant="small"
+                  color="black"
+                  className="ml-1 font-bold"
+                  onClick={handleskillopen}
+                >
+                  Don't Save
+                </Typography>
+              </Typography>
+            </CardFooter>
+          </Card>
+        </Dialog>
+
         <div className="w-[60rem] ml-5 h-[50rem] bg-white">
           <div className="">
             <Tabs value="profile" className="mt-5 mr-20">
@@ -469,19 +608,14 @@ function UserProfile() {
                         color="blue-gray"
                         className="m-5 ml-10"
                       >
-                        About Me <EditIcon />
+                        About Me <EditIcon onClick={handleaboutOpen} />
                       </Typography>
 
                       <Typography
-                        className="font-medium max-w-2xl ml-10 text-gray-600 container"
+                        className="text-md max-w-2xl ml-10 text-gray-600 container"
                         textGradient
                       >
-                        Hi my name is {userinfo.first_name}, I am a Python Full
-                        Stack Developer and has a passion about tech and
-                        productivity among other things. Developer and has a
-                        passion about tech and productivity among other things.
-                        has a passion about tech and productivity among other
-                        things.
+                        {userinfo.bio}
                       </Typography>
                       <div className="grid grid-cols-2">
                         <div>
@@ -513,38 +647,64 @@ function UserProfile() {
                             3 years experience in web development
                           </Typography>
                         </div>
-
-                        <div className="mb-10">
-                          <Typography
-                            variant="h6"
-                            className="m-5 ml-10  text-gray-600"
-                          >
-                            Education :
-                          </Typography>
-                          <Typography
-                            className="font-medium max-w-2xl ml-10 -mt-2 text-gray-600 container"
-                            textGradient
-                          >
-                            Bachelors in Computer Application
-                          </Typography>
-                        </div>
-
-                        <div>
-                          <Typography
-                            variant="h6"
-                            className="m-5 ml-10  text-gray-600"
-                          >
-                            Work Experience :
-                          </Typography>
-                          <Typography
-                            className="font-medium  max-w-2xl ml-10 -mt-2 text-gray-600 container"
-                            textGradient
-                          >
-                            3 years experience in web development
-                          </Typography>
-                        </div>
                       </div>
                     </Card>
+                    <Dialog
+                      size="xs"
+                      open={aboutopen}
+                      // handler={handleaboutOpen}
+                      className="bg-transparent shadow-none"
+                    >
+                      <Card className="mx-auto w-[30rem]">
+                        <CardBody className="flex flex-col gap-4">
+                          <Typography variant="h4" color="blue-gray">
+                            About Me
+                          </Typography>
+
+                          <Typography className="-mb-2" variant="h6">
+                            Your Bio (Max 30 words)
+                          </Typography>
+                          <textarea
+                            name="bio"
+                            placeholder={bio ? { bio } : "write your bio..."}
+                            value={bio}
+                            // defaultValue={bio}
+                            id=""
+                            cols="30"
+                            rows="5"
+                            onChange={(e) => setBio(e.target.value)}
+                          ></textarea>
+
+                          {/* <div className="-ml-2.5 -mt-3">
+                            <Checkbox label="Remember Me" />
+                          </div> */}
+                        </CardBody>
+                        <CardFooter className="pt-0">
+                          <Button
+                            variant="gradient"
+                            onClick={Handlesavebio}
+                            fullWidth
+                          >
+                            Save
+                          </Button>
+                          <Typography
+                            variant="small"
+                            className="mt-4 flex justify-center"
+                          >
+                            <Typography
+                              as="a"
+                              href="#Aboutme"
+                              variant="small"
+                              color="black"
+                              className="ml-1 font-bold"
+                              onClick={handleaboutOpen}
+                            >
+                              Don't Save
+                            </Typography>
+                          </Typography>
+                        </CardFooter>
+                      </Card>
+                    </Dialog>
 
                     <Card className="w-[50rem] h-auto mt-5 bg-gray-100">
                       <Typography
@@ -552,31 +712,21 @@ function UserProfile() {
                         color="blue-gray"
                         className="m-5 ml-10"
                       >
-                        Skills <EditIcon />
+                        Skills Ratings
                       </Typography>
-                      <div className="max-w-2xl ml-10 mb-10">
-                        <div className="mb-2 flex items-center justify-between gap-4">
-                          <Typography color="blue-gray" variant="h6">
-                            Web Developer
-                          </Typography>
-                          <Typography color="blue-gray" variant="h6">
-                            50%
-                          </Typography>
+                      {skills.map((skill) => (
+                        <div className="max-w-2xl ml-10 mb-10">
+                          <div className="mb-2 flex items-center justify-between gap-4">
+                            <Typography color="blue-gray" variant="h6">
+                              {skill.skill}
+                            </Typography>
+                            <Typography color="blue-gray" variant="h6">
+                              {skill.rateofskills}%
+                            </Typography>
+                          </div>
+                          <Progress value={skill.rateofskills} />
                         </div>
-                        <Progress value={50} />
-                      </div>
-
-                      <div className="max-w-2xl ml-10 mb-10">
-                        <div className="mb-2 flex items-center justify-between gap-4">
-                          <Typography color="blue-gray" variant="h6">
-                            UI/UX Designer
-                          </Typography>
-                          <Typography color="blue-gray" variant="h6">
-                            50%
-                          </Typography>
-                        </div>
-                        <Progress value={50} />
-                      </div>
+                      ))}
                     </Card>
                   </TabPanel>
                 ))}

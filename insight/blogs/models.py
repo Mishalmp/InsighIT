@@ -22,6 +22,7 @@ class Blogs(models.Model):
     video_post=models.FileField(upload_to='blog_video/',null=True,blank=True)
     is_block=models.BooleanField(default=False)
     likes=models.IntegerField(default=0)
+    is_premium=models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     updated_at = models.DateTimeField(default=timezone.now, editable=False)
 

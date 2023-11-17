@@ -36,14 +36,13 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     USER_TYPE=(
         ('user','user'),
-        ('author','Author'),
         ('admin','Admin'),
     )
     
 
     first_name=models.CharField(max_length=200,null=True)
     last_name=models.CharField(max_length=200,null=True)
-    # username = models.CharField(max_length=150, unique=True)
+    username = models.CharField(max_length=150, unique=False)
     email=models.EmailField(max_length=250,unique=True)
     
     profile_img=models.ImageField(upload_to='user_profile_img/',blank=True,null=True)
@@ -53,9 +52,41 @@ class User(AbstractUser):
     is_google=models.BooleanField(default=False)
     is_completed=models.BooleanField(default=False)
     bio=models.TextField(max_length=500,null=True)
+    tag_name=models.CharField(max_length=50,default='He/She')
+    is_premium=models.BooleanField(default=False)
 
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['role']
 
     objects=CustomUserManager()
+
+
+
+class Skills(models.Model):
+    user_id=models.ForeignKey(User,on_delete=models.CASCADE)
+    skill=models.CharField(max_length=100)
+    rateofskills=models.IntegerField(default=0)
+
+
+class PremiumUserInfo(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    subscription_price = models.DecimalField(max_digits=10, decimal_places=2, default=50)
+    pan_number = models.CharField(max_length=10)
+    bank_name=models.CharField(max_length=100,default='sbi')
+    linkedin_url=models.CharField(max_length=100,default='skdcbkasbckaskcxbk')
+    account_number = models.CharField(max_length=20)
+    ifsc_code = models.CharField(max_length=20)
+    is_approved=models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.email
+
+class Qualifications(models.Model):
+    premium_user = models.ForeignKey(PremiumUserInfo, on_delete=models.CASCADE)
+    qualifications = models.CharField(max_length=100,null=True)
+
+class Experiences(models.Model):
+    premium_user = models.ForeignKey(PremiumUserInfo, on_delete=models.CASCADE)
+    experience = models.CharField(max_length=200,null=True)

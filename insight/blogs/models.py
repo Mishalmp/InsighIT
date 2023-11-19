@@ -22,9 +22,24 @@ class Blogs(models.Model):
     video_post=models.FileField(upload_to='blog_video/',null=True,blank=True)
     is_block=models.BooleanField(default=False)
     likes=models.IntegerField(default=0)
-    is_premium=models.BooleanField(default=False)
+    is_premium_blog=models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     updated_at = models.DateTimeField(default=timezone.now, editable=False)
 
     def __str__(self):
         return self.title
+    
+
+class Comments(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    blog=models.ForeignKey(Blogs,on_delete=models.CASCADE,related_name='comments')
+    parent_comment=models.ForeignKey('self',on_delete=models.CASCADE,null=True,blank=True,related_name='replies')
+    content=models.TextField()
+    likes=models.IntegerField(default=0)
+    created_at=models.DateTimeField(default=timezone.now,editable=False)
+    updated_at=models.DateTimeField(default=timezone.now,editable=False)
+
+    def __str__(self):
+        return f"Comment by {self.user.first_name} on {self.blog.title}"
+    
+        

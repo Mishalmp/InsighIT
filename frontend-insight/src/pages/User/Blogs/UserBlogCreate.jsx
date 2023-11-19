@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Input } from "@material-tailwind/react";
-import { Card, Typography, Button } from "@material-tailwind/react";
+import { Card, Typography, Button,Checkbox  } from "@material-tailwind/react";
 import { Select, Option } from "@material-tailwind/react";
 import { CreateBlog, GetTopics } from "../../../services/BlogsApi";
 import { useSelector } from "react-redux";
@@ -26,6 +26,7 @@ function UserBlogCreate() {
   const [loading,setLoading]=useState(false)
   const [imageFile, setImageFile] = useState(null);
   const [videoFile, setVideoFile] = useState(null);
+  const [ispremium,setisPremium]=useState(false)
   const navigate=useNavigate()
   const handleLoading=()=>setLoading((cur)=>!cur)
 
@@ -61,11 +62,12 @@ function UserBlogCreate() {
     formData.append("topic",selectTopic)
     formData.append("banner_img",imageFile)
     formData.append("video_post",videoFile)
+    formData.append("is_premium",ispremium)
 
     try {
       console.log(blogvalues, "blogvalues");
       const response = await CreateBlog(formData);
-      console.log("Blog created successfully");
+      console.log("Blog created successfully",response.data);
       toast.success("Blog created successfully")
       navigate("/User/blogs")
     } catch (error) {
@@ -88,7 +90,7 @@ function UserBlogCreate() {
       <ToastContainer  />
       <NavBar/>
       <Typography className="text-center font-semibold text-2xl -ml-24 mt-10">Write Blog</Typography>
-      <Card className="w-[60rem] h-[60rem] m-10 ml-[15%] bg-gray-50">
+      <Card className="w-[60rem]  m-10 ml-[15%] bg-gray-50">
         <Typography className="text-center font-semibold mt-4">Title </Typography>
         <div className="flex flex-col w-[70%] ml-[15%] gap-6">
           <Input
@@ -202,7 +204,14 @@ function UserBlogCreate() {
             onChange={handleVideoChange}
           />
         </div>
-        <Button className="mt-6 w-[60%] ml-[20%]" onClick={handleBlogSubmit}>
+        {userinfo.is_premium && 
+
+          <div className="mt-10 mb-10 ml-[10%] flex">
+          
+        <Checkbox defaultValue={ispremium} onClick={(e)=>setisPremium(!ispremium)}/><Typography className="mt-2">Premium Blog </Typography>
+        </div>
+        }
+        <Button className="mt-6 w-[60%] mb-10 ml-[20%]" onClick={handleBlogSubmit}>
           Submit Blog
         </Button>
       </Card>

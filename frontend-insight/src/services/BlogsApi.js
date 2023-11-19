@@ -65,4 +65,23 @@ const GetTopics=()=>{
 }
 
 
-export {CreateBlog,GetBlogDetail,GetBlogsByTopic,ListBlogs,GetBlogsByUser,CreateTopics,GetTopics,TrendingBlogs,UpdateBlog,DeleteBlog}
+const CreateComment=(values)=>{
+    return BlogsAxiosInstant.post("/commentslistcreate/",values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const ListComment=(blog_id)=>{
+    return BlogsAxiosInstant.get(`/commentslist/${blog_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const DeleteComment=(id)=>{
+    return BlogsAxiosInstant.delete(`/comment-retrieve-destroy/${id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+
+export {CreateBlog,GetBlogDetail,GetBlogsByTopic,ListBlogs,GetBlogsByUser,CreateTopics,GetTopics,TrendingBlogs,UpdateBlog,DeleteBlog,CreateComment,ListComment,DeleteComment}

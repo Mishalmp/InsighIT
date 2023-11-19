@@ -16,6 +16,8 @@ import MyBlogs from "../pages/User/Blogs/MyBlogs"
 import EditBlog from "../pages/User/Blogs/EditBlog"
 import Dummy from "../pages/User/Blogs/Dummy"
 import Upgradationform from "../pages/PremiumUser.jsx/Upgradationform"
+import Bloghidepage from "../components/premiumuser/premiumBlog/Bloghidepage"
+import Commentlist from "../components/Comment/commentlist"
 function UserRoutes() {
     
 
@@ -39,7 +41,7 @@ function UserRoutes() {
             <Route path="detailblog/:blogId" element={<Blogdetail/>}/>
             <Route path="myblogs/:userId" element={<MyBlogs/>}/>
             <Route path="editblog/:blogId" element={<EditBlog/>}/>
-            <Route path="dummy/" element={<Dummy/>}/>
+            <Route path="dummy/" element={<Commentlist/>}/>
             <Route path="upgradeform/" element={<Upgradationform/>}/>
           
             

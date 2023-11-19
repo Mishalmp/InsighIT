@@ -16,9 +16,9 @@ import IosShareIcon from '@mui/icons-material/IosShare';
 import CommentIcon from '@mui/icons-material/Comment';
 import { Breadcrumbs } from "@material-tailwind/react";
 import { Link } from 'react-router-dom';
+import VerifiedIcon from "@mui/icons-material/Verified";
 
-
-
+import StarRateIcon from '@mui/icons-material/StarRate';
 
 function timeAgo(date) {
   const now = new Date();
@@ -58,12 +58,14 @@ function Blogcard({
   blog_image,
   topic,
   likes,
-  profile_img
+  profile_img,
+  is_premium_blog,
+  user_premium
 }) {
   const createdAtAgo = timeAgo(date);
   const blogDetailUrl = `/User/detailblog/${id}/`;
   
-
+  console.log(user_premium,'premiummm')
 
   return (
     <>
@@ -79,9 +81,9 @@ function Blogcard({
         
     
     <div className='mt-3 flex gap-10'>
-    <p className='font-semibold text-lg'>{author}</p>
+    <p className='font-semibold text-lg'>{author}</p>{user_premium && <VerifiedIcon color='primary'/>}
 
-    <p className='text-gray-700'>{createdAtAgo}</p>
+    <p className='text-gray-700'>{createdAtAgo}</p> {is_premium_blog && <StarRateIcon color='warning'/>}
 
     </div>
     
@@ -133,6 +135,7 @@ function Blogcard({
 </ul>
 
 </div>
+<Typography color='blue-gray' className='ml-20 font-serif font-semibold mb-3'>By Premium Author</Typography>
 
   </Card >
   </Link>

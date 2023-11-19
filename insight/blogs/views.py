@@ -98,7 +98,7 @@ class BlogsByUserListView(ListAPIView):
     search_fields = ['title', 'topic__topic']
     filterset_fields = ['user_id'] 
     
-    
+
     def get_queryset(self):
         queryset = Blogs.objects.all().order_by('-created_at')
         user_id = self.kwargs.get('user_id')
@@ -107,3 +107,27 @@ class BlogsByUserListView(ListAPIView):
             queryset = queryset.filter(user_id=user_id)
 
         return queryset
+    
+
+
+
+class CommentCreate(ListCreateAPIView):
+    queryset=Comments.objects.all()
+    serializer_class=CommentCreateSerializer
+
+
+class ListComments(ListAPIView):
+    serializer_class=CommentSerializer
+
+    def get_queryset(self):
+        
+        blogid=self.kwargs.get('blog')
+        queryset=Comments.objects.filter(blog=blogid).order_by('-created_at')
+
+        return queryset
+
+class CommentRetrieveDestroy(RetrieveUpdateDestroyAPIView):
+
+    queryset=Comments.objects.all()
+    serializer_class=CommentSerializer
+    

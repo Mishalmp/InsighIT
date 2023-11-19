@@ -29,3 +29,18 @@ class CreateSerializer(serializers.ModelSerializer):
 
    
     # topic = serializers.ReadOnlyField(source='topic.topic')
+
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    user=UserSerializer(required=False)
+    class Meta:
+        model=Comments
+        fields='__all__'
+
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+   
+    class Meta:
+        model=Comments
+        fields='__all__'

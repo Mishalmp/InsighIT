@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Loader } from '../../../components/Loading/Loader';
 import NavBar from "../../../components/Userside/NavBar/NavBar";
 import Footer from "../../../components/Userside/footer/footer";
-
+import Commentlist from "../../../components/Comment/commentlist";
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -99,7 +99,9 @@ function Blogdetail() {
 
     const createdAtAgo = timeAgo(blog.created_at);
     const isAuthor = userinfo.id == blog.user_id.id;
-    console.log(isAuthor,userinfo.id,blog.user_id.id,'iseadfadsfa');
+    // console.log(isAuthor,userinfo.id,blog.user_id.id,'iseadfadsfa');
+    // console.log(blog.is_premium_blog,'premiummmmmmmmmmmmm')
+    // console.log(userinfo,'useree')
 
 
     const handleEdit =()=>{
@@ -259,7 +261,8 @@ function Blogdetail() {
     </video>
     
   </Card>
-  <Commentpost/>
+  <Commentlist blogId={blogId} isAuthor={isAuthor}/>
+  
   <Footer/>
   </>
   )

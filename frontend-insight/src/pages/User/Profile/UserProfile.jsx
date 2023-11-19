@@ -203,7 +203,7 @@ function UserProfile() {
       {loading && <Loader />}
       <NavBar />
       <div className="flex ml-12 mt-[1rem]  max-w-[80rem] ">
-        <div className="w-[40rem] h-[50rem] mt-8 bg-white">
+        <div className="w-[40rem] min-h-[50rem] mt-8 bg-white">
           {/* <Alert color="amber">A simple alert for showing message.</Alert> */}
           <Card className="w-[30rem]  m-3 -mt-2.5 bg-gray-100">
             <div className="w-[30rem]   flex relative">

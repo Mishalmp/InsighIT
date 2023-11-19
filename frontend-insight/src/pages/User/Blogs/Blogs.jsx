@@ -86,6 +86,7 @@ function Blogs() {
         key={blog.id}
         id={blog.id}
         profile_img={blog.user_id.profile_img}
+        user_premium={blog.user_id.is_premium}
         author={blog.user_id.first_name}
         date={blog.created_at}
         title={blog.title}
@@ -93,6 +94,7 @@ function Blogs() {
         blog_image={blog.banner_img}
         topic={blog.topic.topic}
         likes={blog.likes}
+        is_premium_blog={blog.is_premium_blog}
         />
       ))
 

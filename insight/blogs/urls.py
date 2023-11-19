@@ -12,4 +12,8 @@ urlpatterns = [
     path('blogs/by-topic/<int:topic>/', BlogsByTopicListView.as_view(), name='blogs-by-topic'),
 
     path('blogs/by-user/<int:user_id>/', BlogsByUserListView.as_view(), name='blogs-by-user'),
+    path('commentslistcreate/',CommentCreate.as_view(),name='comments-list-create'),
+    path('commentslist/<int:blog>/',ListComments.as_view(),name='comments-list'),
+    path('comment-retrieve-destroy/<int:pk>/',CommentRetrieveDestroy.as_view(),name='comment-retrieve-destroy'),
+    
 ]

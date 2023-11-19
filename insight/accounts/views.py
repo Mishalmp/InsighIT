@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-
+from django.conf import settings
 
 
 class SingleUserInfo(RetrieveUpdateDestroyAPIView):
@@ -38,3 +38,41 @@ class ListSkills(ListAPIView):
 class SkillView(RetrieveUpdateDestroyAPIView):
     queryset=Skills.objects.all()
     serializer_class=SkillSerializer
+
+
+
+#----------------payment STRIPE------------------------------
+
+#! /usr/bin/env python3.6
+
+
+
+# import stripe
+
+# # This is your test secret API key.
+# stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+
+# class StripeCheckoutView(APIView):
+#     def post(self,request):
+#         try:
+#             checkout_session = stripe.checkout.Session.create(
+#                 line_items=[
+#                     {
+                         
+#                         'price': '{{PRICE_ID}}',
+#                         'quantity': 1,
+#                     },
+#                 ],
+#                 mode='payment',
+#                 success_url=YOUR_DOMAIN + '?success=true',
+#                 cancel_url=YOUR_DOMAIN + '?canceled=true',
+#             )
+#         except Exception as e:
+#             return str(e)
+
+#         return redirect(checkout_session.url, code=303)
+
+# if __name__ == '__main__':
+#     app.run(port=4242)

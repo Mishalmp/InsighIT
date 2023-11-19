@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { CreatepremiumUserinfo } from "../../services/PremiumApi";
 import { setPremiumUserInfo } from "../../Redux/UserSlice";
 
-function Upgradation1stForm({ onNext }) {
+function Upgradation1stForm({ onNext}) {
   const { userinfo } = useSelector((state) => state.user);
   const dispatch=useDispatch()
 
@@ -28,18 +28,18 @@ function Upgradation1stForm({ onNext }) {
     // for (let pair of formData.entries()) {
     //   console.log(pair[0] + ': ' + pair[1]);
     // }
-    try {
-      const response = await CreatepremiumUserinfo(formData);
-      console.log(response.data, "resadsa");
-      dispatch(setPremiumUserInfo({
-        premiumuserinfo:response.data
-      }))
+    // try {
+      // const response = await CreatepremiumUserinfo(formData);
+      // console.log(response.data, "resadsa");
+      // dispatch(setPremiumUserInfo({
+      //   premiumuserinfo:response.data
+      // }))
 
-    } catch (error) {
-      console.error("error!", error);
-    }
+    // } catch (error) {
+    //   console.error("error!", error);
+    // }
 
-    onNext();
+    onNext(formData);
   };
 
   return (

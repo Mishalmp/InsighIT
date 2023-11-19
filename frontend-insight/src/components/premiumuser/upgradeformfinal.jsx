@@ -16,32 +16,55 @@ import { useSelector, useDispatch } from "react-redux";
 import { CreateExperiences,CreateQualifications } from "../../services/PremiumApi";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
+import { CreatepremiumUserinfo } from "../../services/PremiumApi";
+import { setPremiumUserInfo } from "../../Redux/UserSlice";
 import "react-toastify/dist/ReactToastify.css";
-function Upgradeformfinal({ onBack }) {
+function Upgradeformfinal({ onBack,formData }) {
 
   const {premiumuserinfo}=useSelector((state)=>state.user);
   const navigate=useNavigate()
-
+  const dispatch=useDispatch()
   const [qualifications, setQualifications] = useState("");
   const [experience, setExperiences] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try{
-      const quali_res=await CreateQualifications({
-        premium_user:premiumuserinfo.id,
-        qualifications:qualifications
-      });
 
-      const exp_res=await CreateExperiences({
-        premium_user:premiumuserinfo.id,
-        experience:experience
-      })
-      console.log(quali_res.data,'qaaali')
-      console.log(exp_res.data,'exppppp')
-      toast.success("Record Submitted Successfully")
-      
+      if (formData){
+        const response = await CreatepremiumUserinfo(formData);
+        console.log(response.data, "resadsa");
+
+        if (response.status === 201){
+          dispatch(setPremiumUserInfo({
+            premiumuserinfo:response.data
+          }))
+
+        }
+
+
+        const quali_res=await CreateQualifications({
+          premium_user:premiumuserinfo.id,
+          qualifications:qualifications
+        });
+  
+        const exp_res=await CreateExperiences({
+          premium_user:premiumuserinfo.id,
+          experience:experience
+        })
+        console.log(quali_res.data,'qaaali')
+        console.log(exp_res.data,'exppppp')
+        toast.success("Record Submitted Successfully")
+        
+
+      }else{
+        toast.error("form empty")
+        console.log("nothing in form")
+      }
+
+     
+
+     
     }catch(error){
       console.error("error",error)
       toast.error("error occured while submitting!!")

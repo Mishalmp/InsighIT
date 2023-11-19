@@ -10,8 +10,11 @@ import { useSelector, useDispatch } from "react-redux";
 function Upgradationform() {
   const { premiumuserinfo } = useSelector((state) => state.user);
   const [currentStep, setCurrentStep] = useState(1);
+  const [premiumUserInfo, setPremiumUserInfo] = useState(null);
 
-  const handleNext = () => {
+  const handleNext = (FormData) => {
+    setPremiumUserInfo(FormData)
+
     setCurrentStep(currentStep + 1);
   };
 
@@ -35,7 +38,7 @@ function Upgradationform() {
           )}
 
           {currentStep === 2 && (
-            <Upgradeformfinal onBack={handleBack} />
+            <Upgradeformfinal onBack={handleBack} formData={premiumUserInfo} />
           )}
         </>
       )}

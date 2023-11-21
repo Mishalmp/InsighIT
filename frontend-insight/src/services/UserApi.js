@@ -63,5 +63,15 @@ const Checkoutsession=(pre_id)=>{
 
 }
 
+const NotificationCreate=(values)=>{
+    return UserAxiosInstant.post("accounts/notifications/",values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
 
-export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,Checkoutsession}
+const Notificationsbyuser=(user_id)=>{
+    return UserAxiosInstant.get(`accounts/listnotification/${user_id}/`)
+}
+
+
+export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,NotificationCreate,Checkoutsession,Notificationsbyuser}

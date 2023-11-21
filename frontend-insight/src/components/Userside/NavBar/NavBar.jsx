@@ -12,7 +12,8 @@ import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import {LogoutDetails} from '../../../Redux/UserSlice'
 import { useDispatch,useSelector } from "react-redux";
 import NewspaperIcon from '@mui/icons-material/Newspaper';
-
+import NotificationDrawer from '../../NotificationDrawer/NotificationDrawer';
+import { Loader } from '../../../components/Loading/Loader';
 import {
 
   ChevronDownIcon,
@@ -25,7 +26,7 @@ import {
   MenuHandler,
   MenuList,
   MenuItem,
-  Avatar,
+  Avatar,Badge
 
 } from "@material-tailwind/react";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -33,6 +34,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import HelpIcon from '@mui/icons-material/Help';
 import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 const profileMenuItems = [
   {
     label: "My Profile",
@@ -47,6 +49,10 @@ const profileMenuItems = [
     icon: SettingsIcon,
   },
 
+  {
+    label: "Notifications",
+    icon:NotificationsActiveIcon, 
+  },
   {
     label: "Inbox",
     icon: MoveToInboxIcon,
@@ -67,11 +73,17 @@ const profileMenuItems = [
 function NavBar() {
     const [toggle,setToggle]=useState(false)
     const { userinfo } = useSelector((state) => state.user);
+    const [loading,setLoading]=useState(false)
+    const handleLoading=()=>setLoading((cur)=>!cur)
+
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
  
     const closeMenu = () => setIsMenuOpen(false);
     const navigate=useNavigate()
+
+    const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState(false);
+
 
     const dispatch=useDispatch()
     const Signout=()=>{
@@ -79,6 +91,12 @@ function NavBar() {
         localStorage.removeItem("token")
         navigate("/login/")
     }
+
+    const handleOpenNotificationDrawer = () => {
+      handleLoading()
+      setIsNotificationDrawerOpen(true);
+      closeMenu(); 
+    };
 
   return (
 
@@ -131,7 +149,7 @@ function NavBar() {
             className="border border-gray-900 p-0.5"
             src={userinfo.profile_img}
           />
-          
+
           <ChevronDownIcon
             strokeWidth={2.5}
             className={`h-3 w-3 transition-transform ${
@@ -154,6 +172,10 @@ function NavBar() {
               navigate(`/User/myblogs/${userinfo.id}`)
             }else if (label === 'Sign Out'){
               Signout()
+            }else if (label === 'Notifications'){
+              handleOpenNotificationDrawer()
+
+
             }
           }
           return (
@@ -182,6 +204,7 @@ function NavBar() {
           );
         })}
       </MenuList>
+      <NotificationDrawer isOpen={isNotificationDrawerOpen} userinfo={userinfo} onClose={() => setIsNotificationDrawerOpen(false)} />
     </Menu>
   </ul>
 

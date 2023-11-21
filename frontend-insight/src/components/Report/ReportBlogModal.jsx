@@ -9,7 +9,7 @@ import {
   } from "@material-tailwind/react";
   import { timeAgo } from '../../helpers/Timemanage';
   import { UpdateBlog,Reportupdate } from '../../services/BlogsApi';
-
+import { NotificationCreate } from '../../services/UserApi';
 
 
 function ReportBlogModal({ isOpen, onClose, report }) {
@@ -20,10 +20,18 @@ function ReportBlogModal({ isOpen, onClose, report }) {
       }
 
       const handleSubmit=async()=>{
+        const values={
+            user:report.blog.user_id.id,
+            text:"Your Blog is Blocked/Unblocked due to ...",
+
+
+        }
+        console.log(values,'notification values');
         try {
             const updatedBlog = await UpdateBlog(report.blog.id, { is_block: !report.blog.is_block });
             // const updatereport=await Reportupdate(report.id,{is_solved:!!report.is_block})
-
+            const notification=await NotificationCreate(values)
+            console.log(notification,'norififii');
 
             setIsBlocking(updatedBlog.data.is_block);
             onClose()

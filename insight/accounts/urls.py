@@ -19,6 +19,8 @@ urlpatterns=[
     path('skills/',CreateSkills.as_view(),name='skill-create'),
     path('skillview/<int:pk>/',SkillView.as_view(),name='skill-view'),
     path('listskills/<int:user_id>',ListSkills.as_view(),name='list-skills'),
+    path('notifications/',NotificationsListCreate.as_view(),name="notifications"),
+    path('listnotification/<int:user_id>/',Notificationbyuser.as_view(),name='notificationbyuser'),
 
 
 

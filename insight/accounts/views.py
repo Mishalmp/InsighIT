@@ -55,6 +55,18 @@ class SkillView(RetrieveUpdateDestroyAPIView):
     serializer_class=SkillSerializer
 
 
+class NotificationsListCreate(ListCreateAPIView):
+    queryset=Notifications.objects.all()
+    serializer_class=NotificationSerializer
+
+class Notificationbyuser(ListAPIView):
+    serializer_class=NotificationSerializer
+
+    def get_queryset(self):
+        user_id=self.kwargs.get('user_id')
+        queryset=Notifications.objects.filter(user=user_id,is_read=False)
+
+        return queryset
 
 #----------------payment STRIPE------------------------------
 

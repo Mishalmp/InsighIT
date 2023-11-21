@@ -64,4 +64,3 @@ class Report_blog(models.Model):
 
 
 
-        

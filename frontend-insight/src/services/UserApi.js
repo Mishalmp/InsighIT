@@ -56,6 +56,12 @@ const ListSkills=(user_id)=>{
     }).catch((error)=>error.response)
 }
 
+const Checkoutsession=(pre_id)=>{
+    return UserAxiosInstant.post(`accounts/create-checkout-session/${pre_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+
+}
 
 
-export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills}
+export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,Checkoutsession}

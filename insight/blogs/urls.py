@@ -15,5 +15,10 @@ urlpatterns = [
     path('commentslistcreate/',CommentCreate.as_view(),name='comments-list-create'),
     path('commentslist/<int:blog>/',ListComments.as_view(),name='comments-list'),
     path('comment-retrieve-destroy/<int:pk>/',CommentRetrieveDestroy.as_view(),name='comment-retrieve-destroy'),
+    path('likes/',LikeCreateView.as_view(),name='like-blog'),
+    path('likeview/',LikeView.as_view(),name='unlike-blog'),
+    path('reportblogs/',ReportListCreate.as_view(),name='reportblogs'),
+    path('reportbloglist/',ReportListView.as_view(),name='reportslist'),
+    path('reportview/<int:pk>/',ReportBlogview.as_view(),name='reportview')
     
 ]

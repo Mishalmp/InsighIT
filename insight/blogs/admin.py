@@ -4,3 +4,5 @@ from .models import *
 
 admin.site.register(Topics)
 admin.site.register(Blogs)
+admin.site.register(Report_blog)
+admin.site.register(Like)

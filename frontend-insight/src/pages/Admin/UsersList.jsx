@@ -239,7 +239,7 @@ const handlePageClick = (selectedPage) => {
 
                       <td className={classes} >
                         <Tooltip content="Edit User">
-                          <IconButton variant="text" style={{ width: "200px" }}>
+                          <Button variant="text" style={{ width: "200px" }}>
                             {/* <PencilIcon className="h-4 w-4" /> */}
                             {user.is_active ? (
                               <NotificationModal
@@ -271,7 +271,7 @@ const handlePageClick = (selectedPage) => {
                                 }}
                               />
                             )}
-                          </IconButton>
+                          </Button>
                         </Tooltip>
                       </td>
                     </tr>

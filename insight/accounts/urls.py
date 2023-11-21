@@ -22,6 +22,11 @@ urlpatterns=[
 
 
 
+    path('create-checkout-session/<int:pk>/',CreateCheckoutSessionView.as_view(),name='checkout-session'),
+    path('webhook/',stripe_webhook_view,name='web_hook'),
+
+
+
 
 
 ]

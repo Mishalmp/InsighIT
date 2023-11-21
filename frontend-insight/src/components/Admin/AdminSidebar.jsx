@@ -11,7 +11,10 @@ import {
   AccordionHeader,
   AccordionBody,
   Alert,
+ 
 } from "@material-tailwind/react";
+
+import ReportIcon from "@mui/icons-material/Report";
 import {
   PresentationChartBarIcon,
   ShoppingBagIcon,
@@ -149,6 +152,12 @@ export default function AdminSidebar() {
             <Cog6ToothIcon className="h-5 w-5" />
           </ListItemPrefix>
           Settings
+        </ListItem>
+        <ListItem onClick={()=>navigate('/admin/blogreports/')}>
+          <ListItemPrefix>
+            <ReportIcon className="h-5 w-5" />
+          </ListItemPrefix>
+         Blog Reports 
         </ListItem>
         <ListItem onClick={Signout}>
           <ListItemPrefix>

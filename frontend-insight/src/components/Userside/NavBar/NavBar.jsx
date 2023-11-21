@@ -100,7 +100,7 @@ function NavBar() {
           />
           <Button
             size="sm"
-            color="black"
+            color="blue-gray"
             className="rounded-lg ml-1"
           >
             Search
@@ -131,6 +131,7 @@ function NavBar() {
             className="border border-gray-900 p-0.5"
             src={userinfo.profile_img}
           />
+          
           <ChevronDownIcon
             strokeWidth={2.5}
             className={`h-3 w-3 transition-transform ${

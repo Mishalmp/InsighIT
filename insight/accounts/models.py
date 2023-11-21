@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
 # Create your models here.
 
-
+from django.utils import timezone
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -70,7 +70,7 @@ class Skills(models.Model):
 
 
 class PremiumUserInfo(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name='premiumuserinfo')
     
     subscription_price = models.DecimalField(max_digits=10, decimal_places=2, default=50)
     pan_number = models.CharField(max_length=10)
@@ -90,3 +90,25 @@ class Qualifications(models.Model):
 class Experiences(models.Model):
     premium_user = models.ForeignKey(PremiumUserInfo, on_delete=models.CASCADE)
     experience = models.CharField(max_length=200,null=True)
+
+
+class Subscription(models.Model):
+    SUBSCRIPTION_CHOICES=[
+        ('monthly','Monthly'),
+        ('yearly','Yearly'),
+    ]
+
+    SUBSCRIPTION_TYPE=[
+        ('basic','Basic'),
+        ('premium','Premium'),
+    ]
+
+    subscriber=models.ForeignKey(User,related_name='subscriptions',on_delete=models.CASCADE)
+    subscribed_to=models.ForeignKey(User,related_name='subscribers',on_delete=models.CASCADE)
+    subscription_time=models.CharField(max_length=10,choices=SUBSCRIPTION_CHOICES)
+    subscription_type=models.CharField(max_length=10,choices=SUBSCRIPTION_TYPE)
+    is_active=models.BooleanField(default=False)
+    created_at=models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.subscriber.first_name} subscribes to {self.subscribed_to.first_name} ({self.subscription_type} - {self.subscription_time})"

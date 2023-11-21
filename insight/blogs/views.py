@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView,ListAPIView
 
@@ -55,7 +56,7 @@ class BlogsListCreateView(ListCreateAPIView):
 from django.db.models import Q
 class ListBlogsView(ListAPIView):
     
-    queryset=Blogs.objects.all().order_by('-created_at')
+    queryset=Blogs.objects.filter(is_block=False).order_by('-created_at')
     serializer_class=Blogserializer
     filter_backends = [SearchFilter]
     search_fields=['title']
@@ -126,8 +127,77 @@ class ListComments(ListAPIView):
 
         return queryset
 
+
 class CommentRetrieveDestroy(RetrieveUpdateDestroyAPIView):
 
     queryset=Comments.objects.all()
     serializer_class=CommentSerializer
-    
+
+from django.db.models import F
+class LikeCreateView(ListCreateAPIView):
+    queryset=Like.objects.all()
+    serializer_class=LikeCreateSerializer
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+
+        
+        blog_id = request.data.get('blog')
+        Blogs.objects.filter(id=blog_id).update(likes=F('likes') + 1)
+
+        liked = True 
+        return JsonResponse({'detail': 'Liked successfully.', 'liked': liked}, status=201)
+
+
+class LikeView(RetrieveUpdateDestroyAPIView):
+    serializer_class=LikeCreateSerializer
+    queryset=Like.objects.all()
+
+    def delete(self, request, *args, **kwargs):
+        
+        blog_id=request.data.get('blog')
+        user_id=request.data.get('user')
+
+        like=Like.objects.filter(blog=blog_id,user=user_id).first()
+
+        if like:
+            like.delete()
+            Blogs.objects.filter(id=blog_id).update(likes=F('likes') - 1)
+            liked = False  
+            return JsonResponse({'detail': 'Unliked successfully.', 'liked': liked}, status=200)
+        else:
+            return JsonResponse({'detail': 'Like not found.'}, status=404)
+   
+        
+    def get(self, request, *args, **kwargs):
+
+        blog_id = request.GET.get('blog')
+        user_id = request.GET.get('user')
+        
+        print(blog_id,user_id,'inpuuuuuuuuuuuuutsssssss')
+        like=Like.objects.filter(blog=blog_id,user=user_id).first()
+        print(like,'liiiiiiiiiiiikeeeeeeeeeeeee')
+
+        if like:
+            liked=True
+        else:
+            liked=False
+        print(liked,'likeeeeed')
+        return JsonResponse({'detail': 'like fetched successfully.', 'liked': liked}, status=200)
+
+
+class ReportListCreate(ListCreateAPIView):
+    queryset=Report_blog.objects.all()
+    serializer_class=ReportBlogSerializer
+
+class ReportListView(ListAPIView):
+    # queryset=Report_blog.objects.all()
+    serializer_class=ReportListSerializer
+
+    def get_queryset(self):
+        queryset=Report_blog.objects.all().order_by('-reported_at')
+        return queryset
+        
+class ReportBlogview(RetrieveUpdateDestroyAPIView):
+    queryset=Report_blog.objects.all()
+    serializer_class=ReportBlogSerializer

@@ -83,5 +83,44 @@ const DeleteComment=(id)=>{
     }).catch((error)=>error.response)
 }
 
+const LikeBlog=(values)=>{
+    return BlogsAxiosInstant.post("/likes/",values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
 
-export {CreateBlog,GetBlogDetail,GetBlogsByTopic,ListBlogs,GetBlogsByUser,CreateTopics,GetTopics,TrendingBlogs,UpdateBlog,DeleteBlog,CreateComment,ListComment,DeleteComment}
+}
+
+const UnlikeBlog=(values)=>{
+    
+    return BlogsAxiosInstant.delete(`/likeview/`,{ data: values },{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const GetBlogLike=(blogId,userId)=>{
+    return BlogsAxiosInstant.get(`/likeview/?blog=${blogId}&user=${userId}`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const ReportBlogs=(values)=>{
+    return BlogsAxiosInstant.post("/reportblogs/",values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+
+const ReportBlogList=()=>{
+    return BlogsAxiosInstant.get("/reportbloglist/",{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const Reportupdate=(id,values)=>{
+    return BlogsAxiosInstant.patch(`/reportview/${id}`,values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+
+export {CreateBlog,GetBlogDetail,GetBlogsByTopic,ListBlogs,GetBlogsByUser,CreateTopics,GetTopics,TrendingBlogs,UpdateBlog,DeleteBlog,CreateComment,ListComment,DeleteComment,LikeBlog,UnlikeBlog,GetBlogLike,ReportBlogs,ReportBlogList,Reportupdate}

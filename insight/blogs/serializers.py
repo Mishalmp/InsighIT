@@ -44,3 +44,25 @@ class CommentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model=Comments
         fields='__all__'
+
+
+class LikeCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Like
+        fields='__all__'
+
+
+class ReportBlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Report_blog
+        fields='__all__'
+
+class ReportListSerializer(serializers.ModelSerializer):
+    user=UserSerializer(required=False)
+    blog=Blogserializer(required=False)
+    class Meta:
+        model=Report_blog
+        fields='__all__'
+        
+
+

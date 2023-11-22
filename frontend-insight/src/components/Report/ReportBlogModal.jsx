@@ -22,8 +22,7 @@ function ReportBlogModal({ isOpen, onClose, report }) {
       const handleSubmit=async()=>{
         const values={
             user:report.blog.user_id.id,
-            text:"Your Blog is Blocked/Unblocked due to ...",
-
+            text:`Your Blog is Blocked/Unblocked due to ${report.reason}`,
 
         }
         console.log(values,'notification values');

@@ -135,7 +135,12 @@ function Blogcard({
 </ul>
 
 </div>
-<Typography color='blue-gray' className='ml-20 font-serif font-semibold mb-3'>By Premium Author</Typography>
+{
+  is_premium_blog ?(
+    <Typography color='blue-gray' className='ml-20 font-serif font-semibold mb-3'>By Premium Author</Typography>
+  ):""
+}
+
 
   </Card >
   </Link>

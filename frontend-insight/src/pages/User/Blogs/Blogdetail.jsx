@@ -25,6 +25,7 @@ import { Rating } from "@material-tailwind/react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import Bloghidepage from "../../../components/premiumuser/premiumBlog/Bloghidepage";
 import {
   Menu,
   MenuHandler,
@@ -38,6 +39,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ReportIcon from "@mui/icons-material/Report";
 import Report from "../../../components/Report/Report";
 import DeleteModal from "../../../components/Modal/Blog/DeleteModal";
+import { IsSubscriber } from "../../../services/UserApi";
+
 
 function timeAgo(date) {
   const now = new Date();
@@ -76,6 +79,9 @@ function Blogdetail() {
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  const [isContentVisible, setIsContentVisible] = useState(true);
+
+
   const handleOpenReportDialog = () => {
     setIsReportDialogOpen(true);
   };
@@ -102,10 +108,22 @@ function Blogdetail() {
         console.log(response.data, "response data");
         setBlog(response.data);
 
+        if (userinfo.id !== response.data.user_id.id && response.data.is_premium_blog) {
+          const res_ponse = await IsSubscriber(userinfo.id,response.data.user_id.id)
+          
+          console.log(res_ponse,'response is content visible');
+          if (!res_ponse.data.is_subscriber){
+            setIsContentVisible(false)
+
+          }
+         
+          }
+
         const like_res = await GetBlogLike(blogId, userinfo.id);
 
         setIsLiked(like_res.data.liked);
         console.log(like_res, "like-resssdata");
+
       } catch (error) {
         console.error("error! fetching blog", error);
       }
@@ -206,7 +224,10 @@ function Blogdetail() {
           Blog Detail
         </Typography>
       </div>
-      <Card className="w-[60rem] m-20 ml-[15%]">
+
+      {isContentVisible ?(
+        <>
+          <Card className="w-[60rem] m-20 ml-[15%]">
         <Typography className="text-3xl font-semibold text-center mb-6">
           {blog.title}
         </Typography>
@@ -357,6 +378,14 @@ function Blogdetail() {
         </video>
       </Card>
       <Commentlist blogId={blogId} isAuthor={isAuthor} />
+        </>
+
+      ):(
+        <Bloghidepage user_id={userinfo.id} author_id={blog.user_id.id} />
+      )
+
+      }
+    
 
       <Footer />
     </>

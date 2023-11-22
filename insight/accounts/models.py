@@ -72,7 +72,10 @@ class Skills(models.Model):
 class PremiumUserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,related_name='premiumuserinfo')
     
-    subscription_price = models.DecimalField(max_digits=10, decimal_places=2, default=50)
+    subscription_price_basic = models.DecimalField(max_digits=10, decimal_places=2, default=50)
+    subscription_price_std = models.DecimalField(max_digits=10, decimal_places=2, default=75)
+    sub_price_basic_yr = models.DecimalField(max_digits=10, decimal_places=2, default=250)
+    sub_price_std_yr = models.DecimalField(max_digits=10, decimal_places=2, default=350)
     pan_number = models.CharField(max_length=10)
     bank_name=models.CharField(max_length=100,default='sbi')
     linkedin_url=models.CharField(max_length=100,default='skdcbkasbckaskcxbk')
@@ -93,25 +96,24 @@ class Experiences(models.Model):
 
 
 class Subscription(models.Model):
-    SUBSCRIPTION_CHOICES=[
-        ('monthly','Monthly'),
-        ('yearly','Yearly'),
-    ]
-
+  
     SUBSCRIPTION_TYPE=[
-        ('basic','Basic'),
-        ('premium','Premium'),
+        ('basic_monthly','Basic_monthly'),
+        ('basic_yearly','Basic_yearly'),
+        ('standard_monthly','Standard_monthly'),
+        ('standard_yearly','Standard_yearly'),
+
     ]
 
     subscriber=models.ForeignKey(User,related_name='subscriptions',on_delete=models.CASCADE)
     subscribed_to=models.ForeignKey(User,related_name='subscribers',on_delete=models.CASCADE)
-    subscription_time=models.CharField(max_length=10,choices=SUBSCRIPTION_CHOICES)
-    subscription_type=models.CharField(max_length=10,choices=SUBSCRIPTION_TYPE)
+    subscription_type=models.CharField(max_length=30,choices=SUBSCRIPTION_TYPE)
     is_active=models.BooleanField(default=False)
-    created_at=models.DateTimeField(default=timezone.now)
+    start_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.subscriber.first_name} subscribes to {self.subscribed_to.first_name} ({self.subscription_type} - {self.subscription_time})"
+        return f"{self.subscriber.first_name} subscribes to {self.subscribed_to.first_name} ({self.subscription_type}"
 
 
 class Notifications(models.Model):
@@ -123,4 +125,3 @@ class Notifications(models.Model):
     def __str__(self):
 
         return self.text
-        

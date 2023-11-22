@@ -64,66 +64,54 @@ class Notificationbyuser(ListAPIView):
 
     def get_queryset(self):
         user_id=self.kwargs.get('user_id')
-        queryset=Notifications.objects.filter(user=user_id,is_read=False)
+        queryset=Notifications.objects.filter(user=user_id,is_read=False).order_by('-created_at')
 
         return queryset
 
+class SubscriptionList(ListCreateAPIView):
+    queryset=Subscription.objects.all()
+    serializer_class=SubscriptionSerializer
+
+
+class IsSubscriber(APIView):
+
+    def get(self,request,user_id,blog_author, *args, **kwargs):
+        print(user_id,blog_author,'is subscriberrrrrrr')
+        try:
+            is_subscriber=Subscription.objects.filter(subscriber=user_id,subscribed_to=blog_author,is_active=True).exists()
+
+            return Response({"is_subscriber":is_subscriber},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"message":str(e) }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    
+
 #----------------payment STRIPE------------------------------
-
-#! /usr/bin/env python3.6
-
-
-
-# import stripe
-
-# # This is your test secret API key.
-# stripe.api_key = settings.STRIPE_SECRET_KEY
-
-
-
-# class StripeCheckoutView(APIView):
-#     def post(self,request):
-#         try:
-#             checkout_session = stripe.checkout.Session.create(
-#                 line_items=[
-#                     {
-                         
-#                         'price': '{{PRICE_ID}}',
-#                         'quantity': 1,
-#                     },
-#                 ],
-#                 mode='payment',
-#                 success_url=YOUR_DOMAIN + '?success=true',
-#                 cancel_url=YOUR_DOMAIN + '?canceled=true',
-#             )
-#         except Exception as e:
-#             return str(e)
-
-#         return redirect(checkout_session.url, code=303)
-
-# if __name__ == '__main__':
-#     app.run(port=4242)
-
-
-
 
 # @method_decorator(csrf_exempt, name='dispatch')
 class CreateCheckoutSessionView(APIView):
     def post(self, request, *args, **kwargs):
-        pre_id=self.kwargs['pk']
-        print('1111111111',pre_id)
+
+        author=self.request.data['author_id']
+        pre_author=User.objects.get(id=author)
+        
         try:
-            pre_user=User.objects.get(id=pre_id)
-            print('222222222',pre_user.premiumuserinfo.subscription_price)
+            subscription_data = {
+                'subscriber': self.request.data['user_id'],
+                'subscribed_to': self.request.data['author_id'],
+                'subscription_type':self.request.data['subscription_type'],  
+                'is_active': True,
+            }
+
             checkout_session=stripe.checkout.Session.create(
                 line_items=[
                     {
                         'price_data':{
                         'currency':'INR',
-                        'unit_amount':int(pre_user.premiumuserinfo.subscription_price)*100,
+                        'unit_amount':int(self.request.data['price'])*100,
                         'product_data':{
-                            'name':pre_user.first_name,
-                            # 'images':pre_user.profile_img.url,
+                            'name':pre_author.first_name+' '+pre_author.last_name,
+                            # 'images':pre_author.profile_img,
                         }
                         },
                         'quantity':1
@@ -132,26 +120,28 @@ class CreateCheckoutSessionView(APIView):
                     
                 ],
                 mode='payment',
-                # metadata={
-                #     'pre_id':pre_user.id
-                # },
-                success_url=SITE_URL+'?success=true',
-                cancel_url=SITE_URL+'?cancel=true'
+            
+                success_url = f"{self.request.data['origin_site']}?success=true&subscriber={self.request.data['user_id']}&subscribed_to={self.request.data['author_id']}&subscription_type={self.request.data['subscription_type']}"
+,
+                cancel_url=self.request.data['origin_site']+'?cancel=true'
             )
-            print('333333',checkout_session)
-            return redirect(checkout_session.url)
+
+            
+
+            # print('333333',checkout_session)
+            return Response({ "message" : checkout_session },status= status.HTTP_200_OK)
 
 
         except Exception as e:
-            return Response({'msg': 'Something went wrong while creating a Stripe session', 'error': str(e)}, status=500)
+            return Response({ "message" : str(e)},status= status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@csrf_exempt
-def stripe_webhook_view(request):
+# @csrf_exempt
+# def stripe_webhook_view(request):
 
-    payload=request.body
+#     payload=request.body
 
-    return HttpResponse(status=200)
+#     return HttpResponse(status=200)
 
      
 

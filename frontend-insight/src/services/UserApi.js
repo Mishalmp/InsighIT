@@ -56,8 +56,8 @@ const ListSkills=(user_id)=>{
     }).catch((error)=>error.response)
 }
 
-const Checkoutsession=(pre_id)=>{
-    return UserAxiosInstant.post(`accounts/create-checkout-session/${pre_id}/`,{
+const Checkoutsession=(data)=>{
+    return UserAxiosInstant.post(`accounts/create-checkout-session/`,data,{
         withCredentials:true
     }).catch((error)=>error.response)
 
@@ -70,8 +70,19 @@ const NotificationCreate=(values)=>{
 }
 
 const Notificationsbyuser=(user_id)=>{
-    return UserAxiosInstant.get(`accounts/listnotification/${user_id}/`)
+    return UserAxiosInstant.get(`accounts/listnotification/${user_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
 }
 
+const CreateSubscription=(data)=>{
+    return UserAxiosInstant.post("accounts/subscriptions/",data,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
 
-export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,NotificationCreate,Checkoutsession,Notificationsbyuser}
+const IsSubscriber=(user_id,blog_author)=>{
+    return UserAxiosInstant.get(`accounts/isSubscriber/${user_id}/${blog_author}/`)
+}
+
+export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,NotificationCreate,Checkoutsession,Notificationsbyuser,CreateSubscription,IsSubscriber}

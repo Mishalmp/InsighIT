@@ -27,7 +27,7 @@ class PremiuminfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = PremiumUserInfo
         fields = [
-            'id', 'user', 'subscription_price', 'pan_number', 'account_number','bank_name','linkedin_url',
+            'id', 'user', 'subscription_price_basic','subscription_price_std','sub_price_basic_yr','sub_price_std_yr','pan_number', 'account_number','bank_name','linkedin_url',
             'ifsc_code', 'is_approved', 'experiences','qualifications'
         ]
 

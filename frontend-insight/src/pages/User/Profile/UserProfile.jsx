@@ -198,11 +198,12 @@ function UserProfile() {
       desc: ``,
     },
   ];
+  
   return (
     <div className="">
       {loading && <Loader />}
       <NavBar />
-      <div className="flex ml-12 mt-[1rem]  max-w-[80rem] ">
+      <div className="flex ml-12 mt-[1rem] h-auto  max-w-[80rem] ">
         <div className="w-[40rem] min-h-[50rem] mt-8 bg-white">
           {/* <Alert color="amber">A simple alert for showing message.</Alert> */}
           <Card className="w-[30rem]  m-3 -mt-2.5 bg-gray-100">
@@ -584,7 +585,7 @@ function UserProfile() {
           </Card>
         </Dialog>
 
-        <div className="w-[60rem] ml-5 h-[50rem] bg-white">
+        <div className="w-[60rem] ml-5 min-h-[50rem] bg-white">
           <div className="">
             <Tabs value="profile" className="mt-5 mr-20">
               <TabsHeader>

@@ -20,6 +20,7 @@ import Bloghidepage from "../components/premiumuser/premiumBlog/Bloghidepage"
 import Commentlist from "../components/Comment/commentlist"
 import Checkoutsession from "../components/premiumuser/payment/checkoutsession"
 import Report from "../components/Report/Report"
+import Paymentresult from "../components/Payment/Paymentresult"
 function UserRoutes() {
     
 
@@ -43,8 +44,8 @@ function UserRoutes() {
             <Route path="detailblog/:blogId" element={<Blogdetail/>}/>
             <Route path="myblogs/:userId" element={<MyBlogs/>}/>
             <Route path="editblog/:blogId" element={<EditBlog/>}/>
-            {/* <Route path="dummy/" element={<Commentlist/>}/> */}
-            <Route path="dummy/" element={<Checkoutsession/>}/>
+            <Route path="dummy/" element={<Bloghidepage/>}/>
+            <Route path="result/" element={<Paymentresult/>}/>
             <Route path="upgradeform/" element={<Upgradationform/>}/>
           
             

@@ -79,6 +79,7 @@ function MyBlogs() {
               blog_image={blog.banner_img}
               topic={blog.topic.topic}
               likes={blog.likes}
+              is_premium_blog={blog.is_premium_blog}
             />
           ))}
         </div>

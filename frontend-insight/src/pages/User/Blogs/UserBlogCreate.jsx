@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Loader } from '../../../components/Loading/Loader';
+import { UploadfileGif } from "../../../components/Loading/UploadfileGif";
 import NavBar from "../../../components/Userside/NavBar/NavBar";
 import Footer from "../../../components/Userside/footer/footer";
 import { useNavigate } from "react-router-dom";
@@ -54,7 +55,7 @@ function UserBlogCreate() {
       user_id: userinfo.id,
       topic: selectTopic,
     };
-
+    console.log(ispremium,'premiumasdadsads');
     const formData=new FormData()
     formData.append("title",title)
     formData.append("content",value)
@@ -62,7 +63,7 @@ function UserBlogCreate() {
     formData.append("topic",selectTopic)
     formData.append("banner_img",imageFile)
     formData.append("video_post",videoFile)
-    formData.append("is_premium",ispremium)
+    formData.append("is_premium_blog",ispremium)
 
     try {
       console.log(blogvalues, "blogvalues");
@@ -86,7 +87,7 @@ function UserBlogCreate() {
 
   return (
     <>
-     {loading && <Loader/>}
+     {loading && <UploadfileGif/>}
       <ToastContainer  />
       <NavBar/>
       <Typography className="text-center font-semibold text-2xl -ml-24 mt-10">Write Blog</Typography>
@@ -208,7 +209,7 @@ function UserBlogCreate() {
 
           <div className="mt-10 mb-10 ml-[10%] flex">
           
-        <Checkbox defaultValue={ispremium} onClick={(e)=>setisPremium(!ispremium)}/><Typography className="mt-2">Premium Blog </Typography>
+        <Checkbox defaultValue={ispremium}  onClick={(e)=>setisPremium(!ispremium)}/><Typography className="mt-2">Premium Blog </Typography>
         </div>
         }
         <Button className="mt-6 w-[60%] mb-10 ml-[20%]" onClick={handleBlogSubmit}>

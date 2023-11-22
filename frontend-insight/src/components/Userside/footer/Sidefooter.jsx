@@ -25,7 +25,7 @@ function Sidefooter() {
      
     const currentYear = new Date().getFullYear();
   return (
-    <div className='w-[28rem] float-right ml-[15%] h-full overflow-y-auto rounded-lg m-3 mt-10 bg-[#474747] text-white'>
+    <div className='w-[20rem] float-right ml-[20rem] h-full overflow-y-auto rounded-lg m-3 mt-10 bg-[#474747] text-white'>
     <footer className="relative w-full">
       <div className="mx-auto w-full max-w-7xl px-8">
         <div className="mx-auto flex-col w-full grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-4">
@@ -53,14 +53,8 @@ function Sidefooter() {
             </div>
           ))}
         </div>
-        <div className="flex w-full flex-col items-center justify-center border-t border-white py-4 md:flex-row md:justify-between">
-          <Typography
-            variant="small"
-            className="mb-4 text-center font-normal text-white md:mb-0"
-          >
-            &copy; {currentYear} <a href="https://material-tailwind.com/">Material Tailwind</a>. All
-            Rights Reserved.
-          </Typography>
+        <div className="w-full flex-col items-center justify-center border-t border-white py-4 md:flex-row md:justify-between">
+         
           <div className="flex gap-4 text-white sm:justify-center">
             <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100">
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -104,6 +98,13 @@ function Sidefooter() {
               </svg>
             </Typography>
           </div>
+          <Typography
+            variant="small"
+            className="mb-4 mt-10 text-center font-normal text-white md:mb-0"
+          >
+            &copy; {currentYear} <a href="https://material-tailwind.com/">Material Tailwind</a>. All
+            Rights Reserved.
+          </Typography>
         </div>
       </div>
     </footer>

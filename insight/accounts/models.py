@@ -114,6 +114,16 @@ class Subscription(models.Model):
 
     def __str__(self):
         return f"{self.subscriber.first_name} subscribes to {self.subscribed_to.first_name} ({self.subscription_type}"
+    
+
+    def save(self,*args,**kwargs):
+
+        if self.end_time and self.end_time <= timezone.now():
+            self.is_active=False
+        
+        super().save(*args,**kwargs)
+
+
 
 
 class Notifications(models.Model):

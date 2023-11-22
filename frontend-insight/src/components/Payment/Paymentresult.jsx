@@ -27,6 +27,26 @@ function Paymentresult() {
         const handleSubscriptioncreate=async()=>{
             if(isSuccess){
 
+                const sub_type=searchparams.get('subscription_type')
+                const currentdate= new Date()
+                
+                let endDate;
+
+                if (sub_type === 'basic_monthly' || sub_type === 'standard_monthly'){
+
+                    endDate = new Date(currentdate);
+                    endDate.setMonth(currentdate.getMonth() + 1);
+
+                }else if (sub_type === 'basic_yearly' || sub_type === 'standard_yearly'){
+
+                    endDate=new Date(currentdate)
+                    endDate.setFullYear(currentdate.getFullYear() + 1);
+
+
+                }else{
+                    throw new error('invalid subscription type')
+                }
+
                 try {
                     await CreateSubscription({
 
@@ -34,6 +54,7 @@ function Paymentresult() {
                         subscribed_to:searchparams.get('subscribed_to'),
                         subscription_type:searchparams.get('subscription_type'),
                         is_active:true,
+                        end_time:endDate,
                    
                     })
                    

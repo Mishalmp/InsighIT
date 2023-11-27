@@ -51,12 +51,12 @@ function ForgotPassword() {
                     accountsapi+"accounts/forgotpassword/",form
                 )
 
-                toast.success(response.data.message)
+                toast.success("Email has been sent !!")
                 navigate("/login/")
                 localStorage.setItem("user_id",response.data.user_id)
                 setForm({email:''})
-            }catch{
-                toast.error(response.data.message)
+            }catch(error) {
+                toast.error("Account not Found")
             }
             return true
         }

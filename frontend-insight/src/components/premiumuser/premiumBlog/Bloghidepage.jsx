@@ -98,6 +98,7 @@ function Bloghidepage({user_id,author_id}) {
       "author_id" : author_id,
       "price" : parseInt(amount),
       'subscription_type':subscription,
+      'subscription_amount':parseInt(amount),
       "origin_site" : window.location.origin+'/User/result/',
     }
     console.log(data,'checkout data aaaaaaa');

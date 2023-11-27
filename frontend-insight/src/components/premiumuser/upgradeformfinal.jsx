@@ -19,11 +19,29 @@ import { ToastContainer, toast } from "react-toastify";
 import { CreatepremiumUserinfo } from "../../services/PremiumApi";
 import { setPremiumUserInfo } from "../../Redux/UserSlice";
 import "react-toastify/dist/ReactToastify.css";
+
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+
+
+const validationSchema = Yup.object({
+  qualifications: Yup.string().required("Qualifications are required"),
+  experience: Yup.string().required("Experiences are required"),
+});
+
 function Upgradeformfinal({ onBack,formData }) {
 
   const {premiumuserinfo}=useSelector((state)=>state.user);
   const navigate=useNavigate()
   const dispatch=useDispatch()
+
+  // const initialValues = {
+  //   qualifications: "",
+  //   experience: "",
+  // };
+
+
   const [qualifications, setQualifications] = useState("");
   const [experience, setExperiences] = useState("");
   const handleSubmit = async (e) => {
@@ -62,7 +80,7 @@ function Upgradeformfinal({ onBack,formData }) {
         console.log("nothing in form")
       }
 
-     
+        
 
      
     }catch(error){
@@ -84,6 +102,13 @@ function Upgradeformfinal({ onBack,formData }) {
         <Typography variant="h5" color="blue" className="text-center mt-5">
           Step 2/2
         </Typography>
+        {/* <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      > */}
+
+     
         <form className="m-16" onSubmit={handleSubmit}>
           <div class="grid gap-6 mb-6 md:grid-cols-2">
             <div>
@@ -102,6 +127,7 @@ function Upgradeformfinal({ onBack,formData }) {
                 className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Write your Qualifications.."
               ></textarea>
+               {/* <ErrorMessage name="qualifications" component="div" className="text-red-500" /> */}
             </div>
             <div>
               <label
@@ -119,6 +145,7 @@ function Upgradeformfinal({ onBack,formData }) {
                 className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Write your Experiences.."
               ></textarea>
+               {/* <ErrorMessage name="experience" component="div" className="text-red-500" /> */}
             </div>
           </div>
 
@@ -134,6 +161,7 @@ function Upgradeformfinal({ onBack,formData }) {
             </button>
           </div>
         </form>
+        {/* </Formik> */}
       </Card>
     </div>
   );

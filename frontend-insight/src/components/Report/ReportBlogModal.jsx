@@ -20,9 +20,22 @@ function ReportBlogModal({ isOpen, onClose, report }) {
       }
 
       const handleSubmit=async()=>{
+
+        let notification_text='';
+
+        if (report.blog.is_block){
+
+            notification_text='Your Blog is Unblocked'
+
+            
+        }else{
+
+            notification_text=`Your Blog is Blocked due to ${report.reason}`
+        }
+
         const values={
             user:report.blog.user_id.id,
-            text:`Your Blog is Blocked/Unblocked due to ${report.reason}`,
+            text:notification_text,
 
         }
         console.log(values,'notification values');

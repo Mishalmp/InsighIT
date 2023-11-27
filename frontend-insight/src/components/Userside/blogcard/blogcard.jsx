@@ -70,7 +70,7 @@ function Blogcard({
   return (
     <>
     <Link to={blogDetailUrl}>
-  <Card className='rounded-lg bg-gray-50 w-[52rem] ml-[10%] mb-5'>
+  <Card className='rounded-lg bg-gray-50 w-[52rem]  mb-5'>
   <div className='flex m-[100px] mt-5 ml-10 gap-10'>
     { profile_img ?
     <img src={profile_img} className="w-12 h-12 rounded-full"/>

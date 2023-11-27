@@ -18,7 +18,7 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.http import JsonResponse
 
-
+from decimal import Decimal
 
 
 
@@ -68,9 +68,68 @@ class Notificationbyuser(ListAPIView):
 
         return queryset
 
+
+
+
 class SubscriptionList(ListCreateAPIView):
     queryset=Subscription.objects.all()
     serializer_class=SubscriptionSerializer
+
+    def perform_create(self, serializer):
+        subscription_amount=serializer.validated_data['subscription_amount']
+
+        recieved_amount=Decimal('0.6') * subscription_amount
+        subscription=serializer.save()
+
+        subscribed_to_user=subscription.subscribed_to
+        subscribed_to_user.wallet_balance += recieved_amount
+        subscribed_to_user.save()
+
+
+        subscribed_to_wallet=Wallet.objects.create(user_id=subscription.subscribed_to,recieved=recieved_amount)
+       
+        subscribed_to_wallet.save()
+
+        admin_user=User.objects.get(role='admin')
+        admin_user.wallet_balance += subscription_amount - recieved_amount
+        admin_user.save()
+
+        admin_wallet=Wallet.objects.create(
+            user_id=admin_user,
+            recieved=subscription_amount-recieved_amount
+        )
+       
+
+        admin_wallet.save()
+    
+    def create(self, request, *args, **kwargs):
+        
+        serializer=self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers=self.get_success_headers(serializer.data)
+        return Response(serializer.data,status=status.HTTP_201_CREATED,headers=headers)
+
+
+
+
+
+
+
+
+
+
+class SubscriptionListByUser(ListAPIView):
+    serializer_class=SubscriptionlistSerializer
+    
+    def get_queryset(self):
+        return Subscription.objects.filter(subscriber=self.kwargs['user_id'])
+         
+class SubscribersListByUser(ListAPIView):
+    serializer_class=SubscriptionlistSerializer
+
+    def get_queryset(self):
+        return Subscription.objects.filter(subscribed_to=self.kwargs['user_id'])
 
 
 class IsSubscriber(APIView):
@@ -84,6 +143,64 @@ class IsSubscriber(APIView):
         except Exception as e:
             return Response({"message":str(e) }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+
+
+class FollowingsCreate(ListCreateAPIView):
+    queryset=Followings.objects.all()
+    serializer_class=FollowingsSerializers
+
+
+class Unfollow(RetrieveUpdateDestroyAPIView):
+    queryset=Followings.objects.all()
+    serializer_class=FollowingsSerializers
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+           
+            following_inst=Followings.objects.get(follower=self.kwargs['follower_id'],following=self.kwargs['following_id'])
+            self.perform_destroy(following_inst)
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Followings.DoesNotExist:
+            return Response({"error":"Following not found"},status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            return Response({"error":str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+class Isfollowing(APIView):
+
+    def get(self,request,follower_id,following_id,*args,**kwargs):
+        try:
+            is_follower=Followings.objects.filter(follower=follower_id,following=following_id).exists()
+
+            return Response({'is_follower':is_follower},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'message':str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class FollowingsList(ListAPIView):
+    serializer_class=FollowinglistSerializer
+    
+    def get_queryset(self):
+        user_id=self.kwargs['user_id']
+        return Followings.objects.filter(follower=user_id)
+
+class FollowersList(ListAPIView):
+    serializer_class=FollowinglistSerializer
+
+    def get_queryset(self):
+        
+        user_id=self.kwargs['user_id']
+        return Followings.objects.filter(following=user_id)
+
+class CreateWallet(ListCreateAPIView):
+    serializer_class=Walletserializer
+    queryset=Wallet.objects.all()
+
+
+
     
 
 #----------------payment STRIPE------------------------------
@@ -96,12 +213,12 @@ class CreateCheckoutSessionView(APIView):
         pre_author=User.objects.get(id=author)
         
         try:
-            subscription_data = {
-                'subscriber': self.request.data['user_id'],
-                'subscribed_to': self.request.data['author_id'],
-                'subscription_type':self.request.data['subscription_type'],  
-                'is_active': True,
-            }
+            # subscription_data = {
+            #     'subscriber': self.request.data['user_id'],
+            #     'subscribed_to': self.request.data['author_id'],
+            #     'subscription_type':self.request.data['subscription_type'],  
+            #     'is_active': True,
+            # }
 
             checkout_session=stripe.checkout.Session.create(
                 line_items=[
@@ -111,17 +228,20 @@ class CreateCheckoutSessionView(APIView):
                         'unit_amount':int(self.request.data['price'])*100,
                         'product_data':{
                             'name':pre_author.first_name+' '+pre_author.last_name,
-                            # 'images':pre_author.profile_img,
+                            'images':[
+                                pre_author.profile_img.url,
+                                # 'https://www.searchenginejournal.com/wp-content/uploads/2020/03/the-top-10-most-popular-online-payment-solutions-5e9978d564973.png'
+                            ],
                         }
                         },
-                        'quantity':1
+                        'quantity':1,
+                        # 'payment_method_types': ['upi'],
 
                     },
-                    
                 ],
                 mode='payment',
             
-                success_url = f"{self.request.data['origin_site']}?success=true&subscriber={self.request.data['user_id']}&subscribed_to={self.request.data['author_id']}&subscription_type={self.request.data['subscription_type']}"
+                success_url = f"{self.request.data['origin_site']}?success=true&subscriber={self.request.data['user_id']}&subscribed_to={self.request.data['author_id']}&subscription_type={self.request.data['subscription_type']}&subscription_amount={self.request.data['subscription_amount']}"
 ,
                 cancel_url=self.request.data['origin_site']+'?cancel=true'
             )
@@ -143,46 +263,10 @@ class CreateCheckoutSessionView(APIView):
 
 #     return HttpResponse(status=200)
 
+
+
      
 
-# @method_decorator(csrf_exempt, name='dispatch')
-# class CreatePortalSessionView(APIView):
-#     def post(self, request, *args, **kwargs):
-#         checkout_session_id = request.POST.get('session_id')
-#         checkout_session = stripe.checkout.Session.retrieve(checkout_session_id)
-
-#         return_url = YOUR_DOMAIN
-
-#         portal_session = stripe.billing_portal.Session.create(
-#             customer=checkout_session.customer,
-#             return_url=return_url,
-#         )
-#         return redirect(portal_session.url, code=303)
-
-# @method_decorator(csrf_exempt, name='dispatch')
-# class WebhookView(APIView):
-#     def post(self, request, *args, **kwargs):
-#         payload = request.body
-#         sig_header = request.headers.get('Stripe-Signature')
-#         endpoint_secret = 'whsec_12345'  # Replace with your actual endpoint secret
-
-#         try:
-#             event = stripe.Webhook.construct_event(
-#                 payload, sig_header, endpoint_secret
-#             )
-#         except ValueError as e:
-#             # Invalid payload
-#             return HttpResponseBadRequest("Invalid payload")
-#         except stripe.error.SignatureVerificationError as e:
-#             # Invalid signature
-#             return HttpResponseBadRequest("Invalid signature")
-
-#         # Handle the event
-#         self.handle_event(event)
-
-#         return JsonResponse({'status': 'success'})
-    
-    # def handle_event(self, event):
 
 
          

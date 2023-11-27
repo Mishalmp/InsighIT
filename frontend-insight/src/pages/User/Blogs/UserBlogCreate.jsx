@@ -13,7 +13,7 @@ import { UploadfileGif } from "../../../components/Loading/UploadfileGif";
 import NavBar from "../../../components/Userside/NavBar/NavBar";
 import Footer from "../../../components/Userside/footer/footer";
 import { useNavigate } from "react-router-dom";
-
+import EditorToolbar, { modules, formats } from '../../../helpers/EditorToolbar'
 // import { Editor } from "react-draft-wysiwyg";
 // import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
@@ -68,7 +68,7 @@ function UserBlogCreate() {
     try {
       console.log(blogvalues, "blogvalues");
       const response = await CreateBlog(formData);
-      console.log("Blog created successfully",response.data);
+      
       toast.success("Blog created successfully")
       navigate("/User/blogs")
     } catch (error) {
@@ -87,7 +87,7 @@ function UserBlogCreate() {
 
   return (
     <>
-     {loading && <UploadfileGif/>}
+     {loading && <Loader/>}
       <ToastContainer  />
       <NavBar/>
       <Typography className="text-center font-semibold text-2xl -ml-24 mt-10">Write Blog</Typography>
@@ -178,12 +178,23 @@ function UserBlogCreate() {
           <Typography className="text-center font-semibold">
             Blog Content
           </Typography>
-          <ReactQuill
+          <EditorToolbar />
+      <ReactQuill
+        theme="snow"
+        value={value}
+        onChange={setValue}
+        placeholder={"Write something awesome..."}
+        className="h-[15rem] w-[80%] ml-[10%] mb-10"
+        modules={modules}
+        formats={formats}
+      />
+    </div>
+          {/* <ReactQuill
             theme="snow"
             className="h-[10rem] w-[80%] ml-[10%] mb-10"
             value={value}
             onChange={setValue}
-          />
+          /> */}
           {/* <Editor
   editorState={editorState}
   toolbarClassName="toolbarClassName"
@@ -191,7 +202,7 @@ function UserBlogCreate() {
   editorClassName="editorClassName"
   onEditorStateChange={this.onEditorStateChange}
 />; */}
-        </div>
+        {/* </div> */}
       
 
         <div className="mt-10 mb-10">

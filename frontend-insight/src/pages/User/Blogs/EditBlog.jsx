@@ -12,7 +12,7 @@ import { Loader } from '../../../components/Loading/Loader';
 import NavBar from "../../../components/Userside/NavBar/NavBar";
 import Footer from "../../../components/Userside/footer/footer";
 import { useNavigate, useParams } from "react-router-dom";
-
+import EditorToolbar , { modules, formats } from '../../../helpers/EditorToolbar'
 
 
 function EditBlog() {
@@ -118,7 +118,7 @@ function EditBlog() {
       <ToastContainer  />
         <NavBar/>
         <Typography className="text-center font-semibold text-2xl -ml-24 mt-10">Edit Blog</Typography>
-      <Card className="w-[60rem] h-[60rem] m-10 ml-[15%] bg-gray-50">
+      <Card className="w-[60rem] h-auto m-10 ml-[15%] bg-gray-50">
         <Typography className="text-center font-semibold mt-4">Title </Typography>
         <div className="flex flex-col w-[70%]  ml-[15%] gap-6">
           <Input
@@ -199,13 +199,27 @@ function EditBlog() {
           <Typography className="text-center font-semibold">
             Blog Content
           </Typography>
-          <ReactQuill
+          <EditorToolbar />
+      <ReactQuill
+        theme="snow"
+        value={value}
+        onChange={setValue}
+        // placeholder={"Write something awesome..."}
+        className="h-[15rem] w-[80%] ml-[10%] mb-10"
+        modules={modules}
+        formats={formats}
+      />
+
+
+
+
+          {/* <ReactQuill
             theme="snow"
             className="h-[10rem] w-[80%] ml-[10%] mb-10"
             value={value}
             onChange={setValue}
             
-          />
+          /> */}
         </div>
        
 
@@ -222,7 +236,7 @@ function EditBlog() {
           />
              {/* {videoFile ? <p>{videoFile.name}</p> : ''} */}
         </div>
-        <Button className="mt-6 w-[60%] ml-[20%]" onClick={HandleBlogUpdate}>
+        <Button className="mt-6 mb-10 w-[60%] ml-[20%]" onClick={HandleBlogUpdate}>
           Submit Blog
         </Button>
       </Card>

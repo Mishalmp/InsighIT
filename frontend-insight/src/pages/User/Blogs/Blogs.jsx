@@ -80,8 +80,11 @@ function Blogs() {
             </div>
                 </div>
       <Blogfilter/>
-      {blogs.map((blog)=>(
+      <div className='ml-[10%]'>
 
+     
+      {blogs.map((blog)=>(
+        
         <Blogcard 
         key={blog.id}
         id={blog.id}
@@ -99,6 +102,7 @@ function Blogs() {
       ))
 
       }
+       </div>
       </div>
 
     <Sidefooter/>

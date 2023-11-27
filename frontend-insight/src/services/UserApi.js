@@ -51,10 +51,25 @@ const CreateSkill=(values)=>{
 }
 
 const ListSkills=(user_id)=>{
-    return UserAxiosInstant.get(`accounts/listskills/${user_id}`,{
+    return UserAxiosInstant.get(`accounts/listskills/${user_id}/`,{
         withCredentials:true
     }).catch((error)=>error.response)
 }
+
+const EditSkill=(id,value)=>{
+    return UserAxiosInstant.patch(`accounts/skillview/${id}/`,value,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+
+}
+
+const DeleteSkill=(id)=>{
+    return UserAxiosInstant.delete(`accounts/skillview/${id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+
 
 const Checkoutsession=(data)=>{
     return UserAxiosInstant.post(`accounts/create-checkout-session/`,data,{
@@ -82,7 +97,52 @@ const CreateSubscription=(data)=>{
 }
 
 const IsSubscriber=(user_id,blog_author)=>{
-    return UserAxiosInstant.get(`accounts/isSubscriber/${user_id}/${blog_author}/`)
+    return UserAxiosInstant.get(`accounts/isSubscriber/${user_id}/${blog_author}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
 }
 
-export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,NotificationCreate,Checkoutsession,Notificationsbyuser,CreateSubscription,IsSubscriber}
+const CreateFollowing=(values)=>{
+    return UserAxiosInstant.post('accounts/followingscreate/',values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const Unfollow=(follower_id,following_id)=>{
+    return UserAxiosInstant.delete(`accounts/unfollow/${follower_id}/${following_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const Is_follower=(follower_id,following_id)=>{
+    return UserAxiosInstant.get(`accounts/is_follower/${follower_id}/${following_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const Followingslist=(user_id)=>{
+    return UserAxiosInstant.get(`accounts/followings/${user_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const Followerslist=(user_id)=>{
+    return UserAxiosInstant.get(`accounts/followers/${user_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const SubscriptionsList=(user_id)=>{
+    return UserAxiosInstant.get(`accounts/subscriptionslist/${user_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const Subscriberslist=(user_id)=>{
+    return UserAxiosInstant.get(`accounts/subscriberslist/${user_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+
+}
+
+export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,EditSkill,DeleteSkill,NotificationCreate,Checkoutsession,Notificationsbyuser,CreateSubscription,IsSubscriber,CreateFollowing,Is_follower,Unfollow,Followingslist,Followerslist,SubscriptionsList,Subscriberslist}

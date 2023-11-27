@@ -54,12 +54,32 @@ class User(AbstractUser):
     bio=models.TextField(max_length=500,null=True)
     tag_name=models.CharField(max_length=50,default='He/She')
     is_premium=models.BooleanField(default=False)
+    wallet_balance=models.DecimalField(max_digits=20,decimal_places=2,default=0)
 
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['role']
 
     objects=CustomUserManager()
+
+
+
+class Followings(models.Model):
+    follower=models.ForeignKey(User,related_name='following',on_delete=models.CASCADE)
+    following=models.ForeignKey(User,related_name='followers',on_delete=models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together=['follower','following']
+    
+
+    def __str__(self):
+
+        return f'{self.follower.first_name} follows {self.following.first_name}'
+    
+
+        
+
 
 
 
@@ -108,10 +128,12 @@ class Subscription(models.Model):
     subscriber=models.ForeignKey(User,related_name='subscriptions',on_delete=models.CASCADE)
     subscribed_to=models.ForeignKey(User,related_name='subscribers',on_delete=models.CASCADE)
     subscription_type=models.CharField(max_length=30,choices=SUBSCRIPTION_TYPE)
+    subscription_amount=models.DecimalField(max_digits=20,decimal_places=2,default=0)
     is_active=models.BooleanField(default=False)
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(null=True, blank=True)
 
+   
     def __str__(self):
         return f"{self.subscriber.first_name} subscribes to {self.subscribed_to.first_name} ({self.subscription_type}"
     
@@ -122,6 +144,7 @@ class Subscription(models.Model):
             self.is_active=False
         
         super().save(*args,**kwargs)
+   
 
 
 
@@ -135,3 +158,14 @@ class Notifications(models.Model):
     def __str__(self):
 
         return self.text
+
+
+class Wallet(models.Model):
+    user_id=models.ForeignKey(User,on_delete=models.CASCADE)
+
+    recieved=models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    withdrawn=models.DecimalField(max_digits=20,decimal_places=2,default=0)
+    created_at=models.DateTimeField(auto_now_add=True)
+
+    # class Meta:
+    #     unique_together=['user_id','recieved','created_at']

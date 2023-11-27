@@ -57,12 +57,13 @@ const Comment = ({ comment, onReply, handleReplyClick ,onDeleteClick,isBlogAutho
       </div>
       <div className="mt-3 ml-[65%] flex gap-4">
         <FavoriteIcon className="w-2 h-2" />
+        {isBlogAuthor || userinfo.id === comment.user.id ?(
         <Menu>
           <MenuHandler>
             <MoreHorizIcon className="w-2 h-2" />
           </MenuHandler>
           <MenuList>
-            {isBlogAuthor || userinfo.id === comment.user.id ?(
+            
 
             <MenuItem className="flex items-center gap-2 rounded hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10" onClick={() => onDeleteClick(comment.id)}>
               {" "}
@@ -73,25 +74,15 @@ const Comment = ({ comment, onReply, handleReplyClick ,onDeleteClick,isBlogAutho
                 className="font-normal"
                 color="red"
               >
-                Delete Blog
+                Delete Comment
               </Typography>
             </MenuItem>
-                ):null }
+                
 
-            <MenuItem className="flex items-center gap-2 rounded">
-              {" "}
-              <ReportIcon className="h-4 w-4" />
-              <Typography
-                as="span"
-                variant="small"
-                className="font-normal"
-                color="inherit"
-              >
-                Report Blog
-              </Typography>
-            </MenuItem>
+         
           </MenuList>
         </Menu>
+        ):null }
       </div>
     </div>
     <Typography className="max-w-[48rem] mt-5 ml-5">

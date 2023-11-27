@@ -15,9 +15,35 @@ import { useSelector, useDispatch } from "react-redux";
 import { CreatepremiumUserinfo } from "../../services/PremiumApi";
 import { setPremiumUserInfo } from "../../Redux/UserSlice";
 
+
+
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+
+// Define validation schema using Yup
+const validationSchema = Yup.object({
+  pan_number: Yup.string().required("Pan Card No is required"),
+  bank_name: Yup.string().required("Bank Name is required"),
+  account_number: Yup.string().required("Account No is required"),
+  ifsc_code: Yup.string().required("IFSC is required"),
+  linkedin_url: Yup.string().url("Invalid LinkedIn URL").required("LinkedIn URL is required"),
+});
+
 function Upgradation1stForm({ onNext}) {
   const { userinfo } = useSelector((state) => state.user);
   const dispatch=useDispatch()
+
+
+  // const initialValues = {
+  //   pan_number: "",
+  //   bank_name: "",
+  //   account_number: "",
+  //   ifsc_code: "",
+  //   linkedin_url: "",
+  // };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,6 +77,11 @@ function Upgradation1stForm({ onNext}) {
         <Typography variant="h5" color="blue" className="text-center mt-5">
           Step 1/2
         </Typography>
+        {/* <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      > */}
         <form className="m-16" onSubmit={handleSubmit}>
           <div class="grid gap-6 mb-6 md:grid-cols-2">
             <div className="w-72">
@@ -60,6 +91,7 @@ function Upgradation1stForm({ onNext}) {
                 size="lg"
                 label="Pan Card No:"
               />
+            {/* <ErrorMessage name="pan_number" component="div" className="text-red-500" /> */}
             </div>
             <div className="w-72">
               <Input
@@ -68,6 +100,7 @@ function Upgradation1stForm({ onNext}) {
                 variant="standard"
                 size="lg"
               />
+              {/* <ErrorMessage name="bank_name" component="div" className="text-red-500" /> */}
             </div>
             <div className="w-72">
               <Input
@@ -76,6 +109,8 @@ function Upgradation1stForm({ onNext}) {
                 variant="standard"
                 size="lg"
               />
+              {/* <ErrorMessage name="account_number" component="div" className="text-red-500" /> */}
+              
             </div>
             <div className="w-72">
               <Input
@@ -84,6 +119,8 @@ function Upgradation1stForm({ onNext}) {
                 variant="standard"
                 size="lg"
               />
+              {/* <ErrorMessage name="ifsc_code" component="div" className="text-red-500" /> */}
+
             </div>
             <div className="w-72">
               <label
@@ -120,6 +157,8 @@ function Upgradation1stForm({ onNext}) {
                 variant="standard"
                 size="lg"
               />
+              {/* <ErrorMessage name="linkedin_url" component="div" className="text-red-500" /> */}
+
             </div>
           </div>
 
@@ -130,6 +169,7 @@ function Upgradation1stForm({ onNext}) {
             Next
           </button>
         </form>
+        {/* </Formik> */}
       </Card>
     </div>
   );

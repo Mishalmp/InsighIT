@@ -17,6 +17,9 @@ const CreateQualifications=(values)=>{
     }).catch((error)=>error.response)
 }
 
+const GetPremiuminfos=()=>{
+    return PremiumAxiosInstant.get('')
+}
 
 const GetPremiuminfo=(user_id)=>{
     return PremiumAxiosInstant.get(`/premiumuserinfoview/${user_id}/`)

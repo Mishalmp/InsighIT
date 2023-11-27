@@ -17,6 +17,10 @@ class ExperiencesSerializers(serializers.ModelSerializer):
         fields='__all__'
 
 
+# class PremiumInfoListSerializer(serializers.ModelSerializer):
+#     qualifications=QualificationSerializers(required = False)
+#     experiences = ExperiencesSerializers(many=True,required = False)
+
 
 
 

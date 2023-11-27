@@ -10,12 +10,14 @@ import UnknownUser from './pages/UnknownUser/UnknownUser'
 import PrivateRoutes from './routes/ProtectedRoutes/PrivateRoutes'
 import UserRoutes from './routes/User'
 import AdminRoutes from './routes/AdminRoutes'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
   
 
   return (
     <>
+    <ToastContainer/>
       <Router>
           <Routes>
             <Route element={<PrivateRoutes/>}>

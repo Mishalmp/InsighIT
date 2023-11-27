@@ -18,12 +18,20 @@ urlpatterns=[
 
     path('skills/',CreateSkills.as_view(),name='skill-create'),
     path('skillview/<int:pk>/',SkillView.as_view(),name='skill-view'),
-    path('listskills/<int:user_id>',ListSkills.as_view(),name='list-skills'),
+    path('listskills/<int:user_id>/',ListSkills.as_view(),name='list-skills'),
     path('notifications/',NotificationsListCreate.as_view(),name="notifications"),
     path('listnotification/<int:user_id>/',Notificationbyuser.as_view(),name='notificationbyuser'),
     path('subscriptions/',SubscriptionList.as_view(),name='subscriptions'),
     path('isSubscriber/<int:user_id>/<int:blog_author>/',IsSubscriber.as_view(),name='IsSubscriber'),
+    path('followingscreate/',FollowingsCreate.as_view(),name='followingcreate'),
+    path('is_follower/<int:follower_id>/<int:following_id>/',Isfollowing.as_view(),name='is_follower'),
+    path('unfollow/<int:follower_id>/<int:following_id>/',Unfollow.as_view(),name='unfollow'),
 
+    path('followings/<int:user_id>/',FollowingsList.as_view(),name='follwings'),
+    path('followers/<int:user_id>/',FollowersList.as_view(),name='followers'),
+
+    path('subscriptionslist/<int:user_id>/',SubscriptionListByUser.as_view(),name='subscriptions'),
+    path('subscriberslist/<int:user_id>/',SubscribersListByUser.as_view(),name='subscribers'),
 
 
     path('create-checkout-session/',CreateCheckoutSessionView.as_view(),name='checkout-session'),

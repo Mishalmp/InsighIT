@@ -38,7 +38,7 @@ function MyBlogs() {
         setBlogs(response.data);
         console.log(response.data, "myblogssss");
       } catch (error) {
-        console.log("error! fetching my blogs", error);
+        console.error("error! fetching my blogs", error);
       }
     };
     Fetchmyblogs();
@@ -67,6 +67,7 @@ function MyBlogs() {
             </div>
           </div>
           <Blogfilter />
+          <div className='ml-[10%]'>
           {blogs.map((blog) => (
             <Blogcard
               key={blog.id}
@@ -82,6 +83,7 @@ function MyBlogs() {
               is_premium_blog={blog.is_premium_blog}
             />
           ))}
+          </div>
         </div>
 
         <Sidefooter />

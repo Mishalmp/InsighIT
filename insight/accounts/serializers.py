@@ -75,3 +75,31 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscription
         fields = '__all__'
+
+class SubscriptionlistSerializer(serializers.ModelSerializer):
+    subscriber=UserSerializer(read_only=True)
+    subscribed_to=UserSerializer(read_only=True)
+    class Meta:
+        model=Subscription
+        fields='__all__'
+
+
+class FollowingsSerializers(serializers.ModelSerializer):
+    class Meta:
+        model=Followings
+        fields='__all__'
+
+
+class FollowinglistSerializer(serializers.ModelSerializer):
+    follower=UserSerializer(read_only=True)
+    following=UserSerializer(read_only=True)
+    class Meta:
+        model=Followings
+        fields='__all__'
+
+class Walletserializer(serializers.Serializer):
+    class Meta:
+        model=Wallet
+        fields='__all__'
+
+        

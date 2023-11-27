@@ -50,13 +50,13 @@ const [blogs,setBlogs]=useState([])
       </div>
       <div className='w-full h-[1.5px] bg-[#039368]'></div>
       <div className='max-w-[1480px] m-10 md:ml-[10rem]'>
-        <div className='flex flex-col md:flex-row mt-4 md:mt-[20px] gap-4'>
+        <div className='flex flex-col ml-16 md:flex-row mt-4 md:mt-[10rem] gap-4'>
           <img src={trending} className='w-[50px] h-[50px]' alt='Trending' />
           <h2 className='text-2xl md:text-3xl font-normal mt-2 md:mt-0'>Trending Topics</h2>
         </div>
         <div className='mt-4 md:mt-8 md:ml-20 flex'>
-          <h3 className='font-semibold text-lg'># Web development</h3>
-          <ul className='grid grid-cols-1 md:grid-cols-2 -ml-44 gap-4 md:w-[500px] content-center mt-4 '>
+          <h3 className='font-semibold text-lg mt-20'># Web development</h3>
+          <ul className='grid grid-cols-1 md:grid-cols-2 -ml-44 gap-4 md:w-[500px] content-center'>
             {Array.from({ length: 5 }, (_, i) => (
               <li key={i} className='bg-gray-300 md:h-[40px] rounded-[28px] mt-4 md:mt-0 flex items-center justify-center'>
                 <span className='text-xl'>Web Development</span>
@@ -69,13 +69,13 @@ const [blogs,setBlogs]=useState([])
         <div className='max-w-[1100px] h-[0.5px] bg-gray-600 md:ml-[80px] mt-4 md:mt-10 mx-auto'></div>
 
 
-        <div className='mt-4 md:mt-[100px]'>
+        <div className='mt-4 md:mt-[100px] ml-24'>
           <div className='flex gap-4'>
             <img src={trending} className='w-[50px] h-[50px]' alt='Trending' />
             <h2 className='text-2xl md:text-3xl font-normal mt-2 md:mt-0'>Trending Blogs</h2>
           </div>
 
-          <div className='-ml-28 mt-10'>
+          <div className='mt-10 '>
 
           
            {blogs.map((blog)=>(

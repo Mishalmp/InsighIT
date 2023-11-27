@@ -52,8 +52,11 @@ import { Input, Checkbox } from "@material-tailwind/react";
 import { Loader } from "../../../components/Loading/Loader";
 import { useSelector, useDispatch } from "react-redux";
 import { setUpdateInfo } from "../../../Redux/UserSlice";
-import { UpdateUser, CreateSkill, ListSkills } from "../../../services/UserApi";
+import { UpdateUser, CreateSkill, ListSkills,EditSkill,DeleteSkill } from "../../../services/UserApi";
 import { Link } from "react-router-dom";
+import Bloglistinprofile from "../../../components/blogs/bloglistinprofile";
+import Followlist from "../../../components/followlist/followlist";
+import Subscribelist from "../../../components/subscribelist/Subscribelist";
 
 function UserProfile() {
   const { userinfo } = useSelector((state) => state.user);
@@ -129,7 +132,7 @@ function UserProfile() {
     }
   };
 
-  const [bio, setBio] = useState("");
+  const [bio, setBio] = useState(userinfo.bio);
   const [aboutopen, setaboutOpen] = useState(false);
   const handleaboutOpen = () => setaboutOpen((cur) => !cur);
 
@@ -159,7 +162,46 @@ function UserProfile() {
   const handleskillopen = () => setskillOpen((cur) => !cur);
 
   const [skilleditopen, setskilleditopen] = useState(false);
-  const handleskilleditopen = () => setskilleditopen((cur) => !cur);
+  const [selectedskillId,setselectedskillId]=useState(null)
+
+  const handleSkillEditOpen = () => setskilleditopen(true);
+
+  const handleskilledit=(selectedSkill)=>{
+
+    setSkill({ ...selectedSkill })
+    setselectedskillId(selectedSkill.id)
+    handleSkillEditOpen();
+
+  }
+
+  const handleskilleditsubmit=async()=>{
+
+    console.log(selectedskillId,skill,'ediiiiiiiiit ssssskillllllllllll');
+
+    try {
+      const res=await EditSkill(selectedskillId,skill)
+      
+      
+    } catch (error) {
+      console.error(error);
+      
+    }
+    setskilleditopen(false)
+
+  }
+
+  const handleSkilldelete=async()=>{
+
+    try {
+      const ress= await DeleteSkill(selectedskillId)
+      toast.error("Skill deleted succussfully!");
+      
+    } catch (error) {
+      console.error(error);
+      
+    }
+    setskilleditopen(false)
+  }
 
   const HandleSkillSubmit = async () => {
     console.log(skill, "skiiiiiiiiiiilllllllll");
@@ -169,7 +211,7 @@ function UserProfile() {
     try {
       const response = CreateSkill(skillData);
       console.log(response.data);
-      toast.success("Blog created succussfully!");
+      toast.success("Skill created succussfully!");
       // handleloading()
       setskillOpen(false);
     } catch (error) {
@@ -179,26 +221,55 @@ function UserProfile() {
   };
 
   const data = [
-    {
-      label: "Subscriptions",
-      value: "subscriptions",
-      icon: Square3Stack3DIcon,
-      desc: ``,
-    },
+
     {
       label: "Profile",
       value: "profile",
       icon: UserCircleIcon,
-      desc: ``,
+    
+    },
+    // {
+    //   label: "Blogs",
+    //   value: "blogs",
+    //   icon: Square3Stack3DIcon,
+     
+    // },
+    {
+      label: "Subscriptions",
+      value: "subscriptions",
+      icon: Square3Stack3DIcon,
+     
+    },
+    ...(userinfo.is_premium
+      ? [
+          {
+            label: "Subscribers",
+            value: "subscribers",
+            icon: Square3Stack3DIcon,
+          },
+        ]
+      : []),
+   
+    {
+      label: "Followings",
+      value: "followings",
+      icon: Square3Stack3DIcon,
+     
     },
     {
-      label: "Settings",
-      value: "settings",
-      icon: Cog6ToothIcon,
-      desc: ``,
+      label: "Followers",
+      value: "followers",
+      icon: Square3Stack3DIcon,
+     
     },
+    // {
+    //   label: "Settings",
+    //   value: "settings",
+    //   icon: Cog6ToothIcon,
+    
+    // },
   ];
-  
+
   return (
     <div className="">
       {loading && <Loader />}
@@ -446,7 +517,7 @@ function UserProfile() {
                 {skills.map((skill) => (
                   <li
                     className="bg-green-200 w-auto  h-[2.5rem] flex justify-center items-center text-blue-900  rounded-md"
-                    onDoubleClick={handleskilleditopen}
+                    onDoubleClick={()=>handleskilledit(skill)}
                   >
                     {skill.skill}
                   </li>
@@ -470,7 +541,7 @@ function UserProfile() {
           <Card className="mx-auto w-[30rem]">
             <CardBody className="flex flex-col gap-4">
               <Typography variant="h4" color="blue-gray">
-                Add Skill
+                Edit Skill
               </Typography>
 
               <Typography className="-mb-2" variant="h6">
@@ -504,21 +575,33 @@ function UserProfile() {
               </div>
             </CardBody>
             <CardFooter className="pt-0">
-              <Button variant="gradient" fullWidth>
+              <Button variant="gradient" fullWidth onClick={handleskilleditsubmit}>
                 Save
               </Button>
-              <Typography variant="small" className="mt-4 flex justify-center">
+              <Typography
+                  as="a"
+                  // href="#signup"
+                  variant="small"
+                  color="red"
+                  className="ml-48 mt-5 font-bold"
+                  onClick={handleSkilldelete}
+                  
+                >
+                  Delete
+                </Typography>
+              <Typography variant="small" className="mt-6 flex justify-center">
                 <Typography
                   as="a"
                   href="#signup"
                   variant="small"
                   color="black"
                   className="ml-1 font-bold"
-                  onClick={handleskilleditopen}
+                  onClick={() => setskilleditopen(false)}
                 >
                   Don't Save
                 </Typography>
               </Typography>
+          
             </CardFooter>
           </Card>
         </Dialog>
@@ -599,10 +682,10 @@ function UserProfile() {
                 ))}
               </TabsHeader>
               <TabsBody>
-                {data.map(({ value, desc }) => (
+                {data.map(({ value}) => (
                   <TabPanel key={value} value={value}>
-                    {desc}
-
+                    {value === "profile" && (
+                    <>
                     <Card className="w-[50rem] h-auto mt-5 bg-gray-100">
                       <Typography
                         variant="h5"
@@ -715,20 +798,47 @@ function UserProfile() {
                       >
                         Skills Ratings
                       </Typography>
-                      {skills.map((skill) => (
-                        <div className="max-w-2xl ml-10 mb-10">
-                          <div className="mb-2 flex items-center justify-between gap-4">
-                            <Typography color="blue-gray" variant="h6">
-                              {skill.skill}
-                            </Typography>
-                            <Typography color="blue-gray" variant="h6">
-                              {skill.rateofskills}%
-                            </Typography>
+                      {skills && skills.length > 0 ? (
+                        skills.map((skill) => (
+                          <div className="max-w-2xl ml-10 mb-10">
+                            <div className="mb-2 flex items-center justify-between gap-4">
+                              <Typography color="blue-gray" variant="h6">
+                                {skill.skill}
+                              </Typography>
+                              <Typography color="blue-gray" variant="h6">
+                                {skill.rateofskills}%
+                              </Typography>
+                            </div>
+                            <Progress value={skill.rateofskills} />
                           </div>
-                          <Progress value={skill.rateofskills} />
-                        </div>
-                      ))}
+                        ))
+                      ) : (
+                        <Typography
+                          variant="h5"
+                          color="blue-gray"
+                          className=" m-1 ml-10 mb-5"
+                        >
+                          Skills not Added
+                        </Typography>
+                      )}
                     </Card>
+                    </> 
+                    )}
+                    {value === "blogs" &&(
+                       <Bloglistinprofile userid={userinfo.id} />
+                    )}
+                    {value === 'followings' &&(
+                      <Followlist user_id={userinfo.id} is_followings={true} />
+                    )}
+                    {value === 'followers' &&(
+                      <Followlist user_id={userinfo.id} is_followings={false} />
+                    )}
+                     {value === 'subscriptions' &&(
+                      <Subscribelist user_id={userinfo.id} is_subscription={true} />
+                    )}
+                      {value === 'subscribers' &&(
+                      <Subscribelist user_id={userinfo.id} is_subscription={false} />
+                    )}
                   </TabPanel>
                 ))}
               </TabsBody>

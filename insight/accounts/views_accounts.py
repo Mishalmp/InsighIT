@@ -38,7 +38,7 @@ class UserRegister(CreateAPIView):
 
         email=request.data.get('email')
         password=request.data.get('password')
-        print(request.data,'1111111111111')
+       
 
         serializer=UserSerializer(data=request.data)
         
@@ -127,10 +127,6 @@ class GoogleUser(APIView):
             return Response(data=response_data,status=status.HTTP_201_CREATED)
         else:
             return Response(data={'status':'400','msg':'login Failed'})
-        
-
-
-
 
 def create_jwt_pair_tokens(user):
 

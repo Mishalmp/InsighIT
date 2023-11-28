@@ -67,6 +67,15 @@ function Blogcard({
   
   console.log(user_premium,'premiummm')
 
+       // Create a temporary div element
+       const tempDiv = document.createElement('div');
+      
+       // Set the innerHTML of the div to your blog content
+       tempDiv.innerHTML = content;
+ 
+       // Use textContent to get the plain text without HTML tags
+       const plainTextContent = tempDiv.textContent || tempDiv.innerText;
+
   return (
     <>
     <Link to={blogDetailUrl}>
@@ -95,7 +104,7 @@ function Blogcard({
         </Typography>
 
     <p className=" mt-5 font-serif w-[25rem] container">
-    The US Bureau of Labour Statistics projects a 13% growth in job opportunities in the web development industry between 2020 and 2030. In terms of the average of all other professions, it is one of the highest......
+    {plainTextContent.substring(0, 250)}
     </p>
     <div>
     

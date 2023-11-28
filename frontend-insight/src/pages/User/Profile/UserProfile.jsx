@@ -57,6 +57,7 @@ import { Link } from "react-router-dom";
 import Bloglistinprofile from "../../../components/blogs/bloglistinprofile";
 import Followlist from "../../../components/followlist/followlist";
 import Subscribelist from "../../../components/subscribelist/Subscribelist";
+import Wallet from "../../../components/premiumuser/Wallet/Wallet";
 
 function UserProfile() {
   const { userinfo } = useSelector((state) => state.user);
@@ -249,6 +250,15 @@ function UserProfile() {
           },
         ]
       : []),
+      ...(userinfo.is_premium
+        ? [
+            {
+              label: "Wallet",
+              value: "wallet",
+              icon: Square3Stack3DIcon,
+            },
+          ]
+        : []),
    
     {
       label: "Followings",
@@ -838,6 +848,9 @@ function UserProfile() {
                     )}
                       {value === 'subscribers' &&(
                       <Subscribelist user_id={userinfo.id} is_subscription={false} />
+                    )}
+                    {value === 'wallet' &&(
+                      <Wallet user={userinfo} />
                     )}
                   </TabPanel>
                 ))}

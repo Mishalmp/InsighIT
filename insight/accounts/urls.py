@@ -32,7 +32,7 @@ urlpatterns=[
 
     path('subscriptionslist/<int:user_id>/',SubscriptionListByUser.as_view(),name='subscriptions'),
     path('subscriberslist/<int:user_id>/',SubscribersListByUser.as_view(),name='subscribers'),
-
+    path('wallet/<int:user_id>/',ListWallet.as_view(),name='wallet'),
 
     path('create-checkout-session/',CreateCheckoutSessionView.as_view(),name='checkout-session'),
     # path('webhook/',stripe_webhook_view,name='web_hook'),

@@ -254,6 +254,31 @@ function Blogdetail() {
     }
   };
 
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        // Create a temporary div element
+      const tempDiv = document.createElement('div');
+      
+      // Set the innerHTML of the div to your blog content
+      tempDiv.innerHTML = blog.content;
+
+      // Use textContent to get the plain text without HTML tags
+      const plainTextContent = tempDiv.textContent || tempDiv.innerText;
+
+      await navigator.share({
+        title: blog.title,
+        text: plainTextContent.substring(0, 100),
+        url: window.location.href,
+      });
+      } else {
+        throw new Error('Web Share API not supported');
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  };
+
   return (
     <>
       <ToastContainer />
@@ -351,7 +376,7 @@ function Blogdetail() {
                   <BookmarkAddIcon className="w-10 h-10 cursor-pointer" />
                 </li>
                 <li className="flex items-center">
-                  <IosShareIcon className="w-10 h-10 cursor-pointer" />
+                  <IosShareIcon className="w-10 h-10 cursor-pointer" onClick={handleShare}/>
                 </li>
                 <li className="flex items-center relative">
                   <Menu

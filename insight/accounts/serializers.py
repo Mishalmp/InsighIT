@@ -97,7 +97,9 @@ class FollowinglistSerializer(serializers.ModelSerializer):
         model=Followings
         fields='__all__'
 
-class Walletserializer(serializers.Serializer):
+class Walletserializer(serializers.ModelSerializer):
+    recieved_from=UserSerializer(read_only=True)
+
     class Meta:
         model=Wallet
         fields='__all__'

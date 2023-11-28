@@ -19,7 +19,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.http import JsonResponse
 
 from decimal import Decimal
-
+from django.db.models import Sum
 
 
 stripe.api_key=settings.STRIPE_SECRET_KEY
@@ -86,7 +86,7 @@ class SubscriptionList(ListCreateAPIView):
         subscribed_to_user.save()
 
 
-        subscribed_to_wallet=Wallet.objects.create(user_id=subscription.subscribed_to,recieved=recieved_amount)
+        subscribed_to_wallet=Wallet.objects.create(user_id=subscription.subscribed_to,recieved=recieved_amount,recieved_from=subscription.subscriber)
        
         subscribed_to_wallet.save()
 
@@ -96,7 +96,8 @@ class SubscriptionList(ListCreateAPIView):
 
         admin_wallet=Wallet.objects.create(
             user_id=admin_user,
-            recieved=subscription_amount-recieved_amount
+            recieved=subscription_amount-recieved_amount,
+            recieved_from=subscription.subscriber
         )
        
 
@@ -195,9 +196,34 @@ class FollowersList(ListAPIView):
         user_id=self.kwargs['user_id']
         return Followings.objects.filter(following=user_id)
 
-class CreateWallet(ListCreateAPIView):
+class ListWallet(ListAPIView):
     serializer_class=Walletserializer
-    queryset=Wallet.objects.all()
+    
+    def get_queryset(self):
+        
+        return Wallet.objects.filter(user_id=self.kwargs['user_id'])
+    
+    def list(self, request, *args, **kwargs):
+        
+        queryset=self.get_queryset()
+
+        aggregated_data=queryset.aggregate(
+            total_recieved=Sum('recieved'),
+            total_withdrawn=Sum('withdrawn')
+        )
+
+
+        serializer=self.get_serializer(queryset,many=True)
+
+        
+        response_data={
+          
+            'transactions':serializer.data,
+            'total_recieved':aggregated_data['total_recieved'] or 0,
+            'total_withdrawn':aggregated_data['total_withdrawn'] or 0,
+        }
+
+        return Response(response_data)
 
 
 

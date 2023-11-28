@@ -145,4 +145,10 @@ const Subscriberslist=(user_id)=>{
 
 }
 
-export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,EditSkill,DeleteSkill,NotificationCreate,Checkoutsession,Notificationsbyuser,CreateSubscription,IsSubscriber,CreateFollowing,Is_follower,Unfollow,Followingslist,Followerslist,SubscriptionsList,Subscriberslist}
+const UserWallet=(user_id)=>{
+    return UserAxiosInstant.get(`accounts/wallet/${user_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,EditSkill,DeleteSkill,NotificationCreate,Checkoutsession,Notificationsbyuser,CreateSubscription,IsSubscriber,CreateFollowing,Is_follower,Unfollow,Followingslist,Followerslist,SubscriptionsList,Subscriberslist,UserWallet}

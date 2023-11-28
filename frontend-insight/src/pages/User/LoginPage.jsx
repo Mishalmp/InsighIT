@@ -95,7 +95,8 @@ function LoginPage() {
         profile_img:res.data.profile_img,
         cover_img:res.data.cover_img,
         tag_name:res.data.tag_name,
-        is_premium:res.data.is_premium
+        is_premium:res.data.is_premium,
+        wallet_balance:res.data.wallet_balance,
       }
       dispatch(setUserInfo({
         userinfo:data

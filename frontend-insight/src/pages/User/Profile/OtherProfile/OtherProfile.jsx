@@ -55,7 +55,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { ListSkills } from "../../../../services/UserApi";
 
-import { GetUserInfo } from "../../../../services/UserApi";
+import { GetUserInfo,IsSubscriber } from "../../../../services/UserApi";
 import { useParams } from "react-router-dom";
 
 import Bloglistinprofile from "../../../../components/blogs/bloglistinprofile";
@@ -69,6 +69,7 @@ function OtherProfile() {
 
   const [loading, setLoading] = useState(false);
   const [is_following, setIs_following] = useState(false);
+  const [is_subscriber, setIs_subscriber] = useState(false);
 
   const [author, setAuthor] = useState(null);
   const [skills, setSkills] = useState([]);
@@ -88,6 +89,10 @@ function OtherProfile() {
 
         const res_follow = await Is_follower(userinfo.id, authorId);
         setIs_following(res_follow.data.is_follower);
+
+        const res_sub=await IsSubscriber(userinfo.id, authorId)
+        setIs_subscriber(res_sub.data.is_subscriber)
+
       } catch (error) {
         console.error(error);
       }
@@ -106,14 +111,14 @@ function OtherProfile() {
     };
     try {
 
-      // if(author.is_premium){
-      //   setShowhidepage(true)
-      // }else{
+      if(author.is_premium && !is_subscriber){
+        setShowhidepage(true)
+      }else{
       const resp = await CreateFollowing(values);
       toast.success("followed successfully");
       setIs_following(true);
 
-      // }
+      }
 
       
     } catch (error) {

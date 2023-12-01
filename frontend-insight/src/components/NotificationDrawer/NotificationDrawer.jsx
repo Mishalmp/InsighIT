@@ -6,7 +6,7 @@ import {
     IconButton,Alert,
   } from "@material-tailwind/react";
 
-  import { Notificationsbyuser } from '../../services/UserApi';
+  import { Notificationsbyuser,ClearNotificationbyuser } from '../../services/UserApi';
   import { Loader } from '../../components/Loading/Loader';
 
 function NotificationDrawer({ isOpen,userinfo, onClose }) {
@@ -16,8 +16,17 @@ function NotificationDrawer({ isOpen,userinfo, onClose }) {
 
  
 
- const handleCloseAll = () => {
-    setNotifications([]);
+ const handleCloseAll =async () => {
+
+    try {
+      await ClearNotificationbyuser(userinfo.id)
+       setNotifications([]);
+    } catch (error) {
+      console.error(error);
+      
+    }
+
+    
   };
 
  useEffect(()=>{
@@ -29,7 +38,7 @@ function NotificationDrawer({ isOpen,userinfo, onClose }) {
             const fetchedNotifications = response.data;
             // handleLoading()
             setNotifications(fetchedNotifications);
-            console.log(notifications, 'Fetched Notifications');
+       
         }catch(error){
             console.error(error)
         }
@@ -73,14 +82,25 @@ function NotificationDrawer({ isOpen,userinfo, onClose }) {
       
         
      
+        {notifications.length > 0?(
+
+       <>
         {notifications.map((notification)=>(
               <Alert open={true} >
              
               {notification.text}
             </Alert>
         ))}
+
+          <Button variant="outlined"  onClick={handleCloseAll}>Clear All</Button>
+          </>
+        )
+        :(
+          <p className='text-lg text-center'>no notifications</p>
+        )
+      }
     
-    <Button variant="outlined"  onClick={handleCloseAll}>Clear All</Button>
+    
     </div>
     
        

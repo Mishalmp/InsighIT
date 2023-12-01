@@ -1,9 +1,10 @@
+from datetime import datetime
 from django.shortcuts import render,redirect
 from .models import *
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView,CreateAPIView,ListAPIView
+from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView,CreateAPIView,ListAPIView,DestroyAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -17,14 +18,14 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.http import JsonResponse
-
+from django.middleware.csrf import get_token
 from decimal import Decimal
-from django.db.models import Sum
+from django.db.models import Sum,Q
 
 
 stripe.api_key=settings.STRIPE_SECRET_KEY
 
-
+endpoint_secret = settings.STRIPE_SECRET_WEBHOOK
 
 SITE_URL='http://localhost:5173/'
 
@@ -67,6 +68,28 @@ class Notificationbyuser(ListAPIView):
         queryset=Notifications.objects.filter(user=user_id,is_read=False).order_by('-created_at')
 
         return queryset
+    
+
+class ClearAllNotifications(APIView):
+    serializer_class=NotificationSerializer
+    lookup_field = 'user_id'
+    
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+
+        return Notifications.objects.filter(user=user_id, is_read=False)
+    
+    def delete(self, request, *args, **kwargs):
+        
+        queryset = self.get_queryset()
+        queryset.update(is_read=True)
+
+        return Response({'message': 'All notifications cleared successfully.'}, status=status.HTTP_204_NO_CONTENT)
+        
+    
+
+    
 
 
 
@@ -136,7 +159,7 @@ class SubscribersListByUser(ListAPIView):
 class IsSubscriber(APIView):
 
     def get(self,request,user_id,blog_author, *args, **kwargs):
-        print(user_id,blog_author,'is subscriberrrrrrr')
+       
         try:
             is_subscriber=Subscription.objects.filter(subscriber=user_id,subscribed_to=blog_author,is_active=True).exists()
 
@@ -196,6 +219,29 @@ class FollowersList(ListAPIView):
         user_id=self.kwargs['user_id']
         return Followings.objects.filter(following=user_id)
 
+
+from chats.models import Message
+from django.db.models import Max, F
+
+class ChatUsersList(ListAPIView):
+    serializer_class=FollowinglistSerializer
+
+    def get(self,request,user_id):
+        followings=Followings.objects.filter(follower=user_id)
+        followers=Followings.objects.filter(following=user_id)
+
+        users=list(followings.values_list('following', flat=True)) + list(followers.values_list('follower', flat=True))
+
+        chat_users=User.objects.filter(pk__in=users)
+
+        
+
+        serializers=UserSerializer(chat_users,many=True)
+        
+        return Response({'chat_users': serializers.data})
+
+
+
 class ListWallet(ListAPIView):
     serializer_class=Walletserializer
     
@@ -237,7 +283,8 @@ class CreateCheckoutSessionView(APIView):
 
         author=self.request.data['author_id']
         pre_author=User.objects.get(id=author)
-        
+
+      
         try:
             # subscription_data = {
             #     'subscriber': self.request.data['user_id'],
@@ -247,6 +294,7 @@ class CreateCheckoutSessionView(APIView):
             # }
 
             checkout_session=stripe.checkout.Session.create(
+                payment_method_types=['card'],
                 line_items=[
                     {
                         'price_data':{
@@ -281,15 +329,28 @@ class CreateCheckoutSessionView(APIView):
         except Exception as e:
             return Response({ "message" : str(e)},status= status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 # @csrf_exempt
 # def stripe_webhook_view(request):
+#     payload = request.body
+#     sig_header = request.headers.get('Stripe-Signature')
 
-#     payload=request.body
+#     try:
+#         event = stripe.Webhook.construct_event(
+#             payload, sig_header, endpoint_secret
+#         )
+#     except ValueError as e:
+#         # Invalid payload
+#         return HttpResponse(status=400)
+#     except stripe.error.SignatureVerificationError as e:
+#         # Invalid signature
+#         return HttpResponse(status=400)
+
+#     # Handle the event
+#     if event['type'] == 'payment_intent.succeeded':
+#         print('successs')
+#         # Do something
 
 #     return HttpResponse(status=200)
-
-
 
      
 

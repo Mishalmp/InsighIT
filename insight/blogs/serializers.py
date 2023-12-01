@@ -66,3 +66,15 @@ class ReportListSerializer(serializers.ModelSerializer):
         
 
 
+class SavedCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=SavedBlogs
+        fields='__all__'
+
+
+class SavedListSerializer(serializers.ModelSerializer):
+    blog=Blogserializer(read_only=True)
+    class Meta:
+        model=SavedBlogs
+        fields='__all__'

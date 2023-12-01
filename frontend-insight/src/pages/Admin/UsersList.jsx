@@ -67,7 +67,7 @@ export default function UsersList() {
     const [users, setUsers] = useState([]); 
     const [searchQuery, setSearchQuery] = useState(""); 
     const [currentPage, setCurrentPage] = useState(0); // Current page number
-    const [itemsPerPage] = useState(5);
+    const [itemsPerPage] = useState(8);
 
 
     useEffect(() => {

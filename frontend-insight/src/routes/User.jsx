@@ -22,6 +22,9 @@ import Checkoutsession from "../components/premiumuser/payment/checkoutsession"
 import Report from "../components/Report/Report"
 import Paymentresult from "../components/Payment/Paymentresult"
 import OtherProfile from "../pages/User/Profile/OtherProfile/OtherProfile"
+import SavedBlogs from "../pages/User/Blogs/SavedBlogs"
+import ChatUserlist from "../components/Chat/ChatUserlist"
+import Chat from "../pages/User/Chat/Chat"
 function UserRoutes() {
     
 
@@ -44,8 +47,10 @@ function UserRoutes() {
             <Route path="usercreateblog" element={<UserBlogCreate/>}/>
             <Route path="detailblog/:blogId" element={<Blogdetail/>}/>
             <Route path="myblogs/:userId" element={<MyBlogs/>}/>
+            <Route path="saved/:userId" element={<SavedBlogs/>}/>
             <Route path="editblog/:blogId" element={<EditBlog/>}/>
-            <Route path="dummy/:" element={<Bloghidepage/>}/>
+            {/* <Route path="dummy/" element={<Chat/>}/>     */}
+            <Route path="chat/" element={<Chat/>}/>
             <Route path="result/" element={<Paymentresult/>}/>
             <Route path="upgradeform/" element={<Upgradationform/>}/>
             <Route path="authorprofile/:authorId" element={<OtherProfile/>}/>

@@ -19,6 +19,9 @@ urlpatterns = [
     path('likeview/',LikeView.as_view(),name='unlike-blog'),
     path('reportblogs/',ReportListCreate.as_view(),name='reportblogs'),
     path('reportbloglist/',ReportListView.as_view(),name='reportslist'),
-    path('reportview/<int:pk>/',ReportBlogview.as_view(),name='reportview')
+    path('reportview/<int:pk>/',ReportBlogview.as_view(),name='reportview'),
+    path('createsaved/',CreateSavedView.as_view(),name='createsaved'),
+    path('listsaved/<int:user_id>/',ListSavedbyUser.as_view(),name='listsaved'),
+    path('saveview/',IsSavedView.as_view(),name='saveview'),
     
-]
+]   

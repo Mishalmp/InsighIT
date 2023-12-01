@@ -88,9 +88,9 @@ const Comment = ({ comment, onReply, handleReplyClick ,onDeleteClick,isBlogAutho
     <Typography className="max-w-[48rem] mt-5 ml-5">
       {comment.content}
     </Typography>
-    <div className="flex  ml-5 mt-5 mb-5 gap-4" onClick={handleReplyClick}>
-      <ReplyIcon className="w-3 h-3" onClick={() => onReply(comment)} />
-      <Typography className="" onClick={() => onReply(comment)}>
+    <div className="flex ml-5 mt-5 mb-5 gap-4" onClick={handleReplyClick}>
+      <ReplyIcon className="w-3 h-3 hover:cursor-pointer hover:bg-blue-gray-100 rounded-full" onClick={() => onReply(comment)} />
+      <Typography className="hover:cursor-pointer" onClick={() => onReply(comment)}>
         Reply
       </Typography>
     </div>
@@ -143,9 +143,9 @@ const Commentlist = ({ blogId,isAuthor }) => {
       }
     };
     fetchcomments();
-  }, [blogId]);
+  }, [blogId,commentContent]);
 
-  console.log(comments, "commentsasss");
+  
 
   // Scroll to comment post section whenever comments change
   //   useEffect(() => {
@@ -195,8 +195,8 @@ const Commentlist = ({ blogId,isAuthor }) => {
   return (
     <>
     <ToastContainer/>
-    <Card className="ml-[14rem] w-[60rem]">
-      <Typography variant="h3" className="text-center">
+    <Card className="ml-[14rem] w-[60rem] bg-gray-200">
+      <Typography variant="h3" className="text-center mt-5">
         Comments ({comments.length})
       </Typography>
       <div className="ml-10 mt-10">
@@ -261,7 +261,7 @@ const Commentlist = ({ blogId,isAuthor }) => {
           variant="static"
           placeholder="Your Comment"
           value={commentContent}
-          className="rounded-lg"
+          className="rounded-lg bg-white"
           rows={5}
           onChange={(e) => setcomment(e.target.value)}
         />

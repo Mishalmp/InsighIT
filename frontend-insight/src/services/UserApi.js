@@ -84,8 +84,16 @@ const NotificationCreate=(values)=>{
     }).catch((error)=>error.response)
 }
 
+
+
 const Notificationsbyuser=(user_id)=>{
     return UserAxiosInstant.get(`accounts/listnotification/${user_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const ClearNotificationbyuser=(user_id)=>{
+    return UserAxiosInstant.delete(`accounts/clearallnotifications/${user_id}/`,{
         withCredentials:true
     }).catch((error)=>error.response)
 }
@@ -151,4 +159,16 @@ const UserWallet=(user_id)=>{
     }).catch((error)=>error.response)
 }
 
-export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,EditSkill,DeleteSkill,NotificationCreate,Checkoutsession,Notificationsbyuser,CreateSubscription,IsSubscriber,CreateFollowing,Is_follower,Unfollow,Followingslist,Followerslist,SubscriptionsList,Subscriberslist,UserWallet}
+const ChatUsersList=(user_id)=>{
+    return UserAxiosInstant.get(`accounts/chatusers/${user_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const PreviousChat=(user1,user2)=>{
+    return UserAxiosInstant.get(`chats/user-previous-chats/${user1}/${user2}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,EditSkill,DeleteSkill,NotificationCreate,Checkoutsession,Notificationsbyuser,CreateSubscription,IsSubscriber,CreateFollowing,Is_follower,Unfollow,Followingslist,Followerslist,SubscriptionsList,Subscriberslist,UserWallet,PreviousChat,ChatUsersList,ClearNotificationbyuser}

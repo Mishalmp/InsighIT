@@ -35,6 +35,7 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import HelpIcon from '@mui/icons-material/Help';
 import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+
 const profileMenuItems = [
   {
     label: "My Profile",
@@ -50,8 +51,8 @@ const profileMenuItems = [
   },
 
   {
-    label: "Notifications",
-    icon:NotificationsActiveIcon, 
+    label: "Saved",
+    icon:BookmarksIcon, 
   },
   {
     label: "Inbox",
@@ -128,10 +129,11 @@ function NavBar() {
     
   </div>
   <ul className='hidden md:flex space-x-20 mr-[100px]'>
-   <Link to="/User/usercreateblog/"> <li className='flex items-center mt-2'><NoteAltIcon fontSize='medium'/><span>Write</span></li></Link>
-  <Link to="/User/blogs">  <li className='flex items-center mt-2'><NewspaperIcon fontSize='medium'/><span>Blogs</span></li></Link>
-    <li className='flex items-center'><ArticleIcon fontSize='medium'/><span>Docs</span></li>
-    <li className='flex items-center'><BookmarksIcon fontSize='medium'/><span>Saved</span></li>
+   <Link to="/User/usercreateblog/"> <li className='flex items-center hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl mt-2'><NoteAltIcon fontSize='medium'/><span>Write</span></li></Link>
+  <Link to="/User/blogs">  <li className='flex items-center mt-2 hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl'><ArticleIcon fontSize='medium'/><span>Blogs</span></li></Link>
+    <li className='flex items-center hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl'><NewspaperIcon fontSize='medium'/><span> Community</span></li>
+    
+    <li className='flex items-center hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl' onClick={handleOpenNotificationDrawer}><NotificationsActiveIcon fontSize='medium'/><span>Notifs</span></li>
     {/* <Link to='/User/userprofile/'>
     <li className='flex items-center'><img className='w-[40px] h-[40px] rounded-full' src={userinfo.profile_img} /></li>
     </Link> */}
@@ -172,10 +174,12 @@ function NavBar() {
               navigate(`/User/myblogs/${userinfo.id}`)
             }else if (label === 'Sign Out'){
               Signout()
-            }else if (label === 'Notifications'){
-              handleOpenNotificationDrawer()
-
-
+            }
+            else if (label === 'Saved'){
+              navigate(`/User/saved/${userinfo.id}`)
+            }
+            else if (label === 'Inbox'){
+              navigate(`/User/chat/`)
             }
           }
           return (

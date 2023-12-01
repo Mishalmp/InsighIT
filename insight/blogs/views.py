@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render
-from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView,ListAPIView
+from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView,ListAPIView,CreateAPIView
 
 from .models import *
 from .serializers import *
@@ -59,7 +59,7 @@ class ListBlogsView(ListAPIView):
     queryset=Blogs.objects.filter(is_block=False).order_by('-created_at')
     serializer_class=Blogserializer
     filter_backends = [SearchFilter]
-    search_fields=['title']
+    search_fields=['title','topic__topic']
 
     # def get_queryset(self):
     #     queryset = super().get_queryset()
@@ -174,16 +174,16 @@ class LikeView(RetrieveUpdateDestroyAPIView):
         blog_id = request.GET.get('blog')
         user_id = request.GET.get('user')
         
-        print(blog_id,user_id,'inpuuuuuuuuuuuuutsssssss')
-        like=Like.objects.filter(blog=blog_id,user=user_id).first()
-        print(like,'liiiiiiiiiiiikeeeeeeeeeeeee')
+       
+        like=Like.objects.filter(blog=blog_id,user=user_id).exists()
+       
 
         if like:
             liked=True
         else:
             liked=False
         print(liked,'likeeeeed')
-        return JsonResponse({'detail': 'like fetched successfully.', 'liked': liked}, status=200)
+        return JsonResponse({'detail': 'like fetched successfully.', 'liked': like}, status=200)
 
 
 class ReportListCreate(ListCreateAPIView):
@@ -201,3 +201,47 @@ class ReportListView(ListAPIView):
 class ReportBlogview(RetrieveUpdateDestroyAPIView):
     queryset=Report_blog.objects.all()
     serializer_class=ReportBlogSerializer
+
+
+class CreateSavedView(CreateAPIView):
+    queryset=SavedBlogs.objects.all()
+    serializer_class=SavedCreateSerializer
+
+
+class ListSavedbyUser(ListAPIView):
+    serializer_class=SavedListSerializer
+    filter_backends = [SearchFilter]
+    search_fields=['title','topic__topic']
+
+    def get_queryset(self):
+        
+        return SavedBlogs.objects.filter(user=self.kwargs['user_id']).order_by('-created_at')
+
+class IsSavedView(RetrieveUpdateDestroyAPIView):
+    serializer_class=SavedCreateSerializer
+    queryset=SavedBlogs.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        
+        user_id=request.GET.get('user_id')
+        blog_id=request.GET.get('blog_id')
+
+        Is_saved=SavedBlogs.objects.filter(user=user_id,blog=blog_id).exists()
+
+        return Response({'detail':'saved checked successfully','saved':Is_saved},status=status.HTTP_200_OK)
+    
+    def delete(self, request, *args, **kwargs):
+        
+        user_id=request.GET.get('user_id')
+        blog_id=request.GET.get('blog_id')
+
+
+        Is_saved=SavedBlogs.objects.filter(user=user_id,blog=blog_id).first()
+
+        if Is_saved:
+            Is_saved.delete()
+
+            return Response({'detail':'item deleted from saved',"saved":False},status=status.HTTP_301_MOVED_PERMANENTLY)
+        else:
+            return Response({'detail':"saved not found"},status=status.HTTP_404_NOT_FOUND)
+        

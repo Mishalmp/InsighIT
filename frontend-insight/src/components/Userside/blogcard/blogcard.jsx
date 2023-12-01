@@ -17,7 +17,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 import { Breadcrumbs } from "@material-tailwind/react";
 import { Link } from 'react-router-dom';
 import VerifiedIcon from "@mui/icons-material/Verified";
-
+import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 import StarRateIcon from '@mui/icons-material/StarRate';
 
 function timeAgo(date) {
@@ -60,7 +60,8 @@ function Blogcard({
   likes,
   profile_img,
   is_premium_blog,
-  user_premium
+  user_premium,
+  is_saved
 }) {
   const createdAtAgo = timeAgo(date);
   const blogDetailUrl = `/User/detailblog/${id}/`;
@@ -104,7 +105,7 @@ function Blogcard({
         </Typography>
 
     <p className=" mt-5 font-serif w-[25rem] container">
-    {plainTextContent.substring(0, 250)}
+    {plainTextContent.substring(0, 250)}...
     </p>
     <div>
     
@@ -136,7 +137,12 @@ function Blogcard({
     <span className='ml-2 text-gray-700'>{likes}</span>
   </li>
   <li className='flex items-center'>
-    <BookmarkAddIcon  className='w-10 h-10' />
+    {/* <BookmarkAddIcon  className='w-10 h-10' /> */}
+    {is_saved?
+                      <BookmarkOutlinedIcon className="w-10 h-10" color="primary"/>
+                      :
+                      <BookmarkAddIcon className="w-10 h-10 " />
+                    }
   </li>
   <li className='flex items-center'>
     <MoreHorizIcon  className='w-10 h-10'/>

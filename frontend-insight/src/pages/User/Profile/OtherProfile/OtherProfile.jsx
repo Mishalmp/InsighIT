@@ -60,7 +60,8 @@ import { useParams } from "react-router-dom";
 
 import Bloglistinprofile from "../../../../components/blogs/bloglistinprofile";
 import Bloghidepage from "../../../../components/premiumuser/premiumBlog/Bloghidepage";
-
+import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
+import { useNavigate } from "react-router-dom";
 function OtherProfile() {
   const { authorId } = useParams();
 
@@ -74,6 +75,8 @@ function OtherProfile() {
   const [opencover, setOpencover] = useState(false);
   const handleOpen = () => setOpencover((cur) => !cur);
   const [showhidepage,setShowhidepage]=useState(false)
+  const navigate=useNavigate()
+
   useEffect(() => {
     const FetchData = async () => {
       try {
@@ -103,14 +106,14 @@ function OtherProfile() {
     };
     try {
 
-      if(author.is_premium){
-        setShowhidepage(true)
-      }else{
+      // if(author.is_premium){
+      //   setShowhidepage(true)
+      // }else{
       const resp = await CreateFollowing(values);
       toast.success("followed successfully");
       setIs_following(true);
 
-      }
+      // }
 
       
     } catch (error) {
@@ -333,6 +336,7 @@ function OtherProfile() {
               <GitHubIcon />
               <LinkedInIcon />
               {/* <Cog6ToothIcon className="w-6 h-6" /> */}
+              {is_following && <CommentOutlinedIcon onClick={()=>navigate('/User/chat/')} fontSize="medium" className="hover:cursor-pointer hover:bg-blue-gray-100 hover:rounded-lg"/>}
             </CardFooter>
           </Card>
 

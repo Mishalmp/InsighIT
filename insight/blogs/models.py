@@ -64,3 +64,15 @@ class Report_blog(models.Model):
 
 
 
+class SavedBlogs(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    blog=models.ForeignKey(Blogs,on_delete=models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together=('user','blog')
+    
+
+    def __str__(self) -> str:
+        return f'{self.user.first_name} saved {self.blog.title}'
+    

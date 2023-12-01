@@ -102,7 +102,7 @@ function LoginPage() {
         userinfo:data
       }))
       const pre=await GetPremiuminfo(id)
-      console.log(pre.data,'premium dataa');
+     
       dispatch(setPremiumUserInfo({
         premiumuserinfo:pre.data
       }))

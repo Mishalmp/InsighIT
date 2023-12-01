@@ -2,6 +2,11 @@ import axios from "axios";
 
 import { accountsapi,adminapi,blogsapi,premiumapi } from "../constants/constants";
 
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
 
 const CreateAxiosClient=(baseURL)=>{
     const client = axios.create({
@@ -17,6 +22,10 @@ const attachToken=(req,tokenName)=>{
     let authToken = localStorage.getItem(tokenName.access)
     if (authToken){
         req.headers.Authorization=`Bearer ${authToken}`;
+    }
+    if (req.method === 'post') {
+        const csrfToken = getCookie('csrftoken'); // Implement getCookie function
+        req.headers['X-CSRFToken'] = csrfToken;
     }
     return req
 }

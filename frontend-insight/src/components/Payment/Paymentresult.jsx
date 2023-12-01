@@ -17,11 +17,12 @@ import {
   import Paymentsuccess from '../../assets/payment success.svg'
   import paymentcancelled from '../../assets/payment cancelled.jpg'
   import { useQuery } from 'react-query';
-
-  import { CreateSubscription,CreateFollowing } from '../../services/UserApi';
+import { useSelector } from 'react-redux';
+  import { CreateSubscription,CreateFollowing,NotificationCreate } from '../../services/UserApi';
 
 function Paymentresult() {
 
+    const {userinfo}=useSelector((state)=>state.user) 
     const isSuccess = new URLSearchParams(window.location.search).get("success") === "true";
     const searchparams= new URLSearchParams(window.location.search)
 
@@ -55,6 +56,14 @@ function Paymentresult() {
           follower: searchparams.get('subscriber'),
           following: searchparams.get('subscribed_to'),
         });
+
+        const values={
+
+          user:searchparams.get('subscribed_to'),
+          text:`${userinfo.first_name} Subscribed you. Type: ${searchparams.get('subscription_type')} `,
+      }
+
+        await NotificationCreate(values)
   
         return subscriptionData;
       }

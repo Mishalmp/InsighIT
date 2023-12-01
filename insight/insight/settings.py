@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'dashboard',
     'blogs',
     'premium',
+    'chats',
+    'channels',
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
@@ -112,6 +115,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'insight.wsgi.application'
+ASGI_APPLICATION ='insight.asgi.application'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': "channels.layers.InMemoryChannelLayer"
+        }
+    }
+
+
+
 
 
 # Database

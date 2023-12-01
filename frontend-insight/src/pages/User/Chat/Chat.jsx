@@ -1,0 +1,42 @@
+import React, { useRef, useState } from "react";
+import Chatfield from "../../../components/Chat/Chatfield";
+import ChatUserlist from "../../../components/Chat/ChatUserlist";
+// import Userico from "../../assets/user2img.png";
+import NavBar from "../../../components/Userside/NavBar/NavBar";
+import Footer from "../../../components/Userside/footer/footer";
+
+import { useSelector } from "react-redux";
+import chatimg from '../../../assets/Work chat-cuate.svg'
+function Chat() {
+  const { userinfo } = useSelector((state) => state.user);
+  
+  const [recipientDetails, setRecipientDetails] = useState(null);
+
+  return (
+    <>
+      <NavBar />
+      <div className="flex">
+        <ChatUserlist
+          userinfo={userinfo}
+          setRecipientDetails={setRecipientDetails}
+        />
+        {recipientDetails ? (
+          <Chatfield userinfo={userinfo} recipientDetails={recipientDetails} />
+        ) : (
+          <div className="w-2/3 h-[50rem] bg-gray-50 border-[1px] border-gray-400">
+            
+            <h1 className="text-5xl font-bold text-center mt-10">Select Chat</h1>
+
+            <img src={chatimg} className="w-[35rem] h-[35rem] ml-48 mt-10" alt="chat img" />
+
+          </div>
+        )}
+      </div>
+      <div className="-mt-10">
+        <Footer />
+      </div>
+    </>
+  );
+}
+
+export default Chat;

@@ -16,6 +16,7 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Progress } from "@material-tailwind/react";
 import { ToastContainer, toast } from "react-toastify";
+import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 import {
   Card,
   CardHeader,
@@ -58,11 +59,22 @@ import Bloglistinprofile from "../../../components/blogs/bloglistinprofile";
 import Followlist from "../../../components/followlist/followlist";
 import Subscribelist from "../../../components/subscribelist/Subscribelist";
 import Wallet from "../../../components/premiumuser/Wallet/Wallet";
-
+import { FaWallet } from "react-icons/fa6";
+import { SlUserFollowing } from "react-icons/sl";
+import { MdSubscriptions } from "react-icons/md";
+import { HiUserGroup } from "react-icons/hi2";
+import { GrGroup } from "react-icons/gr";
 function UserProfile() {
   const { userinfo } = useSelector((state) => state.user);
   const { premiumuserinfo } = useSelector((state) => state.user);
   const [skills, setSkills] = useState([]);
+
+  const [skillopen, setskillOpen] = useState(false);
+  const [skill, setSkill] = useState({ skill: "", rateofskills: 0 });
+  const handleskillopen = () => setskillOpen((cur) => !cur);
+
+  const [skilleditopen, setskilleditopen] = useState(false);
+  const [selectedskillId,setselectedskillId]=useState(null)
   //   console.log(userinfo, "ddddddddddd");
   useEffect(() => {
     const fetchskills = async () => {
@@ -158,12 +170,7 @@ function UserProfile() {
     }
   };
 
-  const [skillopen, setskillOpen] = useState(false);
-  const [skill, setSkill] = useState({ skill: "", rateofskills: 0 });
-  const handleskillopen = () => setskillOpen((cur) => !cur);
 
-  const [skilleditopen, setskilleditopen] = useState(false);
-  const [selectedskillId,setselectedskillId]=useState(null)
 
   const handleSkillEditOpen = () => setskilleditopen(true);
 
@@ -238,7 +245,7 @@ function UserProfile() {
     {
       label: "Subscriptions",
       value: "subscriptions",
-      icon: Square3Stack3DIcon,
+      icon: MdSubscriptions,
      
     },
     ...(userinfo.is_premium
@@ -246,7 +253,7 @@ function UserProfile() {
           {
             label: "Subscribers",
             value: "subscribers",
-            icon: Square3Stack3DIcon,
+            icon: HiUserGroup,
           },
         ]
       : []),
@@ -255,7 +262,7 @@ function UserProfile() {
             {
               label: "Wallet",
               value: "wallet",
-              icon: Square3Stack3DIcon,
+              icon: FaWallet,
             },
           ]
         : []),
@@ -263,13 +270,13 @@ function UserProfile() {
     {
       label: "Followings",
       value: "followings",
-      icon: Square3Stack3DIcon,
+      icon: SlUserFollowing,
      
     },
     {
       label: "Followers",
       value: "followers",
-      icon: Square3Stack3DIcon,
+      icon: GrGroup,
      
     },
     // {
@@ -292,7 +299,7 @@ function UserProfile() {
               {userinfo.cover_img ? (
                 <>
                   <img
-                    className="absolute top-0 left-0 h-48 w-full rounded-lg object-cover object-center"
+                    className="absolute top-0 left-0 h-48 w-full rounded-t-lg object-cover object-center"
                     src={userinfo.cover_img}
                     alt="Banner img"
                   />

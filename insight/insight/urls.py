@@ -25,4 +25,5 @@ urlpatterns = [
     path('dashboard/',include('dashboard.urls')),
     path('blogs/',include('blogs.urls')),
     path('premium/',include('premium.urls')),
+    path('chats/',include('chats.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

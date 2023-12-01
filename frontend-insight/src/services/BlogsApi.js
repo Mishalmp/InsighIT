@@ -117,10 +117,34 @@ const ReportBlogList=()=>{
 }
 
 const Reportupdate=(id,values)=>{
-    return BlogsAxiosInstant.patch(`/reportview/${id}`,values,{
+    return BlogsAxiosInstant.patch(`/reportview/${id}/`,values,{
         withCredentials:true
     }).catch((error)=>error.response)
 }
 
 
-export {CreateBlog,GetBlogDetail,GetBlogsByTopic,ListBlogs,GetBlogsByUser,CreateTopics,GetTopics,TrendingBlogs,UpdateBlog,DeleteBlog,CreateComment,ListComment,DeleteComment,LikeBlog,UnlikeBlog,GetBlogLike,ReportBlogs,ReportBlogList,Reportupdate}
+const CreateSaved=(values)=>{
+    return BlogsAxiosInstant.post(`/createsaved/`,values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const ListSaved=(user_id,searchQuery)=>{
+    return BlogsAxiosInstant.get(`/listsaved/${user_id}/?search=${searchQuery}`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const IsSave=(user_id,blog_id)=>{
+    return BlogsAxiosInstant.get(`/saveview/?user_id=${user_id}&blog_id=${blog_id}`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const Unsave=(user_id,blog_id)=>{
+    return BlogsAxiosInstant.delete(`/saveview/?user_id=${user_id}&blog_id=${blog_id}`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+export {CreateBlog,GetBlogDetail,GetBlogsByTopic,ListBlogs,GetBlogsByUser,CreateTopics,GetTopics,TrendingBlogs,UpdateBlog,DeleteBlog,CreateComment,ListComment,DeleteComment,LikeBlog,UnlikeBlog,GetBlogLike,ReportBlogs,ReportBlogList,Reportupdate,CreateSaved,ListSaved,IsSave,Unsave}

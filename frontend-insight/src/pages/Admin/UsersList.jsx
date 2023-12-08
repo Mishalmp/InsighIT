@@ -72,17 +72,13 @@ export default function UsersList() {
 
     useEffect(() => {
       fetchUsers();
-    }, []);
+    }, [searchQuery]);
   
-      // Filter users based on the search query
-  const filteredUsers = users.filter((user) => {
-    const userFullName = `${user.first_name} ${user.last_name} ${user.email}`.toLowerCase();
-    return userFullName.includes(searchQuery.toLowerCase());
-  });
+
 
     const fetchUsers = async () => {
       try {
-        const response = await ListUser(); // Call your API function
+        const response = await ListUser(searchQuery); // Call your API function
         const data = response.data; // Assuming data is an array of user objects
         setUsers(data);
       } catch (error) {
@@ -94,7 +90,7 @@ const handlePageClick = (selectedPage) => {
   };
 
   const offset = currentPage * itemsPerPage;
-  const paginatedUsers = filteredUsers.slice(offset, offset + itemsPerPage);
+  const paginatedUsers = users.slice(offset, offset + itemsPerPage);
 
     return (
       <div className="flex">

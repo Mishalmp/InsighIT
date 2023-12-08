@@ -30,7 +30,7 @@ function Bloglistinprofile({ userid }) {
   useEffect(() => {
     const Fetchblogs = async () => {
       try {
-        const response = await GetBlogsByUser(userid, searchQuery);
+        const response = await GetBlogsByUser(userid, searchQuery,"");
         setBlogs(response.data);
       } catch (error) {
         console.error(error);
@@ -62,7 +62,8 @@ function Bloglistinprofile({ userid }) {
         </div>
       </div>
       <Card className="w-[50rem] min-h-[25rem] max-h-[50rem] overflow-y-auto overflow-x-hidden mt-5 bg-gray-100">
-        {blogs.map((blog) => (
+        {blogs.length > 0?
+        blogs.map((blog) => (
           <Blogcard
             key={blog.id}
             id={blog.id}
@@ -76,7 +77,10 @@ function Bloglistinprofile({ userid }) {
             likes={blog.likes}
             is_premium_blog={blog.is_premium_blog}
           />
-        ))}
+        )):(
+          <Typography variant='h3' className='text-center'>No Data Found</Typography>
+        )
+      }
       </Card>
     </>
   );

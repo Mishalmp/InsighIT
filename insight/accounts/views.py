@@ -21,7 +21,7 @@ from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from decimal import Decimal
 from django.db.models import Sum,Q
-
+from dashboard.serializers import *
 
 stripe.api_key=settings.STRIPE_SECRET_KEY
 
@@ -272,8 +272,34 @@ class ListWallet(ListAPIView):
         return Response(response_data)
 
 
+class ReportIssueCreateView(CreateAPIView):
+    serializer_class=ReportIssueCreateSerializer
+    queryset=Report_Issue.objects.all()
 
+class ReportIssueListView(ListAPIView):
+    serializer_class=ReportIssueSerializer
+    queryset=Report_Issue.objects.all().order_by('-created_at')
+
+class ReportissueDetailView(RetrieveUpdateDestroyAPIView):
+    serializer_class=ReportIssueSerializer
+    queryset=Report_Issue.objects.all()
+        
+        
+        
+
+class ReportIssuesbyUser(ListAPIView):
+    serializer_class=ReportIssueSerializer
+
+    def get_queryset(self):
+        
+        return Report_Issue.objects.filter(user=self.kwargs.get('user_id')).order_by('-created_at')
     
+
+class PremiumUserList(ListAPIView):
+    serializer_class=UserListSerializer
+    queryset=User.objects.filter(is_active=True,is_premium=True).order_by('-id')
+
+
 
 #----------------payment STRIPE------------------------------
 

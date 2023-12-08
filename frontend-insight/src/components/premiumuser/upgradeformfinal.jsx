@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { CreateExperiences,CreateQualifications } from "../../services/PremiumApi";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { CreatepremiumUserinfo } from "../../services/PremiumApi";
+import { CreatepremiumUserinfo,createpremiumrequest } from "../../services/PremiumApi";
 import { setPremiumUserInfo } from "../../Redux/UserSlice";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -51,7 +51,7 @@ function Upgradeformfinal({ onBack,formData }) {
 
       if (formData){
         const response = await CreatepremiumUserinfo(formData);
-        console.log(response.data, "resadsa");
+       
 
         if (response.status === 201){
           dispatch(setPremiumUserInfo({
@@ -62,22 +62,25 @@ function Upgradeformfinal({ onBack,formData }) {
 
 
         const quali_res=await CreateQualifications({
-          premium_user:premiumuserinfo.id,
+          premium_user:response.data.id,
           qualifications:qualifications
         });
   
         const exp_res=await CreateExperiences({
-          premium_user:premiumuserinfo.id,
+          premium_user:response.data.id,
           experience:experience
         })
-        console.log(quali_res.data,'qaaali')
-        console.log(exp_res.data,'exppppp')
+
+        await createpremiumrequest({
+          premium:response.data.id
+        })
+       
         toast.success("Record Submitted Successfully")
         
 
       }else{
         toast.error("form empty")
-        console.log("nothing in form")
+       
       }
 
         

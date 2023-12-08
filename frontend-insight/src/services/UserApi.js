@@ -171,4 +171,43 @@ const PreviousChat=(user1,user2)=>{
     }).catch((error)=>error.response)
 }
 
-export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,UpdateUser,CreateSkill,ListSkills,EditSkill,DeleteSkill,NotificationCreate,Checkoutsession,Notificationsbyuser,CreateSubscription,IsSubscriber,CreateFollowing,Is_follower,Unfollow,Followingslist,Followerslist,SubscriptionsList,Subscriberslist,UserWallet,PreviousChat,ChatUsersList,ClearNotificationbyuser}
+
+const CreateReportIssue=(values)=>{
+    return UserAxiosInstant.post(`accounts/reportissuecreate/`,values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const ListIssues=()=>{
+    return UserAxiosInstant.get("accounts/issuelist/",{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const ListIssuesByUser=(user_id)=>{
+    return UserAxiosInstant.get(`accounts/issuelistbyuser/${user_id}`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const IssueReportView=(id)=>{
+    return UserAxiosInstant.get(`accounts/issueview/${id}`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const PremiumList=()=>{
+    return UserAxiosInstant.get(`accounts/premiumlist/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+
+
+export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,
+    UpdateUser,CreateSkill,ListSkills,EditSkill,DeleteSkill,NotificationCreate,Checkoutsession,
+    Notificationsbyuser,CreateSubscription,IsSubscriber,CreateFollowing,Is_follower,Unfollow,Followingslist,Followerslist,
+    SubscriptionsList,Subscriberslist,UserWallet,PreviousChat,ChatUsersList,ClearNotificationbyuser,IssueReportView,
+    ListIssuesByUser,ListIssues,CreateReportIssue,PremiumList
+
+}

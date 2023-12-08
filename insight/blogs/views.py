@@ -10,6 +10,7 @@ from rest_framework.response import Response
 import traceback
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
+from django.db.models import Count
 
 # Create your views here.
 
@@ -30,6 +31,33 @@ class TopicsView(RetrieveUpdateDestroyAPIView):
     queryset=Topics.objects.all()
     serializer_class=TopicsSerializer
     # permission_classes=[IsAuthenticated]
+
+class MostUsedtopics(ListAPIView):
+    serializer_class=TopicsSerializer
+
+    def get_queryset(self):
+        return Topics.objects.annotate(blog_count=Count('blogs')).order_by('-blog_count')[:5]
+
+
+
+class CommunityCreateView(CreateAPIView):
+    queryset=Community.objects.all()
+    serializer_class=CommunityCreateSerializer
+
+class CommunityListView(ListAPIView):
+    serializer_class=CommunitySerializer
+    queryset=Community.objects.all().order_by('-created_at')
+
+class Communitydetailview(RetrieveUpdateDestroyAPIView):
+    serializer_class=CommunitySerializer
+    queryset=Community.objects.all()
+
+class CommunityListByUser(ListAPIView):
+    serializer_class=CommunitySerializer
+
+    def get_queryset(self):
+        
+        return Community.objects.filter(user=self.kwargs.get('user_id')).order_by('-created_at')
 
 
 
@@ -56,19 +84,20 @@ class BlogsListCreateView(ListCreateAPIView):
 from django.db.models import Q
 class ListBlogsView(ListAPIView):
     
-    queryset=Blogs.objects.filter(is_block=False).order_by('-created_at')
+    
     serializer_class=Blogserializer
     filter_backends = [SearchFilter]
-    search_fields=['title','topic__topic']
+    search_fields=['title','topic__topic','user_id__first_name']
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     search_query = self.request.query_params.get('search[search]', None)
+    def get_queryset(self):
         
-    #     if search_query:
-    #         queryset = queryset.filter(Q(title__icontains=search_query)  | Q(topic__topic__icontains=search_query))
-        
-    #     return queryset
+        topic=self.request.query_params.get('topic')
+
+        if topic:
+            return Blogs.objects.filter(topic__topic=topic,is_block=False).order_by('-created_at')
+        else:
+            return Blogs.objects.filter(is_block=False).order_by('-created_at')
+
 
 class TrendingBlogsListView(ListAPIView):
     serializer_class = Blogserializer
@@ -101,13 +130,14 @@ class BlogsByUserListView(ListAPIView):
     
 
     def get_queryset(self):
-        queryset = Blogs.objects.all().order_by('-created_at')
+        topic=self.request.query_params.get('topic')
         user_id = self.kwargs.get('user_id')
+        if topic:
+            return Blogs.objects.filter(topic__topic=topic,is_block=False,user_id=user_id).order_by('-created_at')
+        else:
+            return Blogs.objects.filter(is_block=False,user_id=user_id).order_by('-created_at')
 
-        if user_id:
-            queryset = queryset.filter(user_id=user_id)
 
-        return queryset
     
 
 
@@ -244,4 +274,3 @@ class IsSavedView(RetrieveUpdateDestroyAPIView):
             return Response({'detail':'item deleted from saved',"saved":False},status=status.HTTP_301_MOVED_PERMANENTLY)
         else:
             return Response({'detail':"saved not found"},status=status.HTTP_404_NOT_FOUND)
-        

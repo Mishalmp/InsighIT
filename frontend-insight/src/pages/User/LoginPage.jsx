@@ -4,7 +4,7 @@ import Bloggingimg from '../../assets/Computer login-bro.png'
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { UserSignin,UserGoogleSignin,GetUserInfo } from '../../services/UserApi';
-import { GetPremiuminfo } from '../../services/PremiumApi';
+import { GetPremiuminfobyUser } from '../../services/PremiumApi';
 import {jwtDecode} from "jwt-decode";
 import { Loader } from '../../components/Loading/Loader';
 import { useGoogleLogin } from "@react-oauth/google";
@@ -13,11 +13,16 @@ import "react-toastify/dist/ReactToastify.css";
 import NavBar from '../../components/Userside/NavBarhome/NavBar';
 import { setUserInfo,setPremiumUserInfo } from '../../Redux/UserSlice';
 import { useDispatch } from 'react-redux';
-
+import { useLocation } from 'react-router-dom';
 
 function LoginPage() {
 
   const navigate=useNavigate()
+
+  const location = useLocation()
+
+  const message=new URLSearchParams(location.search).get("message")
+
 
   const [user,setUser]=useState({email:"",password:""})
 
@@ -101,7 +106,7 @@ function LoginPage() {
       dispatch(setUserInfo({
         userinfo:data
       }))
-      const pre=await GetPremiuminfo(id)
+      const pre=await GetPremiuminfobyUser(id)
      
       dispatch(setPremiumUserInfo({
         premiumuserinfo:pre.data
@@ -180,13 +185,18 @@ function LoginPage() {
 
   useEffect(()=>{
     const token = localStorage.getItem('token')
+
+    if(message){
+      toast.success(message)
+    }
+
     if (token){
       const decoded = jwtDecode(token)
       if (decoded.role ==='user' && decoded.is_active){
         navigate('/User/Home/');
       }
     }
-  },[navigate])
+  },[navigate,message])
 
 
   //google auth
@@ -223,7 +233,7 @@ function LoginPage() {
   return (
     <>
     {loading && <Loader/>}
-<ToastContainer  />
+
 
 
 <div className="min-h-screen flex">

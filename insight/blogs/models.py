@@ -75,4 +75,10 @@ class SavedBlogs(models.Model):
 
     def __str__(self) -> str:
         return f'{self.user.first_name} saved {self.blog.title}'
-    
+
+
+class Community(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    text=models.TextField()
+    image=models.ImageField(upload_to='community_img/',null=True,blank=True)
+    created_at=models.DateTimeField(auto_now_add=True)

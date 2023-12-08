@@ -14,6 +14,7 @@ import NavBar from "../../../components/Userside/NavBar/NavBar";
 import Footer from "../../../components/Userside/footer/footer";
 import { useNavigate } from "react-router-dom";
 import EditorToolbar, { modules, formats } from '../../../helpers/EditorToolbar'
+import { HowtowriteBlog } from "../../../components/Howto/Howtowriteblog";
 // import { Editor } from "react-draft-wysiwyg";
 // import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
@@ -47,7 +48,7 @@ function UserBlogCreate() {
   
 
   const handleBlogSubmit = async () => {
-    console.log(selectTopic, "selecttopicss");
+    
     handleLoading()
     const blogvalues = {
       title: title,
@@ -55,7 +56,7 @@ function UserBlogCreate() {
       user_id: userinfo.id,
       topic: selectTopic,
     };
-    console.log(ispremium,'premiumasdadsads');
+    
     const formData=new FormData()
     formData.append("title",title)
     formData.append("content",value)
@@ -66,7 +67,7 @@ function UserBlogCreate() {
     formData.append("is_premium_blog",ispremium)
 
     try {
-      console.log(blogvalues, "blogvalues");
+      // console.log(blogvalues, "blogvalues");
       const response = await CreateBlog(formData);
       
       toast.success("Blog created successfully")
@@ -85,13 +86,20 @@ function UserBlogCreate() {
     setVideoFile(e.target.files[0]);
   };
 
+  const [open, setOpen] = useState(false);
+ 
+  const handleOpen = () => setOpen(!open);
+
   return (
     <>
      {loading && <Loader/>}
       <ToastContainer  />
       <NavBar/>
       <Typography className="text-center font-semibold text-2xl -ml-24 mt-10">Write Blog</Typography>
-      <Card className="w-[60rem]  m-10 ml-[15%] bg-gray-50">
+      <Button variant="gradient" onClick={handleOpen} className="float-right mr-20 -mt-10">
+        How to write?
+      </Button>
+      <Card className="w-[60rem]  m-10 ml-[15%] bg-gray-50 shadow-2xl">
         <Typography className="text-center font-semibold mt-4">Title </Typography>
         <div className="flex flex-col w-[70%] ml-[15%] gap-6">
           <Input
@@ -119,7 +127,7 @@ function UserBlogCreate() {
         <Typography className="text-center font-semibold">
           Banner Image{" "}
         </Typography>
-        <div className="flex items-center justify-center w-full mb-10">
+        <div className="flex items-center justify-center ml-20 w-[50rem] mb-10">
           <label
             htmlFor="dropzone-file"
             className="flex flex-col items-center justify-center w-[80%] h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -227,6 +235,7 @@ function UserBlogCreate() {
           Submit Blog
         </Button>
       </Card>
+      <HowtowriteBlog handleOpen={handleOpen} open={open} />
       <Footer/>
     </>
   );

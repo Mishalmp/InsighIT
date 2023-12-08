@@ -9,7 +9,7 @@ import Breadcrumbs from '../../../components/Breadcrumbs/Breadcrumbs'
 import {
   // Card,
   // CardHeader,
-  Input,
+  Input, Typography,
   // Typography,
   // Button,
   // CardBody,
@@ -22,30 +22,21 @@ import {
   // IconButton,
   // Tooltip,
 } from "@material-tailwind/react";
+import Footer from '../../../components/Userside/footer/footer'
+import Sortorder from "../../../components/Userside/sortbar/sortorder"
+import Sidebar from '../../../components/sidebar/Sidebar'
 function Blogs() {
 
   const [blogs,setBlogs]=useState([])
   const [searchQuery, setSearchQuery] = useState('');
-  // const [isSidebarFixed, setIsSidebarFixed] = useState(false);
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const scrollTop = window.scrollY;
-  //     setIsSidebarFixed(scrollTop > 700);
-  //   };
-
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, []);
 
   useEffect(()=>{
     const FetchBlogs=async ()=>{
       try{
-        const response=await ListBlogs(searchQuery)
+        const response=await ListBlogs(searchQuery,"")
         setBlogs(response.data)
-        console.log(response.data,'resssssss');
+        
       }catch (error){
         console.error("error! fetching blogs",error)
       }
@@ -58,39 +49,39 @@ function Blogs() {
     console.log();
   };
 
-  console.log(searchQuery,'search....')
+ 
   return (
-    <div>
+    <div className='bg-white'>
       <Navbar/>
       <div className='flex'>
       {/* <div className={`flex-grow ${isSidebarFixed ? 'ml-[28rem]' : ''}`}> */}
-      <div>
+      <div className='bg-gray-50 mt-5 rounded-lg w-[60rem] ml-[5rem] mb-5 shadow-2xl'>
       <Breadcrumbs/>
-      <div className='flex'>
-
-      <h1 className='font-bold text-5xl ml-[40%] mt-10'>Blogs</h1>
-      <div className="w-full md:w-72 -mt-9 ml-28">
-               <Input
+      <div className="flex">
+            <h1 className="font-bold text-5xl  ml-[20rem] mt-10">Blogs</h1>
+            <div className="md:w-72 mt-12 ml-[8rem] ">
+              <Input
                 label="Search"
-                icon={<MagnifyingGlassIcon   className="h-5 w-5" />}
-                onChange={handleSearchChange}
+                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                 value={searchQuery}
-                
-                />
+                onChange={handleSearchChange}
+              />
             </div>
-                </div>
-      <Blogfilter/>
-      <div className='ml-[10%]'>
+          </div>
+      <Blogfilter ListBlogs={ListBlogs} setBlogs={setBlogs} searchQuery={searchQuery} />
+      <div className='ml-[3rem]'>
+      <Sortorder/>
 
-     
-      {blogs.map((blog)=>(
+     <div className='h-[60rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5'>
+      {blogs.length > 0 ?
+      blogs.map((blog)=>(
         
         <Blogcard 
         key={blog.id}
         id={blog.id}
         profile_img={blog.user_id.profile_img}
         user_premium={blog.user_id.is_premium}
-        author={blog.user_id.first_name}
+        author={blog.user_id.first_name+" "+blog.user_id.last_name}
         date={blog.created_at}
         title={blog.title}
         content={blog.content}
@@ -99,15 +90,20 @@ function Blogs() {
         likes={blog.likes}
         is_premium_blog={blog.is_premium_blog}
         />
-      ))
+      )):(
+        <Typography variant='h3' className='text-center'>No Data Found</Typography>
+      )
 
       }
+      </div>
        </div>
       </div>
+     
 
-    <Sidefooter/>
+    <Sidebar/>
+     
     </div>
-
+    <Footer/>
     </div>
   )
 }

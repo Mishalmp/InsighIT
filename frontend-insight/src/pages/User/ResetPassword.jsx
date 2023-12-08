@@ -72,7 +72,7 @@ function ResetPassword() {
   return (
     <>
     {/* {loading && <Loader/>} */}
-<ToastContainer  />
+
 
 <div className="min-h-screen flex">
 <div className="w-1/2 bg-cover flex items-center justify-center" >

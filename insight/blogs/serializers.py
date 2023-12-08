@@ -24,11 +24,21 @@ class CreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CommunityCreateSerializer(serializers.ModelSerializer):
 
-    # user_id = serializers.ReadOnlyField(source='user_id.username')
+    class Meta:
+        model=Community
+        fields='__all__'
 
-   
-    # topic = serializers.ReadOnlyField(source='topic.topic')
+class CommunitySerializer(serializers.ModelSerializer):
+    user=UserSerializer(read_only=True)
+
+    class Meta:
+        model=Community
+        fields='__all__'
+
+
+
 
 
 

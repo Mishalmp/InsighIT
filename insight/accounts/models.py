@@ -2,7 +2,7 @@ from django.db import models
 
 from django.contrib.auth.models import AbstractUser,BaseUserManager
 # Create your models here.
-
+from celery import shared_task
 from django.utils import timezone
 
 class CustomUserManager(BaseUserManager):
@@ -102,17 +102,25 @@ class PremiumUserInfo(models.Model):
     account_number = models.CharField(max_length=20)
     ifsc_code = models.CharField(max_length=20)
     is_approved=models.BooleanField(default=False)
+    created_at=models.DateTimeField(auto_now_add=True,null=True,blank=True)
 
     def __str__(self):
         return self.user.email
 
 class Qualifications(models.Model):
-    premium_user = models.ForeignKey(PremiumUserInfo, on_delete=models.CASCADE)
+    premium_user = models.ForeignKey(PremiumUserInfo, on_delete=models.CASCADE,related_name='qualifications')
     qualifications = models.CharField(max_length=100,null=True)
 
 class Experiences(models.Model):
-    premium_user = models.ForeignKey(PremiumUserInfo, on_delete=models.CASCADE)
+    premium_user = models.ForeignKey(PremiumUserInfo, on_delete=models.CASCADE,related_name='experiences')
     experience = models.CharField(max_length=200,null=True)
+
+
+class PremiumRequests(models.Model):
+    premium=models.ForeignKey(PremiumUserInfo,on_delete=models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+    is_approved=models.BooleanField(default=False)
+
 
 
 class Subscription(models.Model):
@@ -144,6 +152,18 @@ class Subscription(models.Model):
             self.is_active=False
         
         super().save(*args,**kwargs)
+    
+    # @staticmethod
+    # @shared_task
+    # def check_subscription_status():
+    #     current_time = timezone.now()
+    #     subscriptions_to_update = Subscription.objects.filter(
+    #         end_time__lte=current_time,
+    #         is_active=True
+    #     )
+    #     for subscription in subscriptions_to_update:
+    #         subscription.is_active = False
+    #         subscription.save()
    
 
 
@@ -169,3 +189,9 @@ class Wallet(models.Model):
 
     # class Meta:
     #     unique_together=['user_id','recieved','created_at']
+
+class Report_Issue(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    issue=models.TextField()
+    is_fixed=models.BooleanField(default=False)
+    created_at=models.DateTimeField(auto_now_add=True)

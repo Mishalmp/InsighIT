@@ -3,11 +3,19 @@ from .views import *
 
 urlpatterns = [
     path('topics/', TopicsListCreateView.as_view(), name='topics-list-create'),
+    path('trendingtopics/', MostUsedtopics.as_view(), name='trending-topics'),
     path('topicsview/<int:pk>/',TopicsView.as_view(),name='topic-view'),
     path('blogs/', BlogsListCreateView.as_view(), name='blogs-list-create'),
     path('blogdetail/<int:pk>/', BlogDetailView.as_view(), name='blogs-detail'),
     path('blogslist/',ListBlogsView.as_view(),name='blogs-list'),
     path('trendingblogs/',TrendingBlogsListView.as_view(),name='trendingblogs'),
+
+    path('communitycreate/',CommunityCreateView.as_view(),name='communities-create'),
+    path('communitylist/',CommunityListView.as_view(),name='communities-list'),
+    path('communityview/<int:pk>/',Communitydetailview.as_view(),name='communities-view'),
+    path('communitiesbyuser/<int:user_id>/',CommunityListByUser.as_view(),name='communitieslist-by-user'),
+
+
 
     path('blogs/by-topic/<int:topic>/', BlogsByTopicListView.as_view(), name='blogs-by-topic'),
 

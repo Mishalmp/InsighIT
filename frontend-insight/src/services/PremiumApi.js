@@ -17,13 +17,61 @@ const CreateQualifications=(values)=>{
     }).catch((error)=>error.response)
 }
 
-// const GetPremiuminfos=()=>{
-//     return PremiumAxiosInstant.get('')
-// }
-
-const GetPremiuminfo=(user_id)=>{
-    return PremiumAxiosInstant.get(`/premiumuserinfoview/${user_id}/`)
+const GetPremiuminfolist=(searchQuery)=>{
+    return PremiumAxiosInstant.get(`/premiumuserinfolist/?search=${searchQuery}`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
 }
 
 
-export {CreatepremiumUserinfo,CreateExperiences,CreateQualifications,GetPremiuminfo}
+const GetPremiuminfo=(id)=>{
+    return PremiumAxiosInstant.get(`/premiumuserinfoview/${id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const GetPremiuminfobyUser=(id)=>{
+    return PremiumAxiosInstant.get(`/premiumuserinfouserview/${id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const UpdatePremiuminfo=(id,values)=>{
+    return PremiumAxiosInstant.patch(`/premiumuserinfoview/${id}/`,values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+
+
+const createpremiumrequest=(values)=>{
+    return PremiumAxiosInstant.post("/premiumrequestcreate/",values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const PremiumReqList=()=>{
+    return PremiumAxiosInstant.get("/premiumuserrequestlist/",{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+const PremiumReqView=(id)=>{
+    return PremiumAxiosInstant.get(`/premiumuserreqview/${id}/`,{
+        withCredentials:true
+
+    }).catch((error)=>error.response)
+}
+
+const PremiumReqUpdate=(id,values)=>{
+    return PremiumAxiosInstant.patch(`/premiumuserreqview/${id}/`,values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+export {CreatepremiumUserinfo,CreateExperiences,CreateQualifications,GetPremiuminfo,
+    GetPremiuminfolist,createpremiumrequest,PremiumReqList,PremiumReqView,
+    PremiumReqUpdate,UpdatePremiuminfo,GetPremiuminfobyUser
+
+
+}

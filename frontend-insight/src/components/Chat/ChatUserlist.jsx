@@ -62,7 +62,7 @@ function ChatUserlist({ userinfo, setRecipientDetails }) {
               <div
                 key={user.id}
                 onClick={() => setRecipientDetails(user)}
-                className="w-[30rem] bg-blue-gray-100 gap-8 hover:cursor-pointer hover:bg-gray-200 h-16 mt-2 grid grid-cols-4 rounded-lg shadow-md shadow-gray-300"
+                className="w-[30rem] bg-white gap-8 hover:cursor-pointer hover:bg-gray-200 h-16 mt-2 grid grid-cols-4 rounded-lg shadow-md shadow-gray-300"
               >
                 <img
                   src={user.profile_img}

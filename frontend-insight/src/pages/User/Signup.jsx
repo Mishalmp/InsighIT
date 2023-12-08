@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,10 +14,18 @@ import { Loader } from "../../components/Loading/Loader";
 import { UserGoogleSignup } from "../../services/UserApi";
 import { jwtDecode } from "jwt-decode";
 import NavBar from "../../components/Userside/NavBarhome/NavBar";
+import { GetPremiuminfo } from '../../services/PremiumApi';
+import { UserSignin,UserGoogleSignin,GetUserInfo } from '../../services/UserApi';
+import { setUserInfo,setPremiumUserInfo } from '../../Redux/UserSlice';
+import { useDispatch } from 'react-redux';
 // Redux
 
 function Signup() {
   const navigate=useNavigate()
+  const location = useLocation()
+  const dispatch = useDispatch()
+
+  const message=new URLSearchParams(location.search).get("message")
   const [loading,setLoading]=useState(false)
   const [user,setUser]=useState({
     first_name:"",
@@ -28,6 +36,12 @@ function Signup() {
 
   const [cpass,setCpass]=useState({cpassword:'',check:true})
   const [guser,setGuser]=useState();
+
+  useEffect(()=>{
+    if(message){
+      toast.error(message)
+    }
+  },[message])
 
 
   useEffect(()=>{
@@ -50,6 +64,7 @@ function Signup() {
 
         const token = JSON.stringify(res.data.token)
         const decoded = jwtDecode(token)
+        fetchUserInfo(decoded)
         localStorage.setItem("token",token)
 
         if (decoded.role === 'user'){
@@ -79,7 +94,41 @@ function Signup() {
     }
   },[guser]);
 
-
+  const fetchUserInfo=async (token) =>{
+    try{
+      const id =token.id
+      const res=await GetUserInfo(id)
+      
+      const data={
+        id:res.data.id,
+        first_name:res.data.first_name,
+        last_name:res.data.last_name,
+        email:res.data.email,
+        role:res.data.role,
+        is_active:res.data.is_active,
+        is_google:res.data.is_google,
+        bio:res.data.bio,
+        profile_img:res.data.profile_img,
+        cover_img:res.data.cover_img,
+        tag_name:res.data.tag_name,
+        is_premium:res.data.is_premium,
+        wallet_balance:res.data.wallet_balance,
+      }
+      dispatch(setUserInfo({
+        userinfo:data
+      }))
+      const pre=await GetPremiuminfo(id)
+     
+      dispatch(setPremiumUserInfo({
+        premiumuserinfo:pre.data
+      }))
+      console.log(Userinfo,'userinfo')
+    
+    }
+    catch{
+      toast.error("error occured!!!")
+    }
+  }
 
 
 
@@ -218,7 +267,7 @@ function Signup() {
   return (
     <>
     {loading && <Loader />}
-    <ToastContainer />
+   
    
      <div className="min-h-screen flex ">
      <div className="w-1/2 bg-cover flex items-center justify-center" >

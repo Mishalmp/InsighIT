@@ -2,9 +2,9 @@ import json
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from datetime import datetime
-
+from accounts.models import Notifications
 from django.contrib.auth import get_user_model
-
+from asgiref.sync import sync_to_async
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -22,7 +22,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        print("connect",self.room_group_name,self.channel_layer)
 
         print("handshake connected websocket....")
         await self.accept()
@@ -96,7 +95,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         from .serializers import MessageSerializer
         from .models import Message
-        print(sender,reciever,message,thread_name,'senderrrrrr,recieverrrrrrrrrr')
+       
         Message.objects.create(
             sender=sender,reciever=reciever,message=message,thread_name=thread_name
         )
@@ -104,4 +103,62 @@ class ChatConsumer(AsyncWebsocketConsumer):
             
 
 
+class NotificationConsumer(AsyncWebsocketConsumer):
 
+    async def connect(self):
+        
+        user_id=self.scope['user'].id
+        self.room_group_name=f'notification_{user_id}'
+
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+
+        await self.accept()
+    
+    async def disconnect(self, close_code):
+
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+    
+    async def receive(self, text_data):
+
+        data=json.loads(text_data)
+        message=data['message']
+        user_id=self.scope['user'].id
+
+        await self.save_notifications(user_id,message)
+
+        notifications_count = await self.get_unread_notifications_count(user_id)
+
+        await self.channel_layer.group_send(
+
+            self.room_group_name,
+            {
+                'type':"send_notification",
+                'message':message,
+                'notifications_count':notifications_count,
+            }
+        )
+
+    async def send_notifications(self,event):
+        message=event['message']
+        notifications_count=event['notifications_count']
+
+        await self.send(text_data=json.dumps({
+            'message':message,
+            "notifications_count":notifications_count
+        }))
+        
+        
+        
+    @database_sync_to_async
+    def save_notification(self,user_id,text):
+        Notifications.objects.create(user=user_id,text=text)
+
+    @database_sync_to_async
+    def get_unread_notifications_count(self,user_id):
+        return Notifications.objects.filter(user=user_id,is_read=False).count()

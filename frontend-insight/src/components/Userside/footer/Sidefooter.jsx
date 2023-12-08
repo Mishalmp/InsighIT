@@ -25,7 +25,7 @@ function Sidefooter() {
      
     const currentYear = new Date().getFullYear();
   return (
-    <div className='w-[20rem] float-right ml-[20rem] h-full overflow-y-auto rounded-lg m-3 mt-10 bg-[#474747] text-white'>
+    <div className='w-[20rem] float-right ml-[10rem] h-full mt-[14rem] overflow-y-auto rounded-lg m-3  bg-[#474747] text-white'>
     <footer className="relative w-full">
       <div className="mx-auto w-full max-w-7xl px-8">
         <div className="mx-auto flex-col w-full grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-4">

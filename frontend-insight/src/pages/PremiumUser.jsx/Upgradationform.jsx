@@ -12,6 +12,8 @@ function Upgradationform() {
   const [currentStep, setCurrentStep] = useState(1);
   const [premiumUserInfo, setPremiumUserInfo] = useState(null);
 
+  
+
   const handleNext = (FormData) => {
     setPremiumUserInfo(FormData)
 
@@ -21,7 +23,7 @@ function Upgradationform() {
   const handleBack = () => {
     setCurrentStep(currentStep - 1);
   };
-
+  console.log(premiumuserinfo,'preeeeeeemiiuminfi');
   return (
     <div>
       <NavBar />

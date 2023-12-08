@@ -55,7 +55,7 @@ function NotificationDrawer({ isOpen,userinfo, onClose }) {
         {loading && <Loader/>}
           <Fragment>
      
-      <Drawer  open={isOpen} onClose={onClose} className="p-4 w-[40rem]">
+      <Drawer  open={isOpen} onClose={onClose} className="p-4 w-[40rem] overflow-y-auto">
         <div className="mb-6 flex items-center justify-between">
           <Typography variant="h5" color="blue-gray">
             Notifications
@@ -78,7 +78,7 @@ function NotificationDrawer({ isOpen,userinfo, onClose }) {
           </IconButton>
         </div>
         
-        <div  className="flex w-full flex-col gap-2" >
+        <div  className="flex w-full flex-col gap-2 " >
       
         
      
@@ -86,7 +86,7 @@ function NotificationDrawer({ isOpen,userinfo, onClose }) {
 
        <>
         {notifications.map((notification)=>(
-              <Alert open={true} >
+              <Alert key={notification.id} open={true} >
              
               {notification.text}
             </Alert>

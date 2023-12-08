@@ -9,7 +9,7 @@ from rest_framework.validators import ValidationError
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
-        fields=['id', 'email', 'first_name','last_name', 'password', 'profile_img','cover_img','role','is_completed','bio','tag_name']
+        fields=['id', 'email', 'first_name','last_name', 'password', 'profile_img','cover_img','role','is_completed','bio','tag_name','is_premium','wallet_balance']
         extra_kwargs={
             'password':{'write_only':True},
         }
@@ -104,4 +104,17 @@ class Walletserializer(serializers.ModelSerializer):
         model=Wallet
         fields='__all__'
 
-        
+
+class ReportIssueCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Report_Issue
+        fields='__all__'
+
+class ReportIssueSerializer(serializers.ModelSerializer):
+    user=UserSerializer(read_only=True)
+
+    class Meta:
+        model=Report_Issue
+        fields='__all__'
+
+

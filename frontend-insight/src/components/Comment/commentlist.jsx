@@ -18,7 +18,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ReplyIcon from "@mui/icons-material/Reply";
 //   import Commentpost from './commentpost';
 import { Textarea, Button, IconButton } from "@material-tailwind/react";
-
+import { NotificationCreate } from '../../services/UserApi';
 import { CreateComment, ListComment,DeleteComment } from "../../services/BlogsApi";
 import { useSelector } from "react-redux";
 import { timeAgo } from "../../helpers/Timemanage";
@@ -55,12 +55,12 @@ const Comment = ({ comment, onReply, handleReplyClick ,onDeleteClick,isBlogAutho
           {timeAgo(comment.created_at)}
         </Typography>
       </div>
-      <div className="mt-3 ml-[65%] flex gap-4">
-        <FavoriteIcon className="w-2 h-2" />
+      <div className="mt-3 ml-[36rem] flex gap-4">
+        
         {isBlogAuthor || userinfo.id === comment.user.id ?(
         <Menu>
           <MenuHandler>
-            <MoreHorizIcon className="w-2 h-2" />
+            <MoreHorizIcon fontSize="large" className="mt-1" />
           </MenuHandler>
           <MenuList>
             
@@ -93,15 +93,16 @@ const Comment = ({ comment, onReply, handleReplyClick ,onDeleteClick,isBlogAutho
       <Typography className="hover:cursor-pointer" onClick={() => onReply(comment)}>
         Reply
       </Typography>
+      <FavoriteIcon className="mt-1 ml-5" fontSize="small" />
     </div>
     {/* Render replies */}
-    {comment.replies &&
-      comment.replies.map((reply) => <Reply key={reply.id} reply={reply} onDeleteClick={onDeleteClick} isBlogAuthor={isBlogAuthor} />)}
+    {/* {comment.replies &&
+      comment.replies.map((reply) => <Reply key={reply.id} reply={reply} onDeleteClick={onDeleteClick} isBlogAuthor={isBlogAuthor} />)} */}
   </div>
 );
 
 const Reply = ({ reply }) => (
-  <div className="w-[50rem] ml-16 rounded-lg border-[1px] bg-gray-100 min-h-32 mb-3">
+  <div className="w-[40rem] ml-24 rounded-lg border-[1px] bg-gray-100 min-h-32 mb-3">
     <div className="flex">
       <img
         src={reply.user.profile_img}
@@ -123,12 +124,13 @@ const Reply = ({ reply }) => (
   </div>
 );
 
-const Commentlist = ({ blogId,isAuthor }) => {
+const Commentlist = ({ blogId,isAuthor,blog }) => {
   const [commentContent, setcomment] = useState("");
   const { userinfo } = useSelector((state) => state.user);
   const [comments, setcomments] = useState([]);
+  const [parentid,setparentid]=useState(null)
   const commentPostRef = useRef(null);
-
+  const [parent_comment_id,setparent_comment_id]=useState(null)
 //   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 //   const closeMenu = () => setIsMenuOpen(false);
@@ -159,13 +161,33 @@ const Commentlist = ({ blogId,isAuthor }) => {
       blog: blogId,
       user: userinfo.id,
       content: commentContent,
+      parent_comment:parent_comment_id
     };
+    
+    const noti_values={
+      user:blog.id,
+      text:`${userinfo.first_name+" "+userinfo.last_name} commented on your Blog`
+    }
     try {
       const response = await CreateComment(values);
       console.log(response.data);
+      toast.success("comment created succussfully")
+      await NotificationCreate(noti_values)
+
+      if(parentid && userinfo.id !== parentid){
+        await NotificationCreate({
+          user:parentid,
+          text:`${userinfo.first_name+" "+userinfo.last_name} Replied on your comment`
+        })
+
+      }
+
       setcomment("");
+      setparent_comment_id(null)
+      setparentid(null)
     } catch (error) {
       console.log(error);
+      toast.error("failed to create comment")
     }
   };
 
@@ -205,10 +227,16 @@ const Commentlist = ({ blogId,isAuthor }) => {
             key={comment.id}
             comment={comment}
             handleReplyClick={handleReplyClick}
-            onReply={(parentComment) =>
+            onReply={(parentComment) =>{
+
               setcomment(
                 `@${parentComment.user.first_name}_${parentComment.user.last_name} `
               )
+              setparentid(parentComment.user.id)
+              setparent_comment_id(parentComment.id)
+
+            }
+          
             }
             onDeleteClick={handleDeleteClick}
             isBlogAuthor={isAuthor}
@@ -233,16 +261,15 @@ const Commentlist = ({ blogId,isAuthor }) => {
               </Typography>
             </div>
             <div className="mt-3 ml-[60%] flex gap-4 mr-5">
-              <FavoriteIcon className="w-2 h-2 " />
-              <MoreHorizIcon className="w-2 h-2 " />
+              <FavoriteIcon fontSize="small" className="mt-1" />
+              <MoreHorizIcon fontSize="medium" className="mt-1" />
             </div>
           </div>
 
           <Typography className="max-w-[48rem] mr-5 mt-5 ml-5">
             @Micheal_Gough Very straight-to-point article. Really worth time
             reading. Thank you! But tools are just the instruments the UX
-            designers. The knowledge of the design tools are as important as the
-            creation of the design strategy.
+            designers. 
           </Typography>
 
           <div className="flex  ml-5 mt-5 mb-5 gap-4">

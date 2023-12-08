@@ -1,17 +1,26 @@
 import { BlogsAxiosInstant } from "../utils/axiosUtils";
 
 
+
 const CreateBlog=(values)=>{
     return BlogsAxiosInstant.post("/blogs/",values,{
         withCredentials:true
     }).catch((error)=>error.response)
 }
 
-const ListBlogs=(searchQuery)=>{
-    return BlogsAxiosInstant.get(`/blogslist/?search=${searchQuery}`,{
-       
+const CreateCommunity=(values)=>{
+    return BlogsAxiosInstant.post("communitycreate/",values,{
         withCredentials:true
     }).catch((error)=>error.response)
+}
+
+const ListBlogs=(searchQuery,topic)=>{
+
+        return BlogsAxiosInstant.get(`/blogslist/?search=${searchQuery}&topic=${topic}`,{
+       
+            withCredentials:true
+        }).catch((error)=>error.response)
+        
 }
 
 const TrendingBlogs=()=>{
@@ -44,13 +53,36 @@ const GetBlogsByTopic=(topic_id)=>{
     }).catch((error)=>error.response)
 }
 
-const GetBlogsByUser=(user_id,searchQuery)=>{
-    return BlogsAxiosInstant.get(`blogs/by-user/${user_id}/?search=${searchQuery}`,{
+const GetBlogsByUser=(user_id,searchQuery,topic)=>{
+  
+        return BlogsAxiosInstant.get(`blogs/by-user/${user_id}/?search=${searchQuery}&topic=${topic}`,{
         
+            withCredentials:true
+        }).catch((error)=>error.response)
+
+
+}
+
+
+
+const ListCommunities=()=>{
+    return BlogsAxiosInstant.get("communitylist/",{
         withCredentials:true
     }).catch((error)=>error.response)
 }
 
+const DeleteCommunity=(id)=>{
+    return BlogsAxiosInstant.delete(`communityview/${id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+
+}
+
+const CommunitiesByUser=(user_id)=>{
+    return BlogsAxiosInstant.get(`communitiesbyuser/${user_id}/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
 
 const CreateTopics=(values)=>{
     return BlogsAxiosInstant.post("topics/",values,{
@@ -64,6 +96,11 @@ const GetTopics=()=>{
     }).catch((error)=>error.response)
 }
 
+const TrendingTopics=()=>{
+    return BlogsAxiosInstant.get("trendingtopics/",{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
 
 const CreateComment=(values)=>{
     return BlogsAxiosInstant.post("/commentslistcreate/",values,{
@@ -147,4 +184,11 @@ const Unsave=(user_id,blog_id)=>{
     }).catch((error)=>error.response)
 }
 
-export {CreateBlog,GetBlogDetail,GetBlogsByTopic,ListBlogs,GetBlogsByUser,CreateTopics,GetTopics,TrendingBlogs,UpdateBlog,DeleteBlog,CreateComment,ListComment,DeleteComment,LikeBlog,UnlikeBlog,GetBlogLike,ReportBlogs,ReportBlogList,Reportupdate,CreateSaved,ListSaved,IsSave,Unsave}
+
+
+export {CreateBlog,GetBlogDetail,GetBlogsByTopic,ListBlogs,GetBlogsByUser,
+    CreateTopics,GetTopics,TrendingBlogs,UpdateBlog,DeleteBlog,CreateComment,ListComment,DeleteComment,
+    LikeBlog,UnlikeBlog,GetBlogLike,ReportBlogs,ReportBlogList,Reportupdate,CreateSaved,ListSaved,IsSave,Unsave,
+    CommunitiesByUser,DeleteCommunity,ListCommunities,CreateCommunity,TrendingTopics
+
+}

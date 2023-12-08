@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from "react";
 
-import rightmore from '../../../assets/blogs/rightmore.svg'
+import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
+import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-
-import { GetTopics } from '../../../services/BlogsApi'
+import { GetTopics } from "../../../services/BlogsApi";
 import {
   Tabs,
   TabsHeader,
@@ -12,103 +15,98 @@ import {
   TabPanel,
 } from "@material-tailwind/react";
 
-function Blogfilter() {
+function Blogfilter({ ListBlogs, setBlogs, searchQuery, userId }) {
+  const [topics, setTopics] = useState([]);
 
-  // const [topics,setTopics]=useState([])
+  useEffect(() => {
+    const FetchTopics = async () => {
+      try {
+        const response = await GetTopics();
+        setTopics(response.data);
+      } catch (error) {
+        console.error("Error!fetching topics..", error);
+      }
+    };
+    FetchTopics();
+  }, []);
 
-  // useEffect(()=>{
-  //   const FetchTopics=async ()=>{
+  const [activeTab, setActiveTab] = useState("all");
+  const sliderRef = useRef(null);
 
-  //     try{
-  //       const response = await GetTopics()
-  //       setTopics(response.data)
-  //       console.log(response.data,'topicsss')
-  //     }catch(error){
-  //       console.error("Error!fetching topics..",error)
-  //     }
-  //   }
-  //   FetchTopics()
-  // },[])
-  const [activeTab, setActiveTab] = React.useState("html");
-  const data = [
-    {
-      label: "Web Development",
-      value: "web development",
-      desc: `It really matters and then like it really doesn't matter.
-      What matters is the people who are sparked by it. And the people 
-      who are like offended by it, it doesn't matter.`,
-    },
-    {
-      label: "React",
-      value: "react",
-      desc: `Because it's about motivating the doers. Because I'm here
-      to follow my dreams and inspire other people to follow their dreams, too.`,
-    },
-    {
-      label: "Python",
-      value: "python",
-      desc: `We're not always in the position that we want to be at.
-      We're constantly growing. We're constantly making mistakes. We're
-      constantly trying to express ourselves and actualize our dreams.`,
-    },
-    {
-      label: "Django",
-      value: "django",
-      desc: `Because it's about motivating the doers. Because I'm here
-      to follow my dreams and inspire other people to follow their dreams, too.`,
-    },
-    {
-      label: "Nodejs",
-      value: "nodejs",
-      desc: `We're not always in the position that we want to be at.
-      We're constantly growing. We're constantly making mistakes. We're
-      constantly trying to express ourselves and actualize our dreams.`,
-    },
-  ];
+  const handleTabClick = async (topic) => {
+    setActiveTab(topic === "" ? "all" : topic);
+
+    try {
+      let apiCall;
+
+      if (userId) {
+        apiCall = await ListBlogs(userId, searchQuery, topic);
+      } else {
+        apiCall = await ListBlogs(searchQuery, topic);
+      }
+
+      setBlogs(apiCall.data);
+    } catch (error) {
+      console.error("Error fetching blogs", error);
+    }
+  };
+  const settings = {
+    infinite: false,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+  };
+
   return (
-    <div className='w-[52rem] ml-[10%] mt-10 mb-10'>
-        {/* <div className='md:w-[40rem] md:ml-[10%] h-10 mt-20 overflow-x-auto'> 
-      <ul className='flex justify-between text-lg'>
-        
-        <li>All</li>
+    <div className="w-[56rem] flex-row items-center ml-[3rem] mt-10 mb-10">
+      <ChevronLeftOutlinedIcon
+        fontSize="large"
+        className="float-left mt-3"
+        onClick={() => sliderRef.current.slickPrev()}
+      />
+      <Tabs value={activeTab} className="w-[52rem]">
+        <Slider
+          ref={sliderRef}
+          {...settings}
+          className="rounded-none border-b cursor-pointer flex-row justify-evenly gap-7 border-blue-gray-50 bg-transparent p-4"
+          indicatorProps={{
+            className:
+              "bg-transparent cursor-pointer border-b-2 border-gray-900 shadow-none rounded-none",
+          }}
+        >
+          <div
+            key="all"
+            // value="all"
+          onClick={() => handleTabClick("")}
 
-        {topics.map((topic)=>(
-          <li>{topic.topic} </li>
-        ))}  
-      
-        <li><img className='w-10 h-10' src={rightmore} alt="more" /></li>
-      </ul>
-      </div>
-      <div className='max-w-[1200px] md:ml-[10%] mb-10 mt-5 h-[1px] bg-blue-gray-700'></div> */}
-        <Tabs value={activeTab}>
-      <TabsHeader
-        className="rounded-none border-b border-blue-gray-50 bg-transparent p-0"
-        indicatorProps={{
-          className:
-            "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
-        }}
-      >
-        {data.map(({ label, value }) => (
-          <Tab
-            key={value}
-            value={value}
-            onClick={() => setActiveTab(value)}
-            className={activeTab === value ? "text-gray-900" : ""}
+            className={`text-gray-900 cursor-pointer text-center hover:bg-gray-200 rounded-2xl ${
+              activeTab === "all" ? "w-auto font-bold" : ""
+            }`}
           >
-            {label}
-          </Tab>
-        ))}
-      </TabsHeader>
-      <TabsBody>
-        {data.map(({ value, desc }) => (
-          <TabPanel key={value} value={value}>
-            {desc}
-          </TabPanel>
-        ))}
-      </TabsBody>
-    </Tabs>
+            All
+          </div>
+
+          {topics.map(({ id, topic }) => (
+            <div
+              key={id}
+              value={topic}
+              onClick={() => handleTabClick(topic)}
+              className={`text-gray-900 cursor-pointer text-center hover:bg-gray-200 rounded-2xl ${
+                activeTab === topic ? "w-auto font-bold" : ""
+              }`}
+            >
+              {topic}
+            </div>
+          ))}
+        </Slider>
+      </Tabs>
+      <ChevronRightOutlinedIcon
+        fontSize="large"
+        className="float-right ml-2 -mt-[2.8rem]"
+        onClick={() => sliderRef.current.slickNext()}
+      />
     </div>
-  )
+  );
 }
 
-export default Blogfilter
+export default Blogfilter;

@@ -68,7 +68,7 @@ function ForgotPassword() {
   return (
     <>
     {/* {loading && <Loader/>} */}
-<ToastContainer  />
+
 
 <div className="min-h-screen flex">
 <div className="w-1/2 outward-shadow bg-cover flex items-center justify-center" >

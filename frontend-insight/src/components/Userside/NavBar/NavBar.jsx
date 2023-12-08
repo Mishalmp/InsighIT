@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import bginsight from '../../../assets/bginsight.png'
 import hamburgerMenu from '../../../assets/hamburgerMenu.svg' 
 import close from '../../../assets/close.svg'
@@ -14,6 +14,7 @@ import { useDispatch,useSelector } from "react-redux";
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import NotificationDrawer from '../../NotificationDrawer/NotificationDrawer';
 import { Loader } from '../../../components/Loading/Loader';
+
 import {
 
   ChevronDownIcon,
@@ -35,7 +36,8 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import HelpIcon from '@mui/icons-material/Help';
 import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import SearchUser from '../../searchuser/SearchUser';
 const profileMenuItems = [
   {
     label: "My Profile",
@@ -45,17 +47,17 @@ const profileMenuItems = [
     label: "My Blogs",
     icon: ArticleIcon,
   },
-  {
-    label: "Edit Profile",
-    icon: SettingsIcon,
-  },
+  // {
+  //   label: "Edit Profile",
+  //   icon: SettingsIcon,
+  // },
 
   {
     label: "Saved",
     icon:BookmarksIcon, 
   },
   {
-    label: "Inbox",
+    label: "Chat",
     icon: MoveToInboxIcon,
   },
   {
@@ -76,6 +78,8 @@ function NavBar() {
     const { userinfo } = useSelector((state) => state.user);
     const [loading,setLoading]=useState(false)
     const handleLoading=()=>setLoading((cur)=>!cur)
+
+
 
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -99,6 +103,13 @@ function NavBar() {
       closeMenu(); 
     };
 
+    const [searchresultopen,setsearchresultopen]=useState(false)
+
+    const [searchQuery,setSearchQuery]=useState("")
+
+    
+    
+
   return (
 
     <>
@@ -107,31 +118,22 @@ function NavBar() {
   <Link to='/User/Home/'>
     <img src={bginsight} className='h-[70px]' />
   </Link>
-  <div className='ml-28 flex'>
-  <Input
-            type="search"
-            color="teal"
-            label="Search here..."
-            // className="pr-20"
-            // containerProps={{
-            //   className: "min-w-[288px]",
-            // }}
-          />
-          <Button
-            size="sm"
-            color="blue-gray"
-            className="rounded-lg ml-1"
-          >
-            Search
-          </Button>
-  </div>
+  <div className="md:w-64  ml-20" onClick={()=>setsearchresultopen(!searchresultopen)}>
+              <Input
+                label="Search User"
+                value={searchQuery}
+                onChange={(e)=>setSearchQuery(e.target.value)}
+                
+                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+              />
+            </div>
 
     
   </div>
   <ul className='hidden md:flex space-x-20 mr-[100px]'>
    <Link to="/User/usercreateblog/"> <li className='flex items-center hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl mt-2'><NoteAltIcon fontSize='medium'/><span>Write</span></li></Link>
   <Link to="/User/blogs">  <li className='flex items-center mt-2 hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl'><ArticleIcon fontSize='medium'/><span>Blogs</span></li></Link>
-    <li className='flex items-center hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl'><NewspaperIcon fontSize='medium'/><span> Community</span></li>
+  <Link to="/User/community/"> <li className='flex items-center mt-2 hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl'><NewspaperIcon fontSize='medium'/><span> Community</span></li></Link>
     
     <li className='flex items-center hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl' onClick={handleOpenNotificationDrawer}><NotificationsActiveIcon fontSize='medium'/><span>Notifs</span></li>
     {/* <Link to='/User/userprofile/'>
@@ -178,8 +180,11 @@ function NavBar() {
             else if (label === 'Saved'){
               navigate(`/User/saved/${userinfo.id}`)
             }
-            else if (label === 'Inbox'){
+            else if (label === 'Chat'){
               navigate(`/User/chat/`)
+            }
+            else if (label === 'Help'){
+              navigate(`/User/reportissue/`)
             }
           }
           return (
@@ -234,6 +239,8 @@ function NavBar() {
     </div>
 
 <div className='w-full h-[1px] bg-gray-600'></div>
+
+  <SearchUser searchresultopen={searchresultopen} searchQuery={searchQuery} userinfo={userinfo} setsearchresultopen={setsearchresultopen} />
 
     </>
   )

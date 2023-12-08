@@ -37,9 +37,9 @@ function Chatfield({userinfo,recipientDetails}) {
         messageRef.current.value = "";
       };
 
-      const setUpChat = () => {
+      const setUpChat =async () => {
         
-        PreviousChat(senderdetails.id,recipientDetails.id).then((response) => {
+       await PreviousChat(senderdetails.id,recipientDetails.id).then((response) => {
             if (response.status == 200) {
               setMessages(response.data);
             }
@@ -128,7 +128,7 @@ function Chatfield({userinfo,recipientDetails}) {
                 </div>
             
               </div>
-              <p className={`text-xs mt-2 text-gray-800 ${message.sender_email === userinfo.email ? 'float-right mr-5' : 'ml-16'}`}>{timeAgo(message.timestamp)}</p>
+              <p className={`text-xs mt-2 text-gray-800 ${message.sender_email === userinfo.email ? 'float-right mr-5' : 'ml-16'}`}>{timeAgo(message.timestamp) == 'NaN years ago' ? 'just now': timeAgo(message.timestamp) }</p>
              </>
               ))
             ):
@@ -148,7 +148,7 @@ function Chatfield({userinfo,recipientDetails}) {
            </p> */}
         </div>
 
-        <div className="bg-gray-200 rounded-lg ml-1 mr-1 ">
+        <div className="bg-gray-200 rounded-lg ml-1 mr-1 -mt-5">
           <form>
             <label for="chat" class="sr-only">
               Your message

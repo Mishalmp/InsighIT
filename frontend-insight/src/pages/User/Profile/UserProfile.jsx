@@ -4,19 +4,18 @@ import Footer from "../../../components/Userside/footer/footer";
 
 import EditIcon from "@mui/icons-material/Edit";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import Styled from "@emotion/styled";
+
 import "react-toastify/dist/ReactToastify.css";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import Crown from "../../../assets/Userprofile/crown.png";
-import CardMembershipIcon from "@mui/icons-material/CardMembership";
+
 import VerifiedIcon from "@mui/icons-material/Verified";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+
+import AddIcon from "@mui/icons-material/Add";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Progress } from "@material-tailwind/react";
-import { ToastContainer, toast } from "react-toastify";
-import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
+import { toast } from "react-toastify";
+
 import {
   Card,
   CardHeader,
@@ -27,6 +26,12 @@ import {
   Alert,
   Avatar,
   Slider,
+} from "@material-tailwind/react";
+import {
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
 } from "@material-tailwind/react";
 import {
   Button,
@@ -64,6 +69,9 @@ import { SlUserFollowing } from "react-icons/sl";
 import { MdSubscriptions } from "react-icons/md";
 import { HiUserGroup } from "react-icons/hi2";
 import { GrGroup } from "react-icons/gr";
+import ChangeName from "../../../components/Userside/edituser/ChangeName";
+import ChangePass from "../../../components/Userside/edituser/ChangePass";
+
 function UserProfile() {
   const { userinfo } = useSelector((state) => state.user);
   const { premiumuserinfo } = useSelector((state) => state.user);
@@ -76,16 +84,17 @@ function UserProfile() {
   const [skilleditopen, setskilleditopen] = useState(false);
   const [selectedskillId,setselectedskillId]=useState(null)
   //   console.log(userinfo, "ddddddddddd");
+  const fetchskills = async () => {
+    try {
+      const response = await ListSkills(userinfo.id);
+      setSkills(response.data);
+      
+    } catch (error) {
+      console.error("error ! couldn't fectch skills ", error);
+    }
+  };
   useEffect(() => {
-    const fetchskills = async () => {
-      try {
-        const response = await ListSkills(userinfo.id);
-        setSkills(response.data);
-        console.log(skills, response.data, "silslslslslssl");
-      } catch (error) {
-        console.error("error ! couldn't fectch skills ", error);
-      }
-    };
+    
 
     fetchskills();
   }, [userinfo]);
@@ -128,7 +137,7 @@ function UserProfile() {
       formData.append("profile_img", file);
       const res = await UpdateUser(id, formData);
 
-      console.log(res, "proimg resss");
+      
 
       dispatch(
         setUpdateInfo({
@@ -138,7 +147,7 @@ function UserProfile() {
         })
       );
       handleloading();
-      console.log(res.data, "dispatch");
+      
     } catch (error) {
       handleloading();
       console.log(error);
@@ -152,7 +161,7 @@ function UserProfile() {
   const Handlesavebio = async () => {
     try {
       const response = await UpdateUser(userinfo.id, { bio });
-      console.log(response.data);
+      
       toast.success("bio updated succussfully");
 
       dispatch(
@@ -184,10 +193,11 @@ function UserProfile() {
 
   const handleskilleditsubmit=async()=>{
 
-    console.log(selectedskillId,skill,'ediiiiiiiiit ssssskillllllllllll');
+   
 
     try {
       const res=await EditSkill(selectedskillId,skill)
+      fetchskills();
       
       
     } catch (error) {
@@ -202,7 +212,8 @@ function UserProfile() {
 
     try {
       const ress= await DeleteSkill(selectedskillId)
-      toast.error("Skill deleted succussfully!");
+      fetchskills();
+      toast.success("Skill deleted succussfully!");
       
     } catch (error) {
       console.error(error);
@@ -212,16 +223,19 @@ function UserProfile() {
   }
 
   const HandleSkillSubmit = async () => {
-    console.log(skill, "skiiiiiiiiiiilllllllll");
+    
 
     const user_id = userinfo.id;
     const skillData = { ...skill, user_id };
     try {
-      const response = CreateSkill(skillData);
-      console.log(response.data);
+      const response = await CreateSkill(skillData);
+      fetchskills();
+      setSkill({ skill: "", rateofskills: 0 })
+      
       toast.success("Skill created succussfully!");
       // handleloading()
       setskillOpen(false);
+
     } catch (error) {
       console.error("error occured during skill creation", error);
       toast.error("Error occured during skill creation");
@@ -286,15 +300,22 @@ function UserProfile() {
     
     // },
   ];
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isChangeNameOpen, setChangeNameOpen] = useState(false);
+  const [isChangePassOpen, setChangePassOpen] = useState(false);
 
+  const handleToggleChangeName = () => setChangeNameOpen((prev) => !prev);
+  const handleToggleChangePass = () => setChangePassOpen((prev) => !prev);
+
+  console.log(premiumuserinfo,'is upgradeeddd');
   return (
     <div className="">
       {loading && <Loader />}
       <NavBar />
       <div className="flex ml-12 mt-[1rem] h-auto  max-w-[80rem] ">
-        <div className="w-[40rem] min-h-[50rem] mt-8 bg-white">
+        <div className="w-[40rem] min-h-[50rem] mt-8 bg-white shadow-2xl rounded-lg">
           {/* <Alert color="amber">A simple alert for showing message.</Alert> */}
-          <Card className="w-[30rem]  m-3 -mt-2.5 bg-gray-100">
+          <Card className="w-[30rem]  m-3 -mt-2.5 bg-gray-100 shadow-2xl">
             <div className="w-[30rem]   flex relative">
               {userinfo.cover_img ? (
                 <>
@@ -311,10 +332,10 @@ function UserProfile() {
                   />
                 </>
               ) : (
-                <div className="absolute top-0 left-0 mt-2 w-full h-48 flex items-center justify-center">
+                <div className="absolute top-0 left-0 mt-0 w-full h-52 flex items-center justify-center">
                   <label
                     htmlFor="dropzone-file"
-                    className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                    className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                   >
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <svg
@@ -503,17 +524,70 @@ function UserProfile() {
                 </Typography>
               </div>
             </CardBody>
-            <CardFooter className="flex justify-center gap-7">
+            <CardFooter className="flex justify-center gap-7 ml-16">
               {/* <span>
             Edit
             </span> */}
               <InstagramIcon onClick={handleOpen} />
               <GitHubIcon />
               <LinkedInIcon />
-              <Cog6ToothIcon className="w-6 h-6" />
+              
+              <Menu
+                    open={isMenuOpen}
+                    handler={setIsMenuOpen}
+                    // placement="bottom-end"
+                  >
+                    <MenuHandler>
+                
+                        <Cog6ToothIcon className="w-6 h-6" />
+                     
+                    </MenuHandler>
+                    <MenuList className="p-1">
+                     
+                        <div>
+                          <MenuItem
+                            className="flex items-center gap-2 rounded" onClick={handleToggleChangeName}
+                         
+                          >
+                           <EditIcon fontSize="small"/>
+                          
+                            <Typography
+                              as="span"
+                              variant="small"
+                              className="font-normal"
+                              color="inherit"
+                            >
+                              Change Name
+                            </Typography>
+                          </MenuItem>
+                          <MenuItem
+                          className="flex items-center gap-2 rounded" onClick={handleToggleChangePass}
+                          
+                        >
+                          <EditIcon fontSize="small"/>
+                          
+                          <Typography
+                            as="span"
+                            variant="small"
+                            className="font-normal"
+                            color="yellow"
+                          >
+                            Change Password
+                          </Typography>
+                        </MenuItem>
+                        </div>
+                
+                    </MenuList>
+                 
+                  
+                  </Menu>
+                  <ChangeName isOpen={isChangeNameOpen} UpdateUser={UpdateUser} userinfo={userinfo} onClose={handleToggleChangeName} />
+                  <ChangePass isOpen={isChangePassOpen} UpdateUser={UpdateUser} userinfo={userinfo} onClose={handleToggleChangePass} />
+              
+              
             </CardFooter>
             
-            {premiumuserinfo &&  premiumuserinfo.is_approved  ? ''
+            {premiumuserinfo &&  premiumuserinfo.is_approved ? ''
             :(
               <Link to="/User/upgradeform/">
                 {" "}
@@ -524,26 +598,26 @@ function UserProfile() {
             )}
           </Card>
 
-          <Card className="w-[30rem] m-3 mt-5 bg-gray-100">
+          <Card className="w-[30rem] m-3 mt-5 bg-gray-100 shadow-2xl">
             <Typography variant="h5" color="blue-gray" className="m-5 ml-12">
-              Skills <EditIcon onClick={handleskillopen} />
+              Skills <EditIcon fontSize="small" className="-mt-1 hover:cursor-pointer" onClick={handleskillopen} />
             </Typography>
 
             <CardBody>
               <ul className="grid grid-cols-2 gap-2">
                 {skills.map((skill) => (
                   <li
-                    className="bg-green-200 w-auto  h-[2.5rem] flex justify-center items-center text-blue-900  rounded-md"
+                    className="bg-green-200 w-auto hover:cursor-pointer hover:bg-green-300  h-[2.5rem] flex justify-center items-center text-blue-900  rounded-md"
                     onDoubleClick={()=>handleskilledit(skill)}
                   >
                     {skill.skill}
                   </li>
                 ))}
                 <li
-                  className="bg-green-200 w-auto  h-[2.5rem]  flex justify-center items-center text-blue-900 font-semibold  rounded-md"
+                  className="bg-green-200 w-auto  h-[2.5rem] hover:cursor-pointer hover:bg-green-300  flex justify-center items-center text-blue-900 font-semibold  rounded-md"
                   onClick={handleskillopen}
                 >
-                  <AddCircleOutlineIcon /> Add Skill
+                  <AddIcon /> Add Skill
                 </li>
               </ul>
             </CardBody>
@@ -685,9 +759,9 @@ function UserProfile() {
           </Card>
         </Dialog>
 
-        <div className="w-[60rem] ml-5 min-h-[50rem] bg-white">
+        <div className="w-[60rem] ml-5 min-h-[50rem] bg-white shadow-2xl rounded-lg">
           <div className="">
-            <Tabs value="profile" className="mt-5 mr-20">
+            <Tabs value="profile" className="mt-5 ml-2 mr-2">
               <TabsHeader>
                 {data.map(({ label, value, icon }) => (
                   <Tab key={value} value={value}>
@@ -703,13 +777,13 @@ function UserProfile() {
                   <TabPanel key={value} value={value}>
                     {value === "profile" && (
                     <>
-                    <Card className="w-[50rem] h-auto mt-5 bg-gray-100">
+                    <Card className="w-[50rem] h-auto mt-5 bg-gray-100 shadow-2xl">
                       <Typography
                         variant="h5"
                         color="blue-gray"
                         className="m-5 ml-10"
                       >
-                        About Me <EditIcon onClick={handleaboutOpen} />
+                        About Me <EditIcon fontSize="small" className="-mt-1" onClick={handleaboutOpen} />
                       </Typography>
 
                       <Typography
@@ -807,7 +881,7 @@ function UserProfile() {
                       </Card>
                     </Dialog>
 
-                    <Card className="w-[50rem] h-auto mt-5 bg-gray-100">
+                    <Card className="w-[50rem] h-auto mt-5 bg-gray-100 shadow-2xl">
                       <Typography
                         variant="h5"
                         color="blue-gray"

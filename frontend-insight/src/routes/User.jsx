@@ -16,15 +16,22 @@ import MyBlogs from "../pages/User/Blogs/MyBlogs"
 import EditBlog from "../pages/User/Blogs/EditBlog"
 import Dummy from "../pages/User/Blogs/Dummy"
 import Upgradationform from "../pages/PremiumUser.jsx/Upgradationform"
-import Bloghidepage from "../components/premiumuser/premiumBlog/Bloghidepage"
-// import Commentlist from "../components/Comment/commentlist"
-import Checkoutsession from "../components/premiumuser/payment/checkoutsession"
-import Report from "../components/Report/Report"
+
+
+
+
 import Paymentresult from "../components/Payment/Paymentresult"
 import OtherProfile from "../pages/User/Profile/OtherProfile/OtherProfile"
 import SavedBlogs from "../pages/User/Blogs/SavedBlogs"
-import ChatUserlist from "../components/Chat/ChatUserlist"
+
 import Chat from "../pages/User/Chat/Chat"
+import Community from "../pages/User/Community/Community"
+import SearchUser from "../components/searchuser/SearchUser"
+import ReportIssue from "../pages/User/ReportIssue/ReportIssue"
+import Sidebar from "../components/sidebar/Sidebar"
+import PremiumRequest from "../pages/Admin/PremiumRequest/PremiumRequest"
+import Technews from "../components/Technews/Technews"
+
 function UserRoutes() {
     
 
@@ -49,7 +56,9 @@ function UserRoutes() {
             <Route path="myblogs/:userId" element={<MyBlogs/>}/>
             <Route path="saved/:userId" element={<SavedBlogs/>}/>
             <Route path="editblog/:blogId" element={<EditBlog/>}/>
-            {/* <Route path="dummy/" element={<Chat/>}/>     */}
+            <Route path="dummy/" element={<Technews/>}/>    
+            <Route path="reportissue/" element={<ReportIssue/>}/>    
+            <Route path="community/" element={<Community/>}/>    
             <Route path="chat/" element={<Chat/>}/>
             <Route path="result/" element={<Paymentresult/>}/>
             <Route path="upgradeform/" element={<Upgradationform/>}/>

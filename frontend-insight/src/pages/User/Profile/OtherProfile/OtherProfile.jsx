@@ -161,8 +161,8 @@ function OtherProfile() {
       {/* {loading && <Loader />} */}
       <NavBar />
       <div className="flex ml-12 mt-[1rem] h-auto  max-w-[80rem] ">
-        <div className="w-[40rem] min-h-[50rem] mt-8 bg-white">
-          <Card className="w-[30rem]  m-3 -mt-2.5 bg-gray-100">
+        <div className="w-[40rem] min-h-[50rem] mt-8 bg-white shadow-2xl">
+          <Card className="w-[30rem]  m-3 -mt-2.5 bg-gray-100 shadow-2xl">
             <div className="w-[30rem]   flex relative">
               {author.cover_img ? (
                 <>
@@ -345,7 +345,7 @@ function OtherProfile() {
             </CardFooter>
           </Card>
 
-          <Card className="w-[30rem] m-3 mt-5 bg-gray-100">
+          <Card className="w-[30rem] m-3 mt-5 bg-gray-100 shadow-2xl">
             <Typography variant="h5" color="blue-gray" className="m-5 ml-12">
               Skills
             </Typography>
@@ -372,7 +372,7 @@ function OtherProfile() {
           </Card>
         </div>
 
-        <div className="w-[60rem] ml-5 min-h-[50rem] bg-white">
+        <div className="w-[60rem] ml-5 min-h-[50rem] bg-white shadow-2xl rounded-lg">
           <div className="">
             <Tabs value="profile" className="mt-5 mr-20">
               <TabsHeader>
@@ -390,7 +390,7 @@ function OtherProfile() {
                   <TabPanel key={value} value={value}>
                     {value === "profile" && (
                       <>
-                        <Card className="w-[50rem] h-auto mt-5 bg-gray-100">
+                        <Card className="w-[50rem] h-auto mt-5 bg-gray-100 shadow-2xl">
                           <Typography
                             variant="h5"
                             color="blue-gray"
@@ -438,7 +438,7 @@ function OtherProfile() {
                           </div>
                         </Card>
 
-                        <Card className="w-[50rem] h-auto mt-5 bg-gray-100">
+                        <Card className="w-[50rem] h-auto mt-5 bg-gray-100 shadow-2xl">
                           <Typography
                             variant="h5"
                             color="blue-gray"

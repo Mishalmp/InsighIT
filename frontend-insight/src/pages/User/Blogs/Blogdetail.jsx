@@ -314,7 +314,7 @@ function Blogdetail() {
 
   return (
     <>
-      <ToastContainer />
+   
       <NavBar />
       <div className="flex">
         <Breadcrumbs className="ml-24 mt-10">
@@ -537,7 +537,7 @@ function Blogdetail() {
             </video>
           </Card>
           <div ref={commentListRef}></div>
-          <Commentlist blogId={blogId} isAuthor={isAuthor} />
+          <Commentlist blogId={blogId} isAuthor={isAuthor} blog={blog.user_id} />
         </>
       ) : (
         <Bloghidepage user_id={userinfo.id} author_id={blog.user_id.id} />

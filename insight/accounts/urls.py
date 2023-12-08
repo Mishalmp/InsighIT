@@ -7,7 +7,7 @@ urlpatterns=[
     path('token/',MyTokenObtainPairView.as_view(),name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/',UserRegister.as_view(),name='register'),
-   
+    path('premiumlist/',PremiumUserList.as_view(),name="premiumlist"),
     path('activate/<uidb64>/<token>',activate, name='activate'),
     path('GoogleUser/',GoogleUser.as_view(), name='GoogleUser'),
     path('userinfo/<int:pk>/',SingleUserInfo.as_view(),name='userinfo'),
@@ -39,7 +39,13 @@ urlpatterns=[
     path('subscriberslist/<int:user_id>/',SubscribersListByUser.as_view(),name='subscribers'),
     path('wallet/<int:user_id>/',ListWallet.as_view(),name='wallet'),
 
+    path('reportissuecreate/',ReportIssueCreateView.as_view(),name='reportcreate'),
+    path('issuelist/',ReportIssueListView.as_view(),name='reportissuelist'),
+    path('issuelistbyuser/<int:user_id>',ReportIssuesbyUser.as_view(),name='reportissuelistbyuser'),
+    path('issueview/<int:pk>',ReportissueDetailView.as_view(),name='reportissuelistbyuser'),
+
     path('create-checkout-session/',CreateCheckoutSessionView.as_view(),name='checkout-session'),
     # path('webhook/stripe/',stripe_webhook_view,name='web_hook'),
 
 ]
+

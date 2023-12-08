@@ -11,7 +11,8 @@ import { useParams } from "react-router-dom";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Input } from "@material-tailwind/react";
 import { Loader } from "../../../components/Loading/Loader";
-
+import Sidebar from "../../../components/sidebar/Sidebar";
+import Footer from '../../../components/Userside/footer/footer'
 function SavedBlogs() {
   const [saved, setSaved] = useState(null);
   const { userinfo } = useSelector((state) => state.user);
@@ -45,7 +46,7 @@ function SavedBlogs() {
     <div>
       <Navbar />
       <div className="flex">
-        <div>
+      <div className='bg-gray-50 mt-5 rounded-lg w-[60rem] ml-[5rem] mb-5 shadow-2xl'>
           <Breadcrumbs />
           <div className="flex">
             <h1 className="font-bold text-5xl  ml-[25rem] mt-10">
@@ -61,7 +62,8 @@ function SavedBlogs() {
             </div> */}
           </div>
           <Blogfilter />
-          <div className="ml-[10%]">
+          <div className='ml-[3rem]'>
+          <div className="h-[60rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5">
             {saved.map((savedBlog) => (
               <Blogcard
                 key={savedBlog.id}
@@ -81,8 +83,11 @@ function SavedBlogs() {
           </div>
         </div>
 
-        <Sidefooter />
+        
       </div>
+      <Sidebar/>
+    </div>
+    <Footer/>
     </div>
   );
 }

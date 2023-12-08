@@ -26,6 +26,7 @@ function Paymentresult() {
     const isSuccess = new URLSearchParams(window.location.search).get("success") === "true";
     const searchparams= new URLSearchParams(window.location.search)
 
+    
     const { data, isError, error } = useQuery('subscription', async () => {
       if (isSuccess) {
         const sub_type = searchparams.get('subscription_type');

@@ -147,6 +147,12 @@ export default function AdminSidebar() {
           </ListItemPrefix>
           Users
         </ListItem>
+        <ListItem onClick={()=>navigate('/admin/premiumrequests/')}>
+          <ListItemPrefix>
+            <UserCircleIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          Premium Users 
+        </ListItem>
         <ListItem>
           <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5" />
@@ -159,9 +165,15 @@ export default function AdminSidebar() {
           </ListItemPrefix>
          Blog Reports 
         </ListItem>
-        <ListItem onClick={Signout}>
+        <ListItem >
           <ListItemPrefix>
-            <PowerIcon className="h-5 w-5" />
+            <ReportIcon className="h-5 w-5" />
+          </ListItemPrefix>
+         Bug Reports 
+        </ListItem>
+        <ListItem onClick={Signout} className="text-red-800 hover:bg-red-200 hover:text-red-800">
+          <ListItemPrefix>
+            <PowerIcon className="h-5 w-5 " />
           </ListItemPrefix>
           Log Out
         </ListItem>

@@ -9,7 +9,8 @@ import UsersList from '../pages/Admin/UsersList'
 import BlogReports from '../pages/Admin/Reports/BlogReports'
 import PremiumRequest from '../pages/Admin/PremiumRequest/PremiumRequest'
 import PremiumrequestView from '../pages/Admin/PremiumRequest/PremiumrequestView'
-
+import Bugreports from '../pages/Admin/Reports/Bugreports' 
+import WalletAdmin from '../pages/Admin/Dashboard/Wallet'
 function AdminRoutes() {
   return (
     <Routes>
@@ -25,6 +26,8 @@ function AdminRoutes() {
             <Route path='/blogreports/' element={<BlogReports/>} />
             <Route path='/premiumrequests/' element={<PremiumRequest/>} />
             <Route path='/premiumrequestview/:premiumId' element={<PremiumrequestView/>} />
+            <Route path='/reportedissues/' element={<Bugreports/>} />
+            <Route path='/adminwallet/' element={<WalletAdmin/>} />
 
         </Route>
 

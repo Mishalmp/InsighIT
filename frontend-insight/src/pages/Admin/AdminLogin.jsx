@@ -6,9 +6,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { Loader } from '../../components/Loading/Loader';
 import { jwtDecode } from 'jwt-decode';
 import { AdminSignIn } from '../../services/AdminApi';
-
+import { GetUserInfo } from '../../services/UserApi';
+import { setUserInfo } from '../../Redux/UserSlice';
+import { useDispatch } from 'react-redux';
 
 function AdminLogin() {
+
+  const dispatch = useDispatch()
 
     const navigate = useNavigate()
     const [form,setForm]=useState({ email:'',password:''})
@@ -36,6 +40,37 @@ function AdminLogin() {
 
     }
 
+    const fetchUserInfo=async (token) =>{
+      try{
+        const id =token.user_id
+        const res=await GetUserInfo(id)
+        
+        const data={
+          id:res.data.id,
+          first_name:res.data.first_name,
+          last_name:res.data.last_name,
+          email:res.data.email,
+          role:res.data.role,
+          is_active:res.data.is_active,
+          is_google:res.data.is_google,
+          bio:res.data.bio,
+          profile_img:res.data.profile_img,
+          cover_img:res.data.cover_img,
+          tag_name:res.data.tag_name,
+          is_premium:res.data.is_premium,
+          wallet_balance:res.data.wallet_balance,
+        }
+        dispatch(setUserInfo({
+          userinfo:data
+        }))
+       
+      
+      }
+      catch{
+        toast.error("error occured!!!")
+      }
+    }
+
     const FormHandlerLogin = async (e)=>{
         e.preventDefault();
 
@@ -47,8 +82,10 @@ function AdminLogin() {
                 if (res.status === 200){
                     const token = JSON.stringify(res.data)
                     const decoded = jwtDecode(token)
-                    console.log(decoded,'decccooo')
+                    
                     Handleloading()
+
+                    fetchUserInfo(decoded)
 
                     if (decoded.role === 'admin' && decoded.is_superuser){
                         localStorage.setItem("token",token)

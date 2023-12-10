@@ -58,7 +58,13 @@ import { Input, Checkbox } from "@material-tailwind/react";
 import { Loader } from "../../../components/Loading/Loader";
 import { useSelector, useDispatch } from "react-redux";
 import { setUpdateInfo } from "../../../Redux/UserSlice";
-import { UpdateUser, CreateSkill, ListSkills,EditSkill,DeleteSkill } from "../../../services/UserApi";
+import {
+  UpdateUser,
+  CreateSkill,
+  ListSkills,
+  EditSkill,
+  DeleteSkill,
+} from "../../../services/UserApi";
 import { Link } from "react-router-dom";
 import Bloglistinprofile from "../../../components/blogs/bloglistinprofile";
 import Followlist from "../../../components/followlist/followlist";
@@ -71,7 +77,7 @@ import { HiUserGroup } from "react-icons/hi2";
 import { GrGroup } from "react-icons/gr";
 import ChangeName from "../../../components/Userside/edituser/ChangeName";
 import ChangePass from "../../../components/Userside/edituser/ChangePass";
-
+import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 function UserProfile() {
   const { userinfo } = useSelector((state) => state.user);
   const { premiumuserinfo } = useSelector((state) => state.user);
@@ -82,20 +88,17 @@ function UserProfile() {
   const handleskillopen = () => setskillOpen((cur) => !cur);
 
   const [skilleditopen, setskilleditopen] = useState(false);
-  const [selectedskillId,setselectedskillId]=useState(null)
+  const [selectedskillId, setselectedskillId] = useState(null);
   //   console.log(userinfo, "ddddddddddd");
   const fetchskills = async () => {
     try {
       const response = await ListSkills(userinfo.id);
       setSkills(response.data);
-      
     } catch (error) {
       console.error("error ! couldn't fectch skills ", error);
     }
   };
   useEffect(() => {
-    
-
     fetchskills();
   }, [userinfo]);
 
@@ -137,8 +140,6 @@ function UserProfile() {
       formData.append("profile_img", file);
       const res = await UpdateUser(id, formData);
 
-      
-
       dispatch(
         setUpdateInfo({
           updatedData: {
@@ -147,7 +148,6 @@ function UserProfile() {
         })
       );
       handleloading();
-      
     } catch (error) {
       handleloading();
       console.log(error);
@@ -161,7 +161,7 @@ function UserProfile() {
   const Handlesavebio = async () => {
     try {
       const response = await UpdateUser(userinfo.id, { bio });
-      
+
       toast.success("bio updated succussfully");
 
       dispatch(
@@ -179,63 +179,46 @@ function UserProfile() {
     }
   };
 
-
-
   const handleSkillEditOpen = () => setskilleditopen(true);
 
-  const handleskilledit=(selectedSkill)=>{
-
-    setSkill({ ...selectedSkill })
-    setselectedskillId(selectedSkill.id)
+  const handleskilledit = (selectedSkill) => {
+    setSkill({ ...selectedSkill });
+    setselectedskillId(selectedSkill.id);
     handleSkillEditOpen();
+  };
 
-  }
-
-  const handleskilleditsubmit=async()=>{
-
-   
-
+  const handleskilleditsubmit = async () => {
     try {
-      const res=await EditSkill(selectedskillId,skill)
+      const res = await EditSkill(selectedskillId, skill);
       fetchskills();
-      
-      
     } catch (error) {
       console.error(error);
-      
     }
-    setskilleditopen(false)
+    setskilleditopen(false);
+  };
 
-  }
-
-  const handleSkilldelete=async()=>{
-
+  const handleSkilldelete = async () => {
     try {
-      const ress= await DeleteSkill(selectedskillId)
+      const ress = await DeleteSkill(selectedskillId);
       fetchskills();
       toast.success("Skill deleted succussfully!");
-      
     } catch (error) {
       console.error(error);
-      
     }
-    setskilleditopen(false)
-  }
+    setskilleditopen(false);
+  };
 
   const HandleSkillSubmit = async () => {
-    
-
     const user_id = userinfo.id;
     const skillData = { ...skill, user_id };
     try {
       const response = await CreateSkill(skillData);
       fetchskills();
-      setSkill({ skill: "", rateofskills: 0 })
-      
+      setSkill({ skill: "", rateofskills: 0 });
+
       toast.success("Skill created succussfully!");
       // handleloading()
       setskillOpen(false);
-
     } catch (error) {
       console.error("error occured during skill creation", error);
       toast.error("Error occured during skill creation");
@@ -243,24 +226,21 @@ function UserProfile() {
   };
 
   const data = [
-
     {
       label: "Profile",
       value: "profile",
       icon: UserCircleIcon,
-    
     },
     // {
     //   label: "Blogs",
     //   value: "blogs",
     //   icon: Square3Stack3DIcon,
-     
+
     // },
     {
       label: "Subscriptions",
       value: "subscriptions",
       icon: MdSubscriptions,
-     
     },
     ...(userinfo.is_premium
       ? [
@@ -271,43 +251,42 @@ function UserProfile() {
           },
         ]
       : []),
-      ...(userinfo.is_premium
-        ? [
-            {
-              label: "Wallet",
-              value: "wallet",
-              icon: FaWallet,
-            },
-          ]
-        : []),
-   
+    ...(userinfo.is_premium
+      ? [
+          {
+            label: "Wallet",
+            value: "wallet",
+            icon: FaWallet,
+          },
+        ]
+      : []),
+
     {
       label: "Followings",
       value: "followings",
       icon: SlUserFollowing,
-     
     },
     {
       label: "Followers",
       value: "followers",
       icon: GrGroup,
-     
     },
     // {
     //   label: "Settings",
     //   value: "settings",
     //   icon: Cog6ToothIcon,
-    
+
     // },
   ];
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isChangeNameOpen, setChangeNameOpen] = useState(false);
   const [isChangePassOpen, setChangePassOpen] = useState(false);
+  const [monetizeopen, setmonetizeopen] = useState(false);
 
   const handleToggleChangeName = () => setChangeNameOpen((prev) => !prev);
   const handleToggleChangePass = () => setChangePassOpen((prev) => !prev);
 
-  console.log(premiumuserinfo,'is upgradeeddd');
+  console.log(premiumuserinfo, "is upgradeeddd");
   return (
     <div className="">
       {loading && <Loader />}
@@ -510,7 +489,10 @@ function UserProfile() {
             />
             <CardBody className="text-center relative">
               <Typography variant="h4" color="blue-gray" className="mb-2 ">
-                {userinfo.first_name} {userinfo.last_name}  {userinfo.is_premium && <VerifiedIcon className="-mt-1" color="primary"/>}
+                {userinfo.first_name} {userinfo.last_name}{" "}
+                {userinfo.is_premium && (
+                  <VerifiedIcon className="-mt-1" color="primary" />
+                )}
               </Typography>
               <Typography className="mt-2 font-thin text-lg text-gray-500">
                 {userinfo.tag_name}
@@ -528,67 +510,123 @@ function UserProfile() {
               {/* <span>
             Edit
             </span> */}
-              <InstagramIcon onClick={handleOpen} />
+              <InstagramIcon onClick={handleOpen} color="secondary" />
               <GitHubIcon />
-              <LinkedInIcon />
-              
+              <LinkedInIcon color="primary" />
+              {userinfo.is_premium && (
+                // <Tooltip content="Monetization info">
+
+                <MonetizationOnOutlinedIcon
+                  color="success"
+                  onClick={() => setmonetizeopen(true)}
+                />
+                // </Tooltip>
+              )}
+
               <Menu
-                    open={isMenuOpen}
-                    handler={setIsMenuOpen}
-                    // placement="bottom-end"
-                  >
-                    <MenuHandler>
-                
-                        <Cog6ToothIcon className="w-6 h-6" />
-                     
-                    </MenuHandler>
-                    <MenuList className="p-1">
-                     
-                        <div>
-                          <MenuItem
-                            className="flex items-center gap-2 rounded" onClick={handleToggleChangeName}
-                         
-                          >
-                           <EditIcon fontSize="small"/>
-                          
-                            <Typography
-                              as="span"
-                              variant="small"
-                              className="font-normal"
-                              color="inherit"
-                            >
-                              Change Name
-                            </Typography>
-                          </MenuItem>
-                          <MenuItem
-                          className="flex items-center gap-2 rounded" onClick={handleToggleChangePass}
-                          
-                        >
-                          <EditIcon fontSize="small"/>
-                          
-                          <Typography
-                            as="span"
-                            variant="small"
-                            className="font-normal"
-                            color="yellow"
-                          >
-                            Change Password
-                          </Typography>
-                        </MenuItem>
-                        </div>
-                
-                    </MenuList>
-                 
-                  
-                  </Menu>
-                  <ChangeName isOpen={isChangeNameOpen} UpdateUser={UpdateUser} userinfo={userinfo} onClose={handleToggleChangeName} />
-                  <ChangePass isOpen={isChangePassOpen} UpdateUser={UpdateUser} userinfo={userinfo} onClose={handleToggleChangePass} />
-              
-              
+                open={isMenuOpen}
+                handler={setIsMenuOpen}
+                // placement="bottom-end"
+              >
+                <MenuHandler>
+                  <Cog6ToothIcon className="w-6 h-6" />
+                </MenuHandler>
+                <MenuList className="p-1">
+                  <div>
+                    <MenuItem
+                      className="flex items-center gap-2 rounded"
+                      onClick={handleToggleChangeName}
+                    >
+                      <EditIcon fontSize="small" />
+
+                      <Typography
+                        as="span"
+                        variant="small"
+                        className="font-normal"
+                        color="inherit"
+                      >
+                        Change Name
+                      </Typography>
+                    </MenuItem>
+                    <MenuItem
+                      className="flex items-center gap-2 rounded"
+                      onClick={handleToggleChangePass}
+                    >
+                      <EditIcon fontSize="small" />
+
+                      <Typography
+                        as="span"
+                        variant="small"
+                        className="font-normal"
+                        color="yellow"
+                      >
+                        Change Password
+                      </Typography>
+                    </MenuItem>
+                  </div>
+                </MenuList>
+              </Menu>
+              <ChangeName
+                isOpen={isChangeNameOpen}
+                UpdateUser={UpdateUser}
+                userinfo={userinfo}
+                onClose={handleToggleChangeName}
+              />
+              <ChangePass
+                isOpen={isChangePassOpen}
+                UpdateUser={UpdateUser}
+                userinfo={userinfo}
+                onClose={handleToggleChangePass}
+              />
             </CardFooter>
-            
-            {premiumuserinfo &&  premiumuserinfo.is_approved ? ''
-            :(
+
+            <Dialog
+              size="md"
+              open={monetizeopen}
+              handler={() => setmonetizeopen(false)}
+            >
+              <DialogHeader>
+                <Typography variant="h4" color="blue-gray">
+                  Subscription Price Info
+                </Typography>
+              </DialogHeader>
+              <DialogBody divider className="grid grid-cols-1 gap-4">
+                <Typography variant="h6" color="blue-gray">
+                  Subscription Basic Monthly:
+                  {premiumuserinfo.subscription_price_basic}
+                </Typography>
+                <Typography variant="h6" color="blue-gray">
+                  Subscription Basic Yearly:{premiumuserinfo.sub_price_basic_yr}
+                </Typography>
+                <Typography variant="h6" color="blue-gray">
+                  Subscription Standard Monthly:
+                  {premiumuserinfo.subscription_price_std}
+                </Typography>
+                <Typography variant="h6" color="blue-gray">
+                  Subscription Standard Yearly:
+                  {premiumuserinfo.sub_price_std_yr}
+                </Typography>
+              </DialogBody>
+              <DialogFooter className="space-x-2">
+                <Button
+                  variant="text"
+                  color="blue-gray"
+                  onClick={() => setmonetizeopen(false)}
+                >
+                  close
+                </Button>
+                <Button
+                  variant="gradient"
+                  onClick={() => setmonetizeopen(false)}
+                >
+                  Ok, Got it
+                </Button>
+              </DialogFooter>
+            </Dialog>
+
+            {premiumuserinfo && premiumuserinfo.is_approved ? (
+              ""
+            ) : (
               <Link to="/User/upgradeform/">
                 {" "}
                 <Typography className="mt-4 ml-64 font-thin text-lg text-blue-800">
@@ -600,7 +638,12 @@ function UserProfile() {
 
           <Card className="w-[30rem] m-3 mt-5 bg-gray-100 shadow-2xl">
             <Typography variant="h5" color="blue-gray" className="m-5 ml-12">
-              Skills <EditIcon fontSize="small" className="-mt-1 hover:cursor-pointer" onClick={handleskillopen} />
+              Skills{" "}
+              <EditIcon
+                fontSize="small"
+                className="-mt-1 hover:cursor-pointer"
+                onClick={handleskillopen}
+              />
             </Typography>
 
             <CardBody>
@@ -608,7 +651,7 @@ function UserProfile() {
                 {skills.map((skill) => (
                   <li
                     className="bg-green-200 w-auto hover:cursor-pointer hover:bg-green-300  h-[2.5rem] flex justify-center items-center text-blue-900  rounded-md"
-                    onDoubleClick={()=>handleskilledit(skill)}
+                    onDoubleClick={() => handleskilledit(skill)}
                   >
                     {skill.skill}
                   </li>
@@ -666,20 +709,23 @@ function UserProfile() {
               </div>
             </CardBody>
             <CardFooter className="pt-0">
-              <Button variant="gradient" fullWidth onClick={handleskilleditsubmit}>
+              <Button
+                variant="gradient"
+                fullWidth
+                onClick={handleskilleditsubmit}
+              >
                 Save
               </Button>
               <Typography
-                  as="a"
-                  // href="#signup"
-                  variant="small"
-                  color="red"
-                  className="ml-48 mt-5 font-bold"
-                  onClick={handleSkilldelete}
-                  
-                >
-                  Delete
-                </Typography>
+                as="a"
+                // href="#signup"
+                variant="small"
+                color="red"
+                className="ml-48 mt-5 font-bold"
+                onClick={handleSkilldelete}
+              >
+                Delete
+              </Typography>
               <Typography variant="small" className="mt-6 flex justify-center">
                 <Typography
                   as="a"
@@ -692,7 +738,6 @@ function UserProfile() {
                   Don't Save
                 </Typography>
               </Typography>
-          
             </CardFooter>
           </Card>
         </Dialog>
@@ -773,165 +818,180 @@ function UserProfile() {
                 ))}
               </TabsHeader>
               <TabsBody>
-                {data.map(({ value}) => (
+                {data.map(({ value }) => (
                   <TabPanel key={value} value={value}>
                     {value === "profile" && (
-                    <>
-                    <Card className="w-[50rem] h-auto mt-5 bg-gray-100 shadow-2xl">
-                      <Typography
-                        variant="h5"
-                        color="blue-gray"
-                        className="m-5 ml-10"
-                      >
-                        About Me <EditIcon fontSize="small" className="-mt-1" onClick={handleaboutOpen} />
-                      </Typography>
-
-                      <Typography
-                        className="text-md max-w-2xl ml-10 text-gray-600 container"
-                        textGradient
-                      >
-                        {userinfo.bio}
-                      </Typography>
-                      <div className="grid grid-cols-2">
-                        <div>
+                      <>
+                        <Card className="w-[50rem] h-auto mt-5 bg-gray-100 shadow-2xl">
                           <Typography
-                            variant="h6"
-                            className="m-5 ml-10  text-gray-600"
+                            variant="h5"
+                            color="blue-gray"
+                            className="m-5 ml-10"
                           >
-                            Education :
-                          </Typography>
-                          <Typography
-                            className="font-medium  max-w-2xl ml-10 -mt-2 text-gray-600 container"
-                            textGradient
-                          >
-                            Bachelors in Computer Application
-                          </Typography>
-                        </div>
-
-                        <div className="mb-10">
-                          <Typography
-                            variant="h6"
-                            className="m-5 ml-10  text-gray-600"
-                          >
-                            Work Experience :
-                          </Typography>
-                          <Typography
-                            className="font-medium  max-w-2xl ml-10 -mt-2 text-gray-600 container"
-                            textGradient
-                          >
-                            3 years experience in web development
-                          </Typography>
-                        </div>
-                      </div>
-                    </Card>
-                    <Dialog
-                      size="xs"
-                      open={aboutopen}
-                      // handler={handleaboutOpen}
-                      className="bg-transparent shadow-none"
-                    >
-                      <Card className="mx-auto w-[30rem]">
-                        <CardBody className="flex flex-col gap-4">
-                          <Typography variant="h4" color="blue-gray">
-                            About Me
-                          </Typography>
-
-                          <Typography className="-mb-2" variant="h6">
-                            Your Bio (Max 30 words)
-                          </Typography>
-                          <textarea
-                            name="bio"
-                            placeholder={bio ? { bio } : "write your bio..."}
-                            value={bio}
-                            // defaultValue={bio}
-                            id=""
-                            cols="30"
-                            rows="5"
-                            onChange={(e) => setBio(e.target.value)}
-                          ></textarea>
-
-                          {/* <div className="-ml-2.5 -mt-3">
-                            <Checkbox label="Remember Me" />
-                          </div> */}
-                        </CardBody>
-                        <CardFooter className="pt-0">
-                          <Button
-                            variant="gradient"
-                            onClick={Handlesavebio}
-                            fullWidth
-                          >
-                            Save
-                          </Button>
-                          <Typography
-                            variant="small"
-                            className="mt-4 flex justify-center"
-                          >
-                            <Typography
-                              as="a"
-                              href="#Aboutme"
-                              variant="small"
-                              color="black"
-                              className="ml-1 font-bold"
+                            About Me{" "}
+                            <EditIcon
+                              fontSize="small"
+                              className="-mt-1"
                               onClick={handleaboutOpen}
-                            >
-                              Don't Save
-                            </Typography>
+                            />
                           </Typography>
-                        </CardFooter>
-                      </Card>
-                    </Dialog>
 
-                    <Card className="w-[50rem] h-auto mt-5 bg-gray-100 shadow-2xl">
-                      <Typography
-                        variant="h5"
-                        color="blue-gray"
-                        className="m-5 ml-10"
-                      >
-                        Skills Ratings
-                      </Typography>
-                      {skills && skills.length > 0 ? (
-                        skills.map((skill) => (
-                          <div className="max-w-2xl ml-10 mb-10">
-                            <div className="mb-2 flex items-center justify-between gap-4">
-                              <Typography color="blue-gray" variant="h6">
-                                {skill.skill}
+                          <Typography
+                            className="text-md max-w-2xl ml-10 text-gray-600 container"
+                            textGradient
+                          >
+                            {userinfo.bio}
+                          </Typography>
+                          <div className="grid grid-cols-2">
+                            <div>
+                              <Typography
+                                variant="h6"
+                                className="m-5 ml-10  text-gray-600"
+                              >
+                                Education :
                               </Typography>
-                              <Typography color="blue-gray" variant="h6">
-                                {skill.rateofskills}%
+                              <Typography
+                                className="font-medium  max-w-2xl ml-10 -mt-2 text-gray-600 container"
+                                textGradient
+                              >
+                                Bachelors in Computer Application
                               </Typography>
                             </div>
-                            <Progress value={skill.rateofskills} />
+
+                            <div className="mb-10">
+                              <Typography
+                                variant="h6"
+                                className="m-5 ml-10  text-gray-600"
+                              >
+                                Work Experience :
+                              </Typography>
+                              <Typography
+                                className="font-medium  max-w-2xl ml-10 -mt-2 text-gray-600 container"
+                                textGradient
+                              >
+                                3 years experience in web development
+                              </Typography>
+                            </div>
                           </div>
-                        ))
-                      ) : (
-                        <Typography
-                          variant="h5"
-                          color="blue-gray"
-                          className=" m-1 ml-10 mb-5"
+                        </Card>
+                        <Dialog
+                          size="xs"
+                          open={aboutopen}
+                          // handler={handleaboutOpen}
+                          className="bg-transparent shadow-none"
                         >
-                          Skills not Added
-                        </Typography>
-                      )}
-                    </Card>
-                    </> 
+                          <Card className="mx-auto w-[30rem]">
+                            <CardBody className="flex flex-col gap-4">
+                              <Typography variant="h4" color="blue-gray">
+                                About Me
+                              </Typography>
+
+                              <Typography className="-mb-2" variant="h6">
+                                Your Bio (Max 30 words)
+                              </Typography>
+                              <textarea
+                                name="bio"
+                                placeholder={
+                                  bio ? { bio } : "write your bio..."
+                                }
+                                value={bio}
+                                // defaultValue={bio}
+                                id=""
+                                cols="30"
+                                rows="5"
+                                onChange={(e) => setBio(e.target.value)}
+                              ></textarea>
+
+                              {/* <div className="-ml-2.5 -mt-3">
+                            <Checkbox label="Remember Me" />
+                          </div> */}
+                            </CardBody>
+                            <CardFooter className="pt-0">
+                              <Button
+                                variant="gradient"
+                                onClick={Handlesavebio}
+                                fullWidth
+                              >
+                                Save
+                              </Button>
+                              <Typography
+                                variant="small"
+                                className="mt-4 flex justify-center"
+                              >
+                                <Typography
+                                  as="a"
+                                  href="#Aboutme"
+                                  variant="small"
+                                  color="black"
+                                  className="ml-1 font-bold"
+                                  onClick={handleaboutOpen}
+                                >
+                                  Don't Save
+                                </Typography>
+                              </Typography>
+                            </CardFooter>
+                          </Card>
+                        </Dialog>
+
+                        <Card className="w-[50rem] h-auto mt-5 bg-gray-100 shadow-2xl">
+                          <Typography
+                            variant="h5"
+                            color="blue-gray"
+                            className="m-5 ml-10"
+                          >
+                            Skills Ratings
+                          </Typography>
+                          {skills && skills.length > 0 ? (
+                            skills.map((skill) => (
+                              <div className="max-w-2xl ml-10 mb-10">
+                                <div className="mb-2 flex items-center justify-between gap-4">
+                                  <Typography color="blue-gray" variant="h6">
+                                    {skill.skill}
+                                  </Typography>
+                                  <Typography color="blue-gray" variant="h6">
+                                    {skill.rateofskills}%
+                                  </Typography>
+                                </div>
+                                <Progress value={skill.rateofskills} />
+                              </div>
+                            ))
+                          ) : (
+                            <Typography
+                              variant="h5"
+                              color="blue-gray"
+                              className=" m-1 ml-10 mb-5"
+                            >
+                              Skills not Added
+                            </Typography>
+                          )}
+                        </Card>
+                      </>
                     )}
-                    {value === "blogs" &&(
-                       <Bloglistinprofile userid={userinfo.id} />
+                    {value === "blogs" && (
+                      <Bloglistinprofile userid={userinfo.id} />
                     )}
-                    {value === 'followings' &&(
+                    {value === "followings" && (
                       <Followlist user_id={userinfo.id} is_followings={true} />
                     )}
-                    {value === 'followers' &&(
+                    {value === "followers" && (
                       <Followlist user_id={userinfo.id} is_followings={false} />
                     )}
-                     {value === 'subscriptions' &&(
-                      <Subscribelist user_id={userinfo.id} is_subscription={true} />
+                    {value === "subscriptions" && (
+                      <Subscribelist
+                        user_id={userinfo.id}
+                        is_subscription={true}
+                      />
                     )}
-                      {value === 'subscribers' &&(
-                      <Subscribelist user_id={userinfo.id} is_subscription={false} />
+                    {value === "subscribers" && (
+                      <Subscribelist
+                        user_id={userinfo.id}
+                        is_subscription={false}
+                      />
                     )}
-                    {value === 'wallet' &&(
-                      <Wallet user={userinfo} />
+                    {value === "wallet" && (
+                      <div className="max-h-[50rem] overflow-y-auto">
+                        <Wallet user={userinfo} />
+                      </div>
                     )}
                   </TabPanel>
                 ))}

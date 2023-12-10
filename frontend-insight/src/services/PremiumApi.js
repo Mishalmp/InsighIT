@@ -17,8 +17,8 @@ const CreateQualifications=(values)=>{
     }).catch((error)=>error.response)
 }
 
-const GetPremiuminfolist=(searchQuery)=>{
-    return PremiumAxiosInstant.get(`/premiumuserinfolist/?search=${searchQuery}`,{
+const GetPremiuminfolist=(searchQuery,filter)=>{
+    return PremiumAxiosInstant.get(`/premiumuserinfolist/?search=${searchQuery}&filter=${filter}`,{
         withCredentials:true
     }).catch((error)=>error.response)
 }

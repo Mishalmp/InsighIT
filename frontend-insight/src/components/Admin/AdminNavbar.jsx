@@ -7,8 +7,25 @@ import {
     Avatar
   } from "@material-tailwind/react";
   import { BellIcon, Cog6ToothIcon } from "@heroicons/react/24/solid";
-   
+  import NotificationDrawer from "../NotificationDrawer/NotificationDrawer";
+import { jwtDecode } from "jwt-decode";
+import { GetUserInfo } from "../../services/UserApi";
+import { Loader } from "../Loading/Loader";
+import { useEffect, useState } from "react";
+
+import { useSelector } from "react-redux";
+
   export default function AdminNavbar() {
+
+    const {userinfo} = useSelector((state)=>state.user)
+
+
+  if (!userinfo) {
+    return <Loader />;
+  }
+
+  const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState(false);
+
     return (
       <Navbar
         variant="gradient"
@@ -39,7 +56,7 @@ import {
             <IconButton variant="text" color="white">
               <Cog6ToothIcon className="h-4 w-4" />
             </IconButton>
-            <IconButton variant="text" color="white">
+            <IconButton variant="text" color="white" onClick={()=>setIsNotificationDrawerOpen(true)}>
               <BellIcon className="h-4 w-4" />
             </IconButton>
             <Avatar
@@ -52,6 +69,8 @@ import {
           </div>
        
         </div>
+
+        <NotificationDrawer isOpen={isNotificationDrawerOpen} userinfo={userinfo} onClose={()=>setIsNotificationDrawerOpen(false)}  />
       </Navbar>
     );
   }

@@ -4,6 +4,10 @@ from django.contrib.auth.models import AbstractUser,BaseUserManager
 # Create your models here.
 from celery import shared_task
 from django.utils import timezone
+from django.dispatch import receiver
+from django.db.models.signals import post_save,pre_save
+
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -64,6 +68,7 @@ class User(AbstractUser):
 
 
 
+
 class Followings(models.Model):
     follower=models.ForeignKey(User,related_name='following',on_delete=models.CASCADE)
     following=models.ForeignKey(User,related_name='followers',on_delete=models.CASCADE)
@@ -107,6 +112,8 @@ class PremiumUserInfo(models.Model):
     def __str__(self):
         return self.user.email
 
+
+
 class Qualifications(models.Model):
     premium_user = models.ForeignKey(PremiumUserInfo, on_delete=models.CASCADE,related_name='qualifications')
     qualifications = models.CharField(max_length=100,null=True)
@@ -144,14 +151,15 @@ class Subscription(models.Model):
    
     def __str__(self):
         return f"{self.subscriber.first_name} subscribes to {self.subscribed_to.first_name} ({self.subscription_type}"
-    
 
-    def save(self,*args,**kwargs):
 
-        if self.end_time and self.end_time <= timezone.now():
-            self.is_active=False
+
+    # def save(self,*args,**kwargs):
+
+    #     if self.end_time and self.end_time <= timezone.now():
+    #         self.is_active=False
         
-        super().save(*args,**kwargs)
+    #     super().save(*args,**kwargs)
     
     # @staticmethod
     # @shared_task
@@ -164,7 +172,6 @@ class Subscription(models.Model):
     #     for subscription in subscriptions_to_update:
     #         subscription.is_active = False
     #         subscription.save()
-   
 
 
 
@@ -187,6 +194,8 @@ class Wallet(models.Model):
     withdrawn=models.DecimalField(max_digits=20,decimal_places=2,default=0)
     created_at=models.DateTimeField(auto_now_add=True)
 
+
+
     # class Meta:
     #     unique_together=['user_id','recieved','created_at']
 
@@ -195,3 +204,4 @@ class Report_Issue(models.Model):
     issue=models.TextField()
     is_fixed=models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
+

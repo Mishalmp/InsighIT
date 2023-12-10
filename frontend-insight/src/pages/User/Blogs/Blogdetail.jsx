@@ -52,6 +52,8 @@ import AddIcon from "@mui/icons-material/Add";
 import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 import { timeAgo } from "../../../helpers/Timemanage";
 import { NotificationCreate } from '../../../services/UserApi';
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+import { wsurl } from '../../../constants/constants';
 
 function Blogdetail() {
   const { blogId } = useParams();
@@ -133,22 +135,37 @@ function Blogdetail() {
     FetchBlog();
   }, [blogId, userinfo.id, is_following]);
 
+  const sendNotification = (message, receiverId) => {
+    const socket = new W3CWebSocket(`${wsurl}ws/notifications/${receiverId}/`);
+    socket.onopen = () => {
+        socket.send(JSON.stringify({ message, receiverId }));
+        socket.close();
+    };
+};
+
   const handlelike = async () => {
     const values = {
       blog: blogId,
       user: userinfo.id,
     };
 
+    const notificationMessage = `${userinfo.first_name} Liked your Blog ${blog.title}`;
+    const receiverId = blog.user_id.id;
+
     const noti_values={
-      user:blog.user_id.id,
-      text:`${userinfo.first_name} Liked  your Blog ${blog.title} `,
+      user:receiverId,
+      text:notificationMessage,
 
   }
+
     try {
       const response = await LikeBlog(values);
       console.log(response);
       const liked = response.data.liked;
       setIsLiked(liked);
+
+      sendNotification(notificationMessage, receiverId)
+
       await NotificationCreate(noti_values)
       toast.success("Liked Blog");
 
@@ -156,6 +173,15 @@ function Blogdetail() {
         ...prevBlog,
         likes: prevBlog.likes + 1,
       }));
+
+      
+       clientstate.send(
+        JSON.stringify({
+            type: 'send_notification',
+            message: noti_values.text,
+        })
+    );
+
     } catch (error) {
       console.error(error);
     }

@@ -6,8 +6,8 @@ const AdminSignIn=(values)=>{
     }).catch((error)=>error.response);
 }
 
-const ListUser = (searchQuery)=>{
-    return AdminAxiosInstant.get(`/userlist/?search=${searchQuery}`,{
+const ListUser = (searchQuery,filter)=>{
+    return AdminAxiosInstant.get(`/userlist/?search=${searchQuery}&filter=${filter}`,{
         withCredentials:true
     }).catch((error)=>error.response)
 }

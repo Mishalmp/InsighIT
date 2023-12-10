@@ -13,10 +13,25 @@ class PremiumUserInfoListCreateView(ListCreateAPIView):
 
 
 class PremiumInfoListView(ListAPIView):
-    queryset=PremiumUserInfo.objects.all()
+    # queryset=PremiumUserInfo.objects.all()
     filter_backends=[SearchFilter]
     search_fields=['user__first_name','user__email']
     serializer_class=PremiumInfoListSerializer
+
+    def get_queryset(self):
+        
+        filter_value = self.request.query_params.get('filter')
+        
+        if filter_value == 'active':
+        
+            return PremiumUserInfo.objects.filter(is_approved = True).order_by('-created_at')
+        elif filter_value == 'inactive':
+            
+            return PremiumUserInfo.objects.filter(is_approved = False).order_by('-created_at')
+        else:
+       
+            return PremiumUserInfo.objects.all().order_by('-created_at')
+
 
 
 class PremiumUserInfoDetailView(RetrieveUpdateDestroyAPIView):
@@ -27,7 +42,7 @@ class PremiumUserInfoDetailView(RetrieveUpdateDestroyAPIView):
 class Premiuminfobyuser(RetrieveUpdateDestroyAPIView):
     serializer_class=PremiumInfoListSerializer
     lookup_field='user'
-    
+
     def get_queryset(self):
         user_id=self.kwargs.get('user')
         premiumview=PremiumUserInfo.objects.filter(user=user_id)

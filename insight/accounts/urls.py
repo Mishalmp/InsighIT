@@ -45,6 +45,7 @@ urlpatterns=[
     path('issueview/<int:pk>',ReportissueDetailView.as_view(),name='reportissuelistbyuser'),
 
     path('create-checkout-session/',CreateCheckoutSessionView.as_view(),name='checkout-session'),
+    
     # path('webhook/stripe/',stripe_webhook_view,name='web_hook'),
 
 ]

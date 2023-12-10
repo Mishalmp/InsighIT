@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
+    'django_celery_results',
+    'django_celery_beat'
 ]
 APPEND_SLASH = False
 REST_FRAMEWORK = {
@@ -163,8 +165,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 
 USE_TZ = True
@@ -210,3 +212,14 @@ STRIPE_SECRET_KEY='sk_test_51ODXutSJIzAHTfhbCRKgdZWdQuHIhCc0ULCZRaSH56Jq2HscZ9sM
 STRIPE_PUBLIC_KEY = 'pk_test_51ODXutSJIzAHTfhbtbs5Hmu3AG7AYIJRnXtolxzyIswLOWoPRcXRh5GPYqeRAUeApVWbAOFyUBnBxULkyHU84onC00CQZvyYIS'
 
 STRIPE_SECRET_WEBHOOK='whsec_8d927394f625628baba18b71cd2ee574813460949ce85829e805ccefa2064f40'
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
+CELERY_RESULT_BACKEND = 'django-db'
+
+
+CELERY_BEAT_SCHEDULER  = 'django_celery_beat.schedulers:DatabaseScheduler'

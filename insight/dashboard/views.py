@@ -21,7 +21,19 @@ class ListUser(ListAPIView):
     filter_backends=[SearchFilter]
     search_fields=['email','first_name','last_name','role']
     pagination_class=PageNumberPagination
-    queryset=User.objects.filter(role='user').exclude(is_superuser=True).order_by('-id')
+    # queryset=User.objects.filter(role='user').exclude(is_superuser=True).order_by('-id')
+
+
+    def get_queryset(self):
+        
+        filter_value = self.request.query_params.get('filter')
+
+        if filter_value == 'active':
+            return User.objects.filter(role='user',is_active = True).exclude(is_superuser=True).order_by('-id')
+        elif filter_value == 'blocked':
+            return User.objects.filter(role='user',is_active = False).exclude(is_superuser=True).order_by('-id')
+        else:
+            return User.objects.filter(role='user').exclude(is_superuser=True).order_by('-id')
 
 
 class UserBlockUnblock(UpdateAPIView):

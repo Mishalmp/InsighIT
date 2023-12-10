@@ -89,7 +89,7 @@ function ReportIssue() {
           </p>
         </div>
 
-        <div className="w-[70rem] rounded-lg mt-10 max-h-[35rem] overflow-y-auto min-h-[30rem] bg-white shadow-2xl ml-[12rem]">
+        <div className="w-[70rem] rounded-lg mt-10 max-h-[39rem] overflow-y-auto min-h-[30rem] bg-white shadow-2xl ml-[12rem]">
           <p className="text-5xl text-center font-serif"> Recent issues</p>
 
           {prevreports.length > 0 ? (

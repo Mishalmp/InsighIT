@@ -16,7 +16,7 @@ class AdminTokenObtainPairSerializers(TokenObtainPairSerializer):
 
         if not user.is_active:
             raise ValidationError("User is not active",code='inactive user')
-        print(token,'hereeeeeeeeeeeeeeeeeeeeee')
+       
 
         token['user_id']=user.id
         token['role']=user.role

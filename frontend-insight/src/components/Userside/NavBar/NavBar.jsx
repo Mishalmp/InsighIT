@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import bginsight from '../../../assets/bginsight.png'
 import hamburgerMenu from '../../../assets/hamburgerMenu.svg' 
 import close from '../../../assets/close.svg'
@@ -107,7 +107,21 @@ function NavBar() {
 
     const [searchQuery,setSearchQuery]=useState("")
 
-    
+    const searchRef = useRef(null);
+
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (searchRef.current && !searchRef.current.contains(event.target)) {
+          setsearchresultopen(false);
+        }
+      };
+  
+      document.addEventListener('mousedown', handleClickOutside);
+  
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [searchRef]);
     
 
   return (
@@ -240,7 +254,7 @@ function NavBar() {
 
 <div className='w-full h-[1px] bg-gray-600'></div>
 
-  <SearchUser searchresultopen={searchresultopen} searchQuery={searchQuery} userinfo={userinfo} setsearchresultopen={setsearchresultopen} />
+  <SearchUser searchresultopen={searchresultopen} searchQuery={searchQuery} userinfo={userinfo} setsearchresultopen={setsearchresultopen}  ref={searchRef} />
 
     </>
   )

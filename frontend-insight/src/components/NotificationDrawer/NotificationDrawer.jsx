@@ -14,7 +14,25 @@ function NotificationDrawer({ isOpen,userinfo, onClose }) {
  const [notifications,setNotifications]=useState([])
  const [loading,setLoading]=useState(false)
 
- 
+//  const [notifications, setNotifications] = useState([]);
+
+//  useEffect(() => {
+//      const socket = new WebSocket('ws://your-domain/ws/notifications/');
+
+//      socket.onmessage = (event) => {
+//          const data = JSON.parse(event.data);
+
+//          // Update state with the new notification
+//          setNotifications((prevNotifications) => [
+//              ...prevNotifications,
+//              data.notification,
+//          ]);
+//      };
+
+//      return () => {
+//          socket.close();
+//      };
+//  }, []); 
 
  const handleCloseAll =async () => {
 
@@ -48,6 +66,8 @@ function NotificationDrawer({ isOpen,userinfo, onClose }) {
  },[userinfo.id])
 
  const handleLoading=()=>setLoading((cur)=>!cur)
+
+ console.log(notifications,'nottificaations');
  
 
   return (

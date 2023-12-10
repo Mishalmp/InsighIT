@@ -24,28 +24,7 @@ import {
 } from "@material-tailwind/react";
 
 
-// const TABLE_ROWS = [
-//   {
-//     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-//     name: "John Michael",
-//     email: "john@creative-tim.com",
-//     job: "Manager",
-//     org: "Organization",
-//     online: true,
-//     date: "23/04/18",
-//   },
-//   {
-//     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-//     name: "Alexa Liras",
-//     email: "alexa@creative-tim.com",
-//     job: "Programator",
-//     org: "Developer",
-//     online: false,
-//     date: "23/04/18",
-//   },
 
-
-// ];
 
 export default function UsersList() {
     const TABS = [
@@ -55,11 +34,11 @@ export default function UsersList() {
       },
       {
         label: "Active",
-        value: "Active",
+        value: "active",
       },
       {
         label: "Blocked",
-        value: "Blocked",
+        value: "blocked",
       }];
     
     const TABLE_HEAD = ["Member","Name", "Email", "Status", "Action"];
@@ -68,17 +47,17 @@ export default function UsersList() {
     const [searchQuery, setSearchQuery] = useState(""); 
     const [currentPage, setCurrentPage] = useState(0); // Current page number
     const [itemsPerPage] = useState(8);
-
+    const [selectedfilter,setselectedfilter]=useState('')
 
     useEffect(() => {
       fetchUsers();
-    }, [searchQuery]);
+    }, [searchQuery,selectedfilter]);
   
 
 
     const fetchUsers = async () => {
       try {
-        const response = await ListUser(searchQuery); // Call your API function
+        const response = await ListUser(searchQuery,selectedfilter); // Call your API function
         const data = response.data; // Assuming data is an array of user objects
         setUsers(data);
       } catch (error) {
@@ -120,7 +99,7 @@ const handlePageClick = (selectedPage) => {
             <Tabs value="all" className="w-full md:w-max">
               <TabsHeader>
                 {TABS.map(({ label, value }) => (
-                  <Tab key={value} value={value}>
+                  <Tab key={value} value={value} onClick={()=>setselectedfilter(value)}>
                     &nbsp;&nbsp;{label}&nbsp;&nbsp;
                   </Tab>
                 ))}

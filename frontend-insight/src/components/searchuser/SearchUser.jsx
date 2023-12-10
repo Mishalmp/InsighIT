@@ -5,10 +5,10 @@ import { ListUser } from "../../services/AdminApi";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { Link, useNavigate } from "react-router-dom";
 
-function SearchUser({ searchresultopen,searchQuery,userinfo,setsearchresultopen }) {
+function SearchUser({ searchresultopen,searchQuery,userinfo,setsearchresultopen,ref }) {
 
     const navigate= useNavigate()
-    const searchUserRef = useRef(null);
+    // const searchUserRef = useRef(null);
 
     const [users,setUsers]=useState([])
 
@@ -21,7 +21,7 @@ function SearchUser({ searchresultopen,searchQuery,userinfo,setsearchresultopen 
     const fetchUsers=async()=>{
         try {
             
-            const res=await ListUser(searchQuery)
+            const res=await ListUser(searchQuery,'')
             setUsers(res.data)
 
         } catch (error) {
@@ -52,7 +52,7 @@ function SearchUser({ searchresultopen,searchQuery,userinfo,setsearchresultopen 
 
   return (
     <div
-    ref={searchUserRef}
+    ref={ref}
     className={`${
         searchresultopen
           ? "absolute ml-40 z-[100] mt-2 overflow-y-auto max-h-[24rem] min-h-[6rem] flex flex-col text-gray-700 bg-gray-50 shadow-md w-[26rem] rounded-xl bg-clip-border"
@@ -74,7 +74,7 @@ function SearchUser({ searchresultopen,searchQuery,userinfo,setsearchresultopen 
                 }
             }}
           >
-            
+
             <div className="grid mr-4 place-items-center">
               <img
                 alt="candice"

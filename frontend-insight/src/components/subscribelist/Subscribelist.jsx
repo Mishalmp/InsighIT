@@ -61,7 +61,7 @@ function Subscribelist({ user_id, is_subscription }) {
   if (!subscribes) {
     return <Loader />;
   }
-  console.log(subscribes, "suuuuuuuuuubbbbbbbbbbbbbbbbbbbbb");
+
 
   const handleOpen = (subscribe) => {
     setSelectedSubscribe(subscribe);
@@ -120,8 +120,8 @@ function Subscribelist({ user_id, is_subscription }) {
                     : subscribe.subscriber.tag_name}
                 </p>
 
-                <p className="bg-green-100 w-40 text-md font-semibold justify-center items-center mt-4 h-[1.6rem] flex text-blue-800  rounded-md">
-                  {subscribe.subscription_type}
+                <p className={`${subscribe.is_active?"bg-green-100":"bg-red-200"}  w-40 text-md font-semibold justify-center items-center mt-4 h-[1.6rem] flex text-blue-800  rounded-md`}>
+                  { subscribe.is_active?subscribe.subscription_type:"Not active" }
                 </p>
               </Card>
             </>

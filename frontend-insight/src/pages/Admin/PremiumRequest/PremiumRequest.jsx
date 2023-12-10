@@ -28,19 +28,35 @@ function PremiumRequest() {
     const [premiuminfos,setPremiuminfos]=useState([])
     const navigate=useNavigate()
     const [searchQuery,setSearchQuery]=useState("")
+    const [selectedfilter,setSelectedfilter]=useState("")
 
     const FetchRequest=async()=>{
         try {
-            const res = await GetPremiuminfolist(searchQuery)
+            const res = await GetPremiuminfolist(searchQuery,selectedfilter)
             setPremiuminfos(res.data)
+           
         } catch (error) {
             console.error(error);
         }
     }
     useEffect(()=>{
         FetchRequest()
-    },[searchQuery])
+    },[searchQuery,selectedfilter])
 
+ 
+    const TABS = [
+        {
+          label: "All",
+          value: "all",
+        },
+        {
+          label: "Active",
+          value: "active",
+        },
+        {
+          label: "Inactive",
+          value: "inactive",
+        }];
 
     const TABLE_HEAD = ["User ", "Date", "Email","status", ""];
   return (
@@ -59,6 +75,7 @@ function PremiumRequest() {
             </Typography>
           </div>
           <div className="flex w-full shrink-0 gap-2 md:w-max">
+      
             <div className="w-full md:w-72">
               <Input
                 label="Search"
@@ -70,6 +87,15 @@ function PremiumRequest() {
           
           </div>
         </div>
+        <Tabs value="all" className="w-full md:w-max">
+              <TabsHeader>
+                {TABS.map(({ label, value }) => (
+                  <Tab key={value} value={value} onClick={()=>setSelectedfilter(value)}>
+                    &nbsp;&nbsp;{label}&nbsp;&nbsp;
+                  </Tab>
+                ))}
+              </TabsHeader>
+            </Tabs>
       </CardHeader>
       <CardBody className="overflow-scroll px-0">
         <table className="w-full min-w-max table-auto text-left">

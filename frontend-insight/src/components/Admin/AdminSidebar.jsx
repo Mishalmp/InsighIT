@@ -30,6 +30,12 @@ import {
 } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import insightimg from '../../assets/insightnew.png'
+
+import { FaWallet } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { LogoutDetails } from "../../Redux/UserSlice";
+
+
 export default function AdminSidebar() {
   const [open, setOpen] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
@@ -39,11 +45,15 @@ export default function AdminSidebar() {
   };
  
 
+
+  const dispatch=useDispatch()
   const Signout=()=>{
+    dispatch(LogoutDetails())
     localStorage.removeItem('token')
     navigate('/admin/adminlogin/')
 
   }
+
   return (
     <Card className="h-[50rem] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
       <div className="mb-2 flex items-center gap-4 p-4">
@@ -80,17 +90,12 @@ export default function AdminSidebar() {
                 </ListItemPrefix>
                 Analytics
               </ListItem>
-              <ListItem>
+           
+              <ListItem onClick={()=>navigate('/admin/adminwallet/')}>
                 <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  <FaWallet strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                Reporting
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Projects
+                Wallet
               </ListItem>
             </List>
           </AccordionBody>
@@ -107,27 +112,27 @@ export default function AdminSidebar() {
           <ListItem className="p-0" selected={open === 2}>
             <AccordionHeader onClick={() => handleOpen(2)} className="border-b-0 p-3">
               <ListItemPrefix>
-                <ShoppingBagIcon className="h-5 w-5" />
+              <ReportIcon className="h-5 w-5" />
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
-                E-Commerce
+                Reports
               </Typography>
             </AccordionHeader>
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Orders
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Products
-              </ListItem>
+            <ListItem onClick={()=>navigate('/admin/blogreports/')}>
+          <ListItemPrefix>
+            <ReportIcon className="h-5 w-5" />
+          </ListItemPrefix>
+         Blog Reports 
+        </ListItem>
+        <ListItem onClick={()=>navigate('/admin/reportedissues/')} >
+          <ListItemPrefix>
+            <ReportIcon className="h-5 w-5" />
+          </ListItemPrefix>
+         Bug Reports 
+        </ListItem>
             </List>
           </AccordionBody>
         </Accordion>
@@ -159,18 +164,7 @@ export default function AdminSidebar() {
           </ListItemPrefix>
           Settings
         </ListItem>
-        <ListItem onClick={()=>navigate('/admin/blogreports/')}>
-          <ListItemPrefix>
-            <ReportIcon className="h-5 w-5" />
-          </ListItemPrefix>
-         Blog Reports 
-        </ListItem>
-        <ListItem >
-          <ListItemPrefix>
-            <ReportIcon className="h-5 w-5" />
-          </ListItemPrefix>
-         Bug Reports 
-        </ListItem>
+      
         <ListItem onClick={Signout} className="text-red-800 hover:bg-red-200 hover:text-red-800">
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5 " />

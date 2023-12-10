@@ -29,7 +29,7 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
 
-import { GetPremiuminfo } from "../../../services/PremiumApi";
+import { GetPremiuminfobyUser } from "../../../services/PremiumApi";
 
 
 function CheckIcon() {
@@ -71,8 +71,9 @@ function Bloghidepage({user_id,author_id}) {
 
       try{
 
-        const premium_info=await GetPremiuminfo(author_id)
+        const premium_info=await GetPremiuminfobyUser(author_id)
         setPremiuminfo(premium_info.data)
+        console.log(premium_info.data,'premium info subdcribe');
        
 
       }catch{
@@ -84,7 +85,7 @@ function Bloghidepage({user_id,author_id}) {
 
   },[])
 
- 
+ console.log(premiuminfo,'');
 
   const handleBuyNow = async (amount,subscription) => {
 

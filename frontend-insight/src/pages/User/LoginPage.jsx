@@ -111,7 +111,7 @@ function LoginPage() {
       dispatch(setPremiumUserInfo({
         premiumuserinfo:pre.data
       }))
-      console.log(Userinfo,'userinfo')
+      
     
     }
     catch{
@@ -150,12 +150,12 @@ function LoginPage() {
       handleLoading();
 
       UserSignin(user).then((res)=>{
-        console.log(res,'ressssssssss')
+   
         if (res.status === 200){
           const token = JSON.stringify(res.data)
-          console.log(token,'token')
+        
           const decoded = jwtDecode(token)
-          console.log(decoded,'decoded')
+     
           fetchUserInfo(decoded)
 
           localStorage.setItem('token',token)

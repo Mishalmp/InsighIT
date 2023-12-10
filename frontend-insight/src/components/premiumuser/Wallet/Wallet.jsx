@@ -37,7 +37,7 @@ function Wallet({ user }) {
     const FetchWallet = async () => {
       try {
         const response = await UserWallet(user.id);
-        console.log(response.data, "walllettt");
+       
         setTotalrecieve(response.data.total_recieved);
         setWithdraw(response.data.total_withdrawn);
         setTransactions(response.data.transactions);
@@ -47,11 +47,11 @@ function Wallet({ user }) {
     };
     FetchWallet();
   }, []);
-  console.log(transactions, "isererererer");
+  
   return (
     <>
       <div className="ml-80 flex">
-        <h1 className="font-bold text-2xl ">Wallet</h1>
+        <h1 className="font-bold text-2xl text-center">Wallet</h1>
 
         {/* <div className="md:w-56 ml-32">
           <Input
@@ -60,7 +60,7 @@ function Wallet({ user }) {
           />
         </div> */}
       </div>
-      <Card className="w-[50rem] min-h-[25rem] max-h-[50rem] overflow-y-auto overflow-x-hidden mt-5 bg-gray-50">
+      <Card className="w-[50rem] min-h-[25rem]  overflow-x-hidden mt-5 bg-gray-50">
         <div className="w-96 ml-48 mt-10 h-32 rounded-lg border-[1px] border-green-500 shadow-2xl shadow-gray-400">
           <Typography variant="h5" className="text-gray-500 mt-2 text-center">
             Your Wallet balance

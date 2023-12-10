@@ -195,6 +195,11 @@ const IssueReportView=(id)=>{
         withCredentials:true
     }).catch((error)=>error.response)
 }
+const Updateissue=(id,values)=>{
+    return UserAxiosInstant.patch(`accounts/issueview/${id}`,values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
 
 const PremiumList=()=>{
     return UserAxiosInstant.get(`accounts/premiumlist/`,{
@@ -208,6 +213,6 @@ export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,
     UpdateUser,CreateSkill,ListSkills,EditSkill,DeleteSkill,NotificationCreate,Checkoutsession,
     Notificationsbyuser,CreateSubscription,IsSubscriber,CreateFollowing,Is_follower,Unfollow,Followingslist,Followerslist,
     SubscriptionsList,Subscriberslist,UserWallet,PreviousChat,ChatUsersList,ClearNotificationbyuser,IssueReportView,
-    ListIssuesByUser,ListIssues,CreateReportIssue,PremiumList
+    ListIssuesByUser,ListIssues,CreateReportIssue,PremiumList,Updateissue
 
 }

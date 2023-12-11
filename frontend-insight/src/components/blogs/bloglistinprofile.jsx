@@ -30,7 +30,7 @@ function Bloglistinprofile({ userid }) {
   useEffect(() => {
     const Fetchblogs = async () => {
       try {
-        const response = await GetBlogsByUser(userid, searchQuery,"");
+        const response = await GetBlogsByUser(userid, searchQuery,"",'');
         setBlogs(response.data);
       } catch (error) {
         console.error(error);

@@ -3,20 +3,20 @@ import os
 from celery import Celery
 from django.conf import settings
 from celery.schedules import crontab
-# set the default Django settings module for the 'celery' program.
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'insight.settings')
 
-# create a Celery instance and configure it.
+
 app = Celery('insight')
 
-#Disabling default timezone as UTC
+
 app.conf.enable_utc = False
 
 app.conf.update(timezone = 'Asia/Kolkata')
 
 app.config_from_object(settings, namespace='CELERY')
 
-#celery beat settings 
+
 app.conf.beat_schedule = {
 
     'send-mail-every-day-at-8':{
@@ -24,7 +24,11 @@ app.conf.beat_schedule = {
         'schedule':crontab(hour=18,minute=48),
         # 'schedule':crontab(),
         # 'args':(2,)
-    }
+    },
+        'check-expiring-subscriptions': {
+        'task': 'accounts.tasks.check_expiring_subscription',
+        'schedule': crontab(hour=18, minute=55),  # Run daily at midnight
+    },
 
 }
 

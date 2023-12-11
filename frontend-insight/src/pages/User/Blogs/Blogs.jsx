@@ -51,7 +51,7 @@ function Blogs() {
 
  
   return (
-    <div className='bg-white'>
+    <div className='bg-white '>
       <Navbar/>
       <div className='flex'>
       {/* <div className={`flex-grow ${isSidebarFixed ? 'ml-[28rem]' : ''}`}> */}
@@ -72,7 +72,7 @@ function Blogs() {
       <div className='ml-[3rem]'>
       <Sortorder/>
 
-     <div className='h-[60rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5'>
+     <div className='h-[75rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5'>
       {blogs.length > 0 ?
       blogs.map((blog)=>(
         

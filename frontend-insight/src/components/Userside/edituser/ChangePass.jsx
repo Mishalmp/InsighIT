@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Card,
     CardHeader,
@@ -11,7 +11,36 @@ import {
     DialogBody,Input
 
   } from "@material-tailwind/react";
-function ChangePass({ isOpen, onClose }) {
+  import { toast } from "react-toastify";
+
+function ChangePass({ isOpen, onClose,userinfo,UpdateUser }) {
+
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+
+  const handleSave =async()=>{
+
+    if (newPassword !== confirmPassword){
+      return toast.error("passwords doesn't match")
+    }
+    try {
+      
+      await UpdateUser(userinfo.id,{
+        password: currentPassword,
+        new_password: newPassword,
+      })
+
+      toast.success("password changed succussfully")
+      onClose()
+    } catch (error) {
+      console.error(error)
+    }
+
+  }
+
+
   return (
     <div>
       <Dialog
@@ -26,21 +55,21 @@ function ChangePass({ isOpen, onClose }) {
               Change Password
             </Typography>
 
-            <Typography className="-mb-2" variant="h6">
+            <Typography className="-mb-2" variant="h6" >
               Current Password
             </Typography>
-            <Input label="Current Password"  size="lg" />
+            <Input label="Current Password"  size="lg" value={currentPassword} onChange={(e)=>setCurrentPassword(e.target.value)} />
             <Typography className="-mb-2" variant="h6">
               New Password
             </Typography>
-            <Input label="New Password" name="skill" size="lg" />
+            <Input label="New Password" name="skill" size="lg" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} />
             <Typography className="-mb-2" variant="h6">
               Confirm Password
             </Typography>
-            <Input label="Confirm Password" name="skill" size="lg" />
+            <Input label="Confirm Password" name="skill" size="lg" value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)} />
           </CardBody>
           <CardFooter className="pt-0">
-            <Button variant="gradient" fullWidth>
+            <Button variant="gradient" fullWidth onClick={handleSave}>
               Save
             </Button>
 

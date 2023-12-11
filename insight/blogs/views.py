@@ -94,9 +94,9 @@ class ListBlogsView(ListAPIView):
         topic=self.request.query_params.get('topic')
 
         if topic:
-            return Blogs.objects.filter(topic__topic=topic,is_block=False).order_by('-created_at')
+            return Blogs.objects.filter(topic__topic=topic,is_block=False,is_hide=False).order_by('-created_at')
         else:
-            return Blogs.objects.filter(is_block=False).order_by('-created_at')
+            return Blogs.objects.filter(is_block=False,is_hide=False).order_by('-created_at')
 
 
 class TrendingBlogsListView(ListAPIView):
@@ -124,18 +124,27 @@ class BlogsByTopicListView(ListAPIView):
 class BlogsByUserListView(ListAPIView):
     serializer_class = Blogserializer
     # permission_classes = [IsAuthenticated]
-    filter_backends=[SearchFilter]
+    filter_backends = [SearchFilter]
     search_fields = ['title', 'topic__topic']
-    filterset_fields = ['user_id'] 
-    
+    filterset_fields = ['user_id']
 
     def get_queryset(self):
-        topic=self.request.query_params.get('topic')
+        topic = self.request.query_params.get('topic')
+        filter_value = self.request.query_params.get('filter')
         user_id = self.kwargs.get('user_id')
+
+        queryset = Blogs.objects.filter(is_block=False, user_id=user_id).order_by('-created_at')
+
         if topic:
-            return Blogs.objects.filter(topic__topic=topic,is_block=False,user_id=user_id).order_by('-created_at')
-        else:
-            return Blogs.objects.filter(is_block=False,user_id=user_id).order_by('-created_at')
+            queryset = queryset.filter(topic__topic=topic)
+
+        if filter_value == 'visible':
+            queryset = queryset.filter(is_hide=False)
+        elif filter_value == 'hidden':
+            queryset = queryset.filter(is_hide=True)
+
+        return queryset
+         
 
 
     

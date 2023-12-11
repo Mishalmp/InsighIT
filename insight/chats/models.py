@@ -14,4 +14,3 @@ class Message(models.Model):
         return f"{self.sender.first_name} sent to {self.reciever.first_name} at {self.timestamp}"
 
 
-    

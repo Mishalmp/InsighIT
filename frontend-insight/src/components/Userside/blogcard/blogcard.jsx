@@ -62,7 +62,7 @@ function Blogcard({
   const createdAtAgo = timeAgo(date);
   const blogDetailUrl = `/User/detailblog/${id}/`;
 
-  console.log(user_premium, "premiummm");
+  // console.log(user_premium, "premiummm");
 
   // Create a temporary div element
   const tempDiv = document.createElement("div");

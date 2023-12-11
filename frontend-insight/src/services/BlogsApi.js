@@ -53,9 +53,9 @@ const GetBlogsByTopic=(topic_id)=>{
     }).catch((error)=>error.response)
 }
 
-const GetBlogsByUser=(user_id,searchQuery,topic)=>{
+const GetBlogsByUser=(user_id,searchQuery,topic,selectedfilter)=>{
   
-        return BlogsAxiosInstant.get(`blogs/by-user/${user_id}/?search=${searchQuery}&topic=${topic}`,{
+        return BlogsAxiosInstant.get(`blogs/by-user/${user_id}/?search=${searchQuery}&topic=${topic}&filter=${selectedfilter}`,{
         
             withCredentials:true
         }).catch((error)=>error.response)

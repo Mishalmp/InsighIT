@@ -12,7 +12,7 @@ import {
 } from "@material-tailwind/react";
 import VerifiedIcon from "@mui/icons-material/Verified";
 
-import { PremiumList } from "../../services/UserApi";
+import { PremiumList, Followingslist } from "../../services/UserApi";
 import { TrendingTopics } from "../../services/BlogsApi";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -22,11 +22,21 @@ function Sidebar() {
 
   const [premiumlist, setPremiumlist] = useState([]);
   const [trendingtopics, settrendingtopics] = useState([]);
+  const [followingslist, setfollwoingslist] = useState([]);
 
   const fetchPremiumList = async () => {
     try {
       const res = await PremiumList();
       setPremiumlist(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchFollowingsList = async () => {
+    try {
+      const res = await Followingslist(userinfo.id);
+      setfollwoingslist(res.data);
     } catch (error) {
       console.error(error);
     }
@@ -43,13 +53,14 @@ function Sidebar() {
 
   useEffect(() => {
     fetchPremiumList();
+    fetchFollowingsList();
     fetchtopics();
   }, []);
 
   const [openAlert, setOpenAlert] = useState(true);
 
   return (
-    <div className="w-[24rem] float-right ml-[5rem] h-[65rem] mt-5 shadow-2xl rounded-md mr-1  bg-gray-100">
+    <div className="w-[24rem] float-right ml-[5rem] h-[98rem] mt-5 shadow-2xl rounded-md mr-1  bg-gray-100">
       <Card className=" m-3 mt-5 bg-white shadow-2xl">
         <Typography
           variant="h5"
@@ -81,13 +92,13 @@ function Sidebar() {
         <Typography variant="h5" className="mb-1">
           Writing on InsighIT
         </Typography>
-        <Typography  className="mt-4 tracking-wider text-md opacity-80">
+        <Typography className="mt-4 tracking-wider text-md opacity-80">
           New writer FAQ
         </Typography>
-        <Typography  className="tracking-wider text-md opacity-80">
+        <Typography className="tracking-wider text-md opacity-80">
           Expert writing advice
         </Typography>
-        <Typography  className=" tracking-wider text-md opacity-80">
+        <Typography className=" tracking-wider text-md opacity-80">
           Grow your readership
         </Typography>
         <div className="mt-6 flex gap-3">
@@ -100,12 +111,193 @@ function Sidebar() {
             Dismiss
           </Typography> */}
           <div className="bg-[#191919] -mt-1 h-8 w-32 text-center hover:cursor-pointer text-white rounded-2xl">
-            <Typography  className="font-medium  mt-[4px]" onClick={()=>navigate("/User/usercreateblog/")} >
+            <Typography
+              className="font-medium  mt-[4px]"
+              onClick={() => navigate("/User/usercreateblog/")}
+            >
               Start Writing
             </Typography>
           </div>
         </div>
       </Alert>
+      {followingslist.length > 0 && (
+        <Card className=" m-3 mt-5 bg-white shadow-2xl">
+          <Typography
+            variant="h5"
+            color="deep-purple"
+            className="m-5 ml-12 text-center"
+          >
+            Your followings
+          </Typography>
+
+          <CardBody className="min-h-[20rem] max-h-[28rem] overflow-y-auto">
+            <ul className="grid grid-cols-1 gap-2">
+              {followingslist.map((premium) => (
+                <div
+                  key={premium.id}
+                  role="button"
+                  className="flex items-center w-full p-3 leading-tight transition-all rounded-lg bg-gray-50 outline-none text-start hover:bg-blue-gray-100 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
+                  onClick={() =>
+                    navigate(`/User/authorprofile/${premium.following.id}`)
+                  }
+                >
+                  <div className="grid mr-4 place-items-center">
+                    <img
+                      alt="candice"
+                      src={`${
+                        premium.following.profile_img
+                          ? premium.following.profile_img
+                          : "https://docs.material-tailwind.com/img/face-1.jpg"
+                      }`}
+                      className="relative inline-block h-12 w-12 !rounded-full object-cover object-center"
+                    />
+                  </div>
+                  <div className="flex-col">
+                    <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
+                      {premium.following.first_name +
+                        " " +
+                        premium.following.last_name}{" "}
+                      {premium.following.is_premium && (
+                        <VerifiedIcon
+                          color="primary"
+                          fontSize="small"
+                          className="-mt-1 ml-2"
+                        />
+                      )}
+                    </h6>
+                    <p className="text-gray-700 text-md font-serif">
+                      {premium.following.email}
+                    </p>
+                    <p className="block font-sans mt-2 text-sm antialiased font-normal leading-normal text-blue-gray-700">
+                      {premium.following.tag_name}
+                    </p>
+                  </div>
+                </div>
+              ))}
+
+              <div
+                // key={premium.id}
+                role="button"
+                className="flex items-center w-full p-3 leading-tight transition-all rounded-lg bg-gray-50 outline-none text-start hover:bg-blue-gray-100 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
+              >
+                <div className="grid mr-4 place-items-center">
+                  <img
+                    alt="candice"
+                    src="https://docs.material-tailwind.com/img/face-1.jpg"
+                    className="relative inline-block h-12 w-12 !rounded-full object-cover object-center"
+                  />
+                </div>
+                <div className="flex-col">
+                  <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
+                    Ashiq Parammel{" "}
+                    <VerifiedIcon
+                      color="primary"
+                      fontSize="small"
+                      className="-mt-1 ml-2"
+                    />
+                  </h6>
+                  <p className="text-gray-700 text-md font-serif">
+                    ashiqparammel@gmail.com
+                  </p>
+                  <p className="block font-sans mt-2 text-sm antialiased font-normal leading-normal text-blue-gray-700">
+                    web developer
+                  </p>
+                </div>
+              </div>
+
+              <div
+                // key={premium.id}
+                role="button"
+                className="flex items-center w-full p-3 leading-tight transition-all rounded-lg bg-gray-50 outline-none text-start hover:bg-blue-gray-100 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
+              >
+                <div className="grid mr-4 place-items-center">
+                  <img
+                    alt="candice"
+                    src="https://docs.material-tailwind.com/img/face-1.jpg"
+                    className="relative inline-block h-12 w-12 !rounded-full object-cover object-center"
+                  />
+                </div>
+                <div className="flex-col">
+                  <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
+                    Ashiq Parammel{" "}
+                    <VerifiedIcon
+                      color="primary"
+                      fontSize="small"
+                      className="-mt-1 ml-2"
+                    />
+                  </h6>
+                  <p className="text-gray-700 text-md font-serif">
+                    ashiqparammel@gmail.com
+                  </p>
+                  <p className="block font-sans mt-2 text-sm antialiased font-normal leading-normal text-blue-gray-700">
+                    web developer
+                  </p>
+                </div>
+              </div>
+              <div
+                // key={premium.id}
+                role="button"
+                className="flex items-center w-full p-3 leading-tight transition-all rounded-lg bg-gray-50 outline-none text-start hover:bg-blue-gray-100 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
+              >
+                <div className="grid mr-4 place-items-center">
+                  <img
+                    alt="candice"
+                    src="https://docs.material-tailwind.com/img/face-1.jpg"
+                    className="relative inline-block h-12 w-12 !rounded-full object-cover object-center"
+                  />
+                </div>
+                <div className="flex-col">
+                  <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
+                    Ashiq Parammel{" "}
+                    <VerifiedIcon
+                      color="primary"
+                      fontSize="small"
+                      className="-mt-1 ml-2"
+                    />
+                  </h6>
+                  <p className="text-gray-700 text-md font-serif">
+                    ashiqparammel@gmail.com
+                  </p>
+                  <p className="block font-sans mt-2 text-sm antialiased font-normal leading-normal text-blue-gray-700">
+                    web developer
+                  </p>
+                </div>
+              </div>
+
+              <div
+                // key={premium.id}
+                role="button"
+                className="flex items-center w-full p-3 leading-tight transition-all rounded-lg bg-gray-50 outline-none text-start hover:bg-blue-gray-100 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
+              >
+                <div className="grid mr-4 place-items-center">
+                  <img
+                    alt="candice"
+                    src="https://docs.material-tailwind.com/img/face-1.jpg"
+                    className="relative inline-block h-12 w-12 !rounded-full object-cover object-center"
+                  />
+                </div>
+                <div className="flex-col">
+                  <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
+                    Ashiq Parammel{" "}
+                    <VerifiedIcon
+                      color="primary"
+                      fontSize="small"
+                      className="-mt-1 ml-2"
+                    />
+                  </h6>
+                  <p className="text-gray-700 text-md font-serif">
+                    ashiqparammel@gmail.com
+                  </p>
+                  <p className="block font-sans mt-2 text-sm antialiased font-normal leading-normal text-blue-gray-700">
+                    web developer
+                  </p>
+                </div>
+              </div>
+            </ul>
+          </CardBody>
+        </Card>
+      )}
+
       <Card className=" m-3 mt-5 bg-white shadow-2xl">
         <Typography
           variant="h5"

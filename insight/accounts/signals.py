@@ -1,9 +1,25 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save,post_delete,pre_save
 from django.dispatch import receiver
-
-from django.db import models
+from django.core.mail import send_mail
+from django.db.models import Q
 from django.utils import timezone
 from .models import *
+from django.conf import settings
+
+
+@receiver(post_save,sender=User)
+def send_mail_user_block(sender,instance,created,*args,**kwargs):
+
+    if not created:
+        if instance.is_active != instance._state.fields_cache.get('is_active', {}).get('original'):
+            subject = 'InsighIT | Account Status Update'
+            message = f'Your insighit account status has been {"activated" if instance.is_active else "deactivated"}.'
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [instance.email]
+
+            send_mail(subject, message, from_email, recipient_list)
+
+
 
 
 @receiver(post_save,sender=User)
@@ -36,15 +52,15 @@ def send_notification_subs(sender, instance, created, **kwargs):
         admin_user = User.objects.filter(is_superuser = True).first()
         Notifications.objects.create(user=admin_user,text=notification_text )
 
-@receiver(post_save,sender=Subscription)
-def update_is_active(sender,instance,*args,**kwargs):
-    if instance.end_time < timezone.now():
-        instance.delete()
-        # instance.is_active=False
 
-        notification_text=f"Your subscription to {instance.subscribed_to.first_name} has expired"
-        Notifications.objects.create(user=instance.subscriber,text=notification_text)
-   
+
+
+@receiver(post_delete, sender=Subscription)
+def delete_related_followings(sender, instance, **kwargs):
+    print('Deleting related followings...')
+    print('Follower:', instance.subscriber)
+    print('Following:', instance.subscribed_to)
+    Followings.objects.filter(follower=instance.subscriber, following=instance.subscribed_to).delete()
 
 
 @receiver(post_save, sender=Subscription)
@@ -52,7 +68,7 @@ def update_subscription_price(sender, instance, created, **kwargs):
     subscribed_to = instance.subscribed_to
     subscribers_count = Subscription.objects.filter(subscribed_to=subscribed_to).count()
 
-    if subscribers_count % 5 == 0 and subscribed_to.is_premium:
+    if subscribers_count % 10 == 0 and subscribed_to.is_premium:
         premium_info = subscribed_to.premiumuserinfo
         premium_info.subscription_price_basic += 10
         premium_info.subscription_price_std += 10

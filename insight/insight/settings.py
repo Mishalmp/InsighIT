@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'blogs',
     'premium',
     'chats',
+    'generative_ai',
     'channels',
     'rest_framework',
     'corsheaders',
@@ -223,3 +224,8 @@ CELERY_RESULT_BACKEND = 'django-db'
 
 
 CELERY_BEAT_SCHEDULER  = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+
+
+#OpenAI
+OPENAI_API_KEY = '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'

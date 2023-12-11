@@ -149,7 +149,7 @@ function NavBar() {
   <Link to="/User/blogs">  <li className='flex items-center mt-2 hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl'><ArticleIcon fontSize='medium'/><span>Blogs</span></li></Link>
   <Link to="/User/community/"> <li className='flex items-center mt-2 hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl'><NewspaperIcon fontSize='medium'/><span> Community</span></li></Link>
     
-    <li className='flex items-center hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl' onClick={handleOpenNotificationDrawer}><NotificationsActiveIcon fontSize='medium'/><span>Notifs</span></li>
+    <li className='flex items-center hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl' onClick={handleOpenNotificationDrawer}><Badge content="3"> <NotificationsActiveIcon fontSize='medium'/></Badge> <span>Notifs</span></li>
     {/* <Link to='/User/userprofile/'>
     <li className='flex items-center'><img className='w-[40px] h-[40px] rounded-full' src={userinfo.profile_img} /></li>
     </Link> */}

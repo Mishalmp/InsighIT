@@ -2,22 +2,34 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Input } from "@material-tailwind/react";
-import { Card, Typography, Button,Checkbox  } from "@material-tailwind/react";
+import { Card, Typography, Button, Checkbox } from "@material-tailwind/react";
 import { Select, Option } from "@material-tailwind/react";
 import { CreateBlog, GetTopics } from "../../../services/BlogsApi";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Loader } from '../../../components/Loading/Loader';
+import { Loader } from "../../../components/Loading/Loader";
 import { UploadfileGif } from "../../../components/Loading/UploadfileGif";
 import NavBar from "../../../components/Userside/NavBar/NavBar";
 import Footer from "../../../components/Userside/footer/footer";
 import { useNavigate } from "react-router-dom";
-import EditorToolbar, { modules, formats } from '../../../helpers/EditorToolbar'
+import EditorToolbar, {
+  modules,
+  formats,
+} from "../../../helpers/EditorToolbar";
 import { HowtowriteBlog } from "../../../components/Howto/Howtowriteblog";
+import { CreateContentai } from "../../../services/generativeai";
+
+import aiicon from "../../../assets/blogs/illustrator.png";
 // import { Editor } from "react-draft-wysiwyg";
 // import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
+import {
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Textarea,
+} from "@material-tailwind/react";
 
 function UserBlogCreate() {
   const [value, setValue] = useState("");
@@ -25,12 +37,12 @@ function UserBlogCreate() {
   const [selectTopic, setSelecttopic] = useState("");
   const [topics, setTopics] = useState([]);
   const { userinfo } = useSelector((state) => state.user);
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [videoFile, setVideoFile] = useState(null);
-  const [ispremium,setisPremium]=useState(false)
-  const navigate=useNavigate()
-  const handleLoading=()=>setLoading((cur)=>!cur)
+  const [ispremium, setisPremium] = useState(false);
+  const navigate = useNavigate();
+  const handleLoading = () => setLoading((cur) => !cur);
 
   useEffect(() => {
     FetchTopics();
@@ -45,36 +57,33 @@ function UserBlogCreate() {
     }
   };
 
-  
-
   const handleBlogSubmit = async () => {
-    
-    handleLoading()
+    handleLoading();
     const blogvalues = {
       title: title,
       content: value,
       user_id: userinfo.id,
       topic: selectTopic,
     };
-    
-    const formData=new FormData()
-    formData.append("title",title)
-    formData.append("content",value)
-    formData.append("user_id",userinfo.id)
-    formData.append("topic",selectTopic)
-    formData.append("banner_img",imageFile)
-    formData.append("video_post",videoFile)
-    formData.append("is_premium_blog",ispremium)
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", value);
+    formData.append("user_id", userinfo.id);
+    formData.append("topic", selectTopic);
+    formData.append("banner_img", imageFile);
+    formData.append("video_post", videoFile);
+    formData.append("is_premium_blog", ispremium);
 
     try {
       // console.log(blogvalues, "blogvalues");
       const response = await CreateBlog(formData);
-      
-      toast.success("Blog created successfully")
-      navigate("/User/blogs")
+
+      toast.success("Blog created successfully");
+      navigate("/User/blogs");
     } catch (error) {
       console.error("error! creating blog", error);
-      toast.error("error! creating blog")
+      toast.error("error! creating blog");
     }
   };
 
@@ -87,20 +96,58 @@ function UserBlogCreate() {
   };
 
   const [open, setOpen] = useState(false);
- 
+
   const handleOpen = () => setOpen(!open);
+
+  const [aimodalopen, setaimodalopen] = useState(false);
+  const [aitopic, setaitopic] = useState("");
+
+  const handleaicontentsubmit = async () => {
+    setaimodalopen(false)
+    setLoading(true)
+    if (aitopic.trim()) {
+      try {
+        const aitext_res = await CreateContentai({ topic: aitopic });
+        const content = aitext_res.data.find((item) => item[0] === 'content');
+      if (content) {
+        console.log(content[1]);
+        setValue(value + content[1])
+      }
+      
+        setaitopic("")
+        setLoading(false)
+        
+      } catch (error) {
+        console.error(error);
+        toast.error("error");
+      }
+    } else {
+      toast.error("field empty");
+    }
+  };
 
   return (
     <>
-     {loading && <Loader/>}
-      <ToastContainer  />
-      <NavBar/>
-      <Typography className="text-center font-semibold text-2xl -ml-24 mt-10">Write Blog</Typography>
-      <Button variant="gradient" onClick={handleOpen} className="float-right mr-20 -mt-10">
+      {loading && <Loader />}
+      <ToastContainer />
+      <NavBar />
+      <Typography className="text-center font-semibold text-2xl -ml-24 mt-10">
+        Write Blog
+      </Typography>
+      <Button
+        variant="gradient"
+        onClick={handleOpen}
+        className="float-right mr-20 -mt-10"
+      >
         How to write?
       </Button>
       <Card className="w-[60rem]  m-10 ml-[15%] bg-gray-50 shadow-2xl">
-        <Typography className="text-center font-semibold mt-4">Title </Typography>
+
+        <div className="grid grid-cols-2" >
+          <div>
+        <Typography className="text-center font-semibold mt-10">
+          Title{" "}
+        </Typography>
         <div className="flex flex-col w-[70%] ml-[15%] gap-6">
           <Input
             variant="standard"
@@ -109,7 +156,7 @@ function UserBlogCreate() {
             label="Title..."
           />
         </div>
-        <div className="w-72 mt-12 mb-10 ml-[35%] gap-6">
+        <div className="w-80 mt-12 mb-10 ml-20 gap-6">
           <Typography className="text-center font-semibold">Topic</Typography>
           <Select
             variant="outlined"
@@ -124,28 +171,30 @@ function UserBlogCreate() {
             ))}
           </Select>
         </div>
-        <Typography className="text-center font-semibold">
+        </div>
+        <div className="mt-8">
+          <Typography className="text-center font-semibold">
           Banner Image{" "}
         </Typography>
-        <div className="flex items-center justify-center ml-20 w-[50rem] mb-10">
+        <div className="flex items-center justify-center ml-10 mt-5 w-[25rem] mb-10">
           <label
             htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-[80%] h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            className="flex flex-col items-center justify-center w-[23rem]  h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
-            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+            <div className="flex flex-col items-center justify-center ">
               {imageFile ? (
                 <>
-                <img
-                  className="w-60 h-28 mt-10 mb-4"
-                  src={URL.createObjectURL(imageFile)}
-                  alt="Selected Image"
+                  <img
+                    className="w-[23rem]  h-40 mt-10 mb-4"
+                    src={URL.createObjectURL(imageFile)}
+                    alt="Selected Image"
                   />
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {imageFile.name}
-                </p>
-                  </>
-                
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {imageFile.name}
+                  </p>
+                </>
               ) : (
+                <>
                 <svg
                   className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
                   aria-hidden="true"
@@ -161,12 +210,15 @@ function UserBlogCreate() {
                     d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                   ></path>
                 </svg>
-              )}
-              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                 <span className="font-semibold">
                   Click to upload banner image
                 </span>
               </p>
+                </>
+                
+              )}
+             
               {/* {imageFile && (
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {imageFile.name}
@@ -181,29 +233,43 @@ function UserBlogCreate() {
             />
           </label>
         </div>
+        </div>
+        </div>
 
         <div>
-          <Typography className="text-center font-semibold">
-            Blog Content
-          </Typography>
-          <EditorToolbar />
-      <ReactQuill
-        theme="snow"
-        value={value}
-        onChange={setValue}
-        placeholder={"Write something awesome..."}
-        className="h-[15rem] w-[80%] ml-[10%] mb-10"
-        modules={modules}
-        formats={formats}
-      />
-    </div>
-          {/* <ReactQuill
+        
+          <div className="flex  ml-[26rem] mb-5 mt-10">
+            <Typography className="text-center font-semibold">
+              Blog Content{" "}
+            </Typography>
+
+            {/* <p className="ml-10 text-blue-800 cursor-pointer" onClick={() => setaimodalopen(true)}>
+              write with ai ?
+            </p> */}
+            {/* <img
+                src={aiicon}
+                className="w-5 h-5 ml-2 hover:bg-gray-200 hover:cursor-pointer"
+                alt="ai icon"
+              /> */}
+          </div>
+          <EditorToolbar onaicontent={() => setaimodalopen(true)} />
+          <ReactQuill
+            theme="snow"
+            value={value}
+            onChange={setValue}
+            placeholder={"Write something awesome..."}
+            className="h-[15rem] w-[80%] ml-[10%] mb-10"
+            modules={modules}
+            formats={formats}
+          />
+        </div>
+        {/* <ReactQuill
             theme="snow"
             className="h-[10rem] w-[80%] ml-[10%] mb-10"
             value={value}
             onChange={setValue}
           /> */}
-          {/* <Editor
+        {/* <Editor
   editorState={editorState}
   toolbarClassName="toolbarClassName"
   wrapperClassName="wrapperClassName"
@@ -211,32 +277,82 @@ function UserBlogCreate() {
   onEditorStateChange={this.onEditorStateChange}
 />; */}
         {/* </div> */}
-      
 
+      <div className="grid grid-cols-2 ml-10" >
         <div className="mt-10 mb-10">
           <Typography className="text-center font-semibold">
             Video Upload (Optional)
           </Typography>
           <input
-            className="block w-[80%] ml-[10%] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+            className="block w-[23rem] mt-5 text-sm ml-10 text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
             id="file_input"
             type="file"
             onChange={handleVideoChange}
           />
         </div>
-        {userinfo.is_premium && 
-
-          <div className="mt-10 mb-10 ml-[10%] flex">
-          
-        <Checkbox defaultValue={ispremium}  onClick={(e)=>setisPremium(!ispremium)}/><Typography className="mt-2">Premium Blog </Typography>
+        {userinfo.is_premium && (
+          <div className="mt-20 mb-10 ml-5  flex">
+            <Checkbox
+              defaultValue={ispremium}
+              onClick={(e) => setisPremium(!ispremium)}
+            />
+            <Typography className="mt-3 ml-2">Premium Blog </Typography>
+          </div>
+        )}
         </div>
-        }
-        <Button className="mt-6 w-[60%] mb-10 ml-[20%]" onClick={handleBlogSubmit}>
+        <Button
+          className="mt-6 w-[60%] mb-10 ml-[20%]"
+          onClick={handleBlogSubmit}
+        >
           Submit Blog
         </Button>
       </Card>
       <HowtowriteBlog handleOpen={handleOpen} open={open} />
-      <Footer/>
+
+      <Dialog open={aimodalopen} size="xs" handler={() => setaimodalopen(false)}>
+        <div className="flex items-center justify-between">
+          <DialogHeader className="flex flex-col items-start">
+            {" "}
+            <Typography className="mb-1" variant="h4">
+              Write Topic 
+            </Typography>
+          </DialogHeader>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="mr-3 h-5 w-5"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+        <DialogBody>
+          <Typography className="mb-10 -mt-7 " color="gray" variant="lead">
+            Write something to generate
+          </Typography>
+          <div className="grid gap-6">
+            <Textarea  value={aitopic} onChange={(e)=>setaitopic(e.target.value)} />
+          </div>
+        </DialogBody>
+        <DialogFooter className="space-x-2">
+          <Button
+            variant="text"
+            color="gray"
+            onClick={() => setaimodalopen(false)}
+          >
+            cancel
+          </Button>
+          <Button variant="gradient" color="gray" onClick={handleaicontentsubmit}>
+            Submit topic
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      <Footer />
     </>
   );
 }

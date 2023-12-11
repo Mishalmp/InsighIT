@@ -7,7 +7,8 @@ import {
   GetBlogLike,
   CreateSaved,
   IsSave,
-  Unsave
+  Unsave,
+  UpdateBlog,
 } from "../../../services/BlogsApi";
 import { useSelector } from "react-redux";
 import { Card, Typography, Button } from "@material-tailwind/react";
@@ -35,7 +36,7 @@ import {
   MenuList,
   MenuItem,
 } from "@material-tailwind/react";
-
+import Relatedblogs from "../../../components/relatedblogs/relatedblogs";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -49,12 +50,13 @@ import {
   Unfollow,
 } from "../../../services/UserApi";
 import AddIcon from "@mui/icons-material/Add";
-import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
+import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 import { timeAgo } from "../../../helpers/Timemanage";
-import { NotificationCreate } from '../../../services/UserApi';
+import { NotificationCreate } from "../../../services/UserApi";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
-import { wsurl } from '../../../constants/constants';
-
+import { wsurl } from "../../../constants/constants";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 function Blogdetail() {
   const { blogId } = useParams();
   const [blog, setBlog] = useState(null);
@@ -65,9 +67,11 @@ function Blogdetail() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isSaved,SetisSaved]=useState(false)
+  const [isSaved, SetisSaved] = useState(false);
   const [isContentVisible, setIsContentVisible] = useState(true);
- 
+
+  const [ishidemodal, setishidemodal] = useState(false);
+
   const commentListRef = useRef(null);
 
   const handleOpenReportDialog = () => {
@@ -87,61 +91,82 @@ function Blogdetail() {
     setIsDeleteModalOpen(false);
   };
 
+  const handleOpenHideModal = () => {
+    setishidemodal(true);
+  };
+
+  const handleCloseHideModal = () => {
+    setishidemodal(false);
+  };
+
+  const handleHideBlog = async () => {
+    try {
+      const updatedBlog = { is_hide: !blog.is_hide };
+
+      await UpdateBlog(blog.id, updatedBlog);
+
+
+      setishidemodal(false)
+      FetchBlog();
+    } catch (error) {
+    
+      console.error("An error occurred while updating blog status:", error);
+    }
+  };
+
   const closeMenu = () => setIsMenuOpen(false);
 
   useEffect(() => {
-    const FetchBlog = async () => {
-      try {
-        const response = await GetBlogDetail(blogId);
-        console.log(response.data, "response data");
-        setBlog(response.data);
 
-        if (
-          userinfo.id !== response.data.user_id.id &&
-          response.data.is_premium_blog
-        ) {
-          const res_ponse = await IsSubscriber(
-            userinfo.id,
-            response.data.user_id.id
-          );
+    FetchBlog();
+  }, [blogId, userinfo.id, is_following]);
 
-          console.log(res_ponse, "response is content visible");
-          if (!res_ponse.data.is_subscriber) {
-            setIsContentVisible(false);
-          }
-        }
+  const FetchBlog = async () => {
+    try {
+      const response = await GetBlogDetail(blogId);
+      console.log(response.data, "response data");
+      setBlog(response.data);
 
-        const like_res = await GetBlogLike(blogId, userinfo.id);
-
-        setIsLiked(like_res.data.liked);
-        console.log(like_res, "like-resssdata");
-
-        const res_follow = await Is_follower(
+      if (
+        userinfo.id !== response.data.user_id.id &&
+        response.data.is_premium_blog
+      ) {
+        const res_ponse = await IsSubscriber(
           userinfo.id,
           response.data.user_id.id
         );
-        setIs_following(res_follow.data.is_follower);
-        
-        const res_save=await IsSave(userinfo.id,blogId)
-        SetisSaved(res_save.data.saved)
 
-
-      } catch (error) {
-        console.error("error! fetching blog", error);
+        console.log(res_ponse, "response is content visible");
+        if (!res_ponse.data.is_subscriber) {
+          setIsContentVisible(false);
+        }
       }
 
-      
-    };
-    FetchBlog();
-  }, [blogId, userinfo.id, is_following]);
+      const like_res = await GetBlogLike(blogId, userinfo.id);
+
+      setIsLiked(like_res.data.liked);
+      console.log(like_res, "like-resssdata");
+
+      const res_follow = await Is_follower(
+        userinfo.id,
+        response.data.user_id.id
+      );
+      setIs_following(res_follow.data.is_follower);
+
+      const res_save = await IsSave(userinfo.id, blogId);
+      SetisSaved(res_save.data.saved);
+    } catch (error) {
+      console.error("error! fetching blog", error);
+    }
+  };
 
   const sendNotification = (message, receiverId) => {
     const socket = new W3CWebSocket(`${wsurl}ws/notifications/${receiverId}/`);
     socket.onopen = () => {
-        socket.send(JSON.stringify({ message, receiverId }));
-        socket.close();
+      socket.send(JSON.stringify({ message, receiverId }));
+      socket.close();
     };
-};
+  };
 
   const handlelike = async () => {
     const values = {
@@ -152,11 +177,10 @@ function Blogdetail() {
     const notificationMessage = `${userinfo.first_name} Liked your Blog ${blog.title}`;
     const receiverId = blog.user_id.id;
 
-    const noti_values={
-      user:receiverId,
-      text:notificationMessage,
-
-  }
+    const noti_values = {
+      user: receiverId,
+      text: notificationMessage,
+    };
 
     try {
       const response = await LikeBlog(values);
@@ -164,9 +188,9 @@ function Blogdetail() {
       const liked = response.data.liked;
       setIsLiked(liked);
 
-      sendNotification(notificationMessage, receiverId)
+      sendNotification(notificationMessage, receiverId);
 
-      await NotificationCreate(noti_values)
+      await NotificationCreate(noti_values);
       toast.success("Liked Blog");
 
       setBlog((prevBlog) => ({
@@ -174,14 +198,12 @@ function Blogdetail() {
         likes: prevBlog.likes + 1,
       }));
 
-      
-       clientstate.send(
+      clientstate.send(
         JSON.stringify({
-            type: 'send_notification',
-            message: noti_values.text,
+          type: "send_notification",
+          message: noti_values.text,
         })
-    );
-
+      );
     } catch (error) {
       console.error(error);
     }
@@ -193,16 +215,16 @@ function Blogdetail() {
       user: userinfo.id,
     };
 
-    const noti_values={
-      user:blog.user_id.id,
-      text:`${userinfo.first_name} UnLiked for your Blog ${blog.title}`,
-    }
+    const noti_values = {
+      user: blog.user_id.id,
+      text: `${userinfo.first_name} UnLiked for your Blog ${blog.title}`,
+    };
     try {
       const response = await UnlikeBlog(values);
       console.log(response);
       const liked = response.data.liked;
       setIsLiked(liked);
-      await NotificationCreate(noti_values)
+      await NotificationCreate(noti_values);
       toast.warning("UnLiked Blog");
       setBlog((prevBlog) => ({
         ...prevBlog,
@@ -219,7 +241,6 @@ function Blogdetail() {
 
   const createdAtAgo = timeAgo(blog.created_at);
   const isAuthor = userinfo.id == blog.user_id.id;
- 
 
   const handleEdit = () => {
     navigate(`/User/editblog/${blogId}`);
@@ -260,15 +281,15 @@ function Blogdetail() {
       following: blog.user_id.id,
     };
 
-    const noti_values={
-      user:blog.user_id.id,
-      text:`${userinfo.first_name} started Follow You`,
-    }
+    const noti_values = {
+      user: blog.user_id.id,
+      text: `${userinfo.first_name} started Follow You`,
+    };
 
     try {
       const resp = await CreateFollowing(values);
       toast.success("followed successfully");
-      await NotificationCreate(noti_values)
+      await NotificationCreate(noti_values);
       setIs_following(true);
     } catch (error) {
       console.error(error);
@@ -277,13 +298,13 @@ function Blogdetail() {
 
   const Handleunfollow = async () => {
     try {
-      const noti_values={
-        user:blog.user_id.id,
-        text:`${userinfo.first_name}  UnFollowed You`,
-      }
+      const noti_values = {
+        user: blog.user_id.id,
+        text: `${userinfo.first_name}  UnFollowed You`,
+      };
       const ress = await Unfollow(userinfo.id, blog.user_id.id);
       toast.success("unfollowed successfully");
-      await NotificationCreate(noti_values)
+      await NotificationCreate(noti_values);
       setIs_following(false);
     } catch (error) {
       console.error(error);
@@ -293,54 +314,45 @@ function Blogdetail() {
   const handleShare = async () => {
     try {
       if (navigator.share) {
-       
-      const tempDiv = document.createElement('div');
-      
-      // Set the innerHTML of the div to your blog content
-      tempDiv.innerHTML = blog.content;
+        const tempDiv = document.createElement("div");
 
-      // Use textContent to get the plain text without HTML tags
-      const plainTextContent = tempDiv.textContent || tempDiv.innerText;
+        // Set the innerHTML of the div to your blog content
+        tempDiv.innerHTML = blog.content;
 
-      await navigator.share({
-        title: blog.title,
-        text: plainTextContent.substring(0, 100),
-        url: window.location.href,
-      });
+        // Use textContent to get the plain text without HTML tags
+        const plainTextContent = tempDiv.textContent || tempDiv.innerText;
+
+        await navigator.share({
+          title: blog.title,
+          text: plainTextContent.substring(0, 100),
+          url: window.location.href,
+        });
       } else {
-        throw new Error('Web Share API not supported');
+        throw new Error("Web Share API not supported");
       }
     } catch (error) {
-      console.error('Error sharing:', error);
+      console.error("Error sharing:", error);
     }
   };
 
-  const HandleSave=async()=>{
-
+  const HandleSave = async () => {
     try {
-
-      if(isSaved){
-
-        await Unsave(userinfo.id,blogId)
-        toast.success("Unsaved blog")
-      }
-      else{
-
-        await CreateSaved({user:userinfo.id,blog:blogId})
-        toast.success("saved Blog")
+      if (isSaved) {
+        await Unsave(userinfo.id, blogId);
+        toast.success("Unsaved blog");
+      } else {
+        await CreateSaved({ user: userinfo.id, blog: blogId });
+        toast.success("saved Blog");
       }
 
       SetisSaved(!isSaved);
-
     } catch (error) {
       console.error(error);
-      
     }
-  }
+  };
 
   return (
     <>
-   
       <NavBar />
       <div className="flex">
         <Breadcrumbs className="ml-24 mt-10">
@@ -432,16 +444,24 @@ function Blogdetail() {
                   <CommentIcon className="w-10 h-10 cursor-pointer" />
                 </li>
                 <li className="flex items-center">
-                    {isSaved?
-                      <BookmarkOutlinedIcon className="w-10 h-10 cursor-pointer" color="primary" onDoubleClick={HandleSave} />
-                      :
-                      <BookmarkAddIcon className="w-10 h-10 cursor-pointer" onClick={HandleSave} />
-                    }
-                  
-                  
+                  {isSaved ? (
+                    <BookmarkOutlinedIcon
+                      className="w-10 h-10 cursor-pointer"
+                      color="primary"
+                      onDoubleClick={HandleSave}
+                    />
+                  ) : (
+                    <BookmarkAddIcon
+                      className="w-10 h-10 cursor-pointer"
+                      onClick={HandleSave}
+                    />
+                  )}
                 </li>
                 <li className="flex items-center">
-                  <IosShareIcon className="w-10 h-10 cursor-pointer" onClick={handleShare}/>
+                  <IosShareIcon
+                    className="w-10 h-10 cursor-pointer"
+                    onClick={handleShare}
+                  />
                 </li>
                 <li className="flex items-center relative">
                   <Menu
@@ -491,21 +511,43 @@ function Blogdetail() {
                               Delete Blog
                             </Typography>
                           </MenuItem>
-                          <MenuItem
-                          className="flex items-center gap-2 rounded"
-                          
-                        >
-                          {" "}
-                          <ReportIcon className="h-4 w-4" />
-                          <Typography
-                            as="span"
-                            variant="small"
-                            className="font-normal"
-                            color="inherit"
-                          >
-                            Hide Blog
-                          </Typography>
-                        </MenuItem>
+                          <MenuItem className="flex items-center gap-2 rounded">
+                            {blog.is_hide ? (
+                              <>
+                                <VisibilityOutlinedIcon className="h-4 w-4" />
+                                <Typography
+                                  as="span"
+                                  variant="small"
+                                  className="font-normal"
+                                  color="inherit"
+                                  onClick={handleOpenHideModal}
+                                >
+                                  Unhide Blog
+                                </Typography>
+                           
+                              </>
+                            ) : (
+                              <>
+                                <VisibilityOffOutlinedIcon className="h-4 w-4" />
+                                <Typography
+                                  as="span"
+                                  variant="small"
+                                  className="font-normal"
+                                  color="inherit"
+                                  onClick={handleOpenHideModal}
+                                >
+                                  Hide Blog
+                                </Typography>
+                            
+                              </>
+                            )}
+                            <DeleteModal
+                              isOpen={ishidemodal}
+                              onClose={handleCloseHideModal}
+                              onConfirm={handleHideBlog}
+                              action={blog.is_hide ? "Unhide" : "Hide"}
+                            />
+                          </MenuItem>
                         </div>
                       ) : (
                         <MenuItem
@@ -534,7 +576,8 @@ function Blogdetail() {
                     <DeleteModal
                       isOpen={isDeleteModalOpen}
                       onClose={handleCloseDeleteModal}
-                      onDelete={handleDelete}
+                      onConfirm={handleDelete}
+                      action="Delete"
                     />
                   </Menu>
                 </li>
@@ -563,7 +606,12 @@ function Blogdetail() {
             </video>
           </Card>
           <div ref={commentListRef}></div>
-          <Commentlist blogId={blogId} isAuthor={isAuthor} blog={blog.user_id} />
+          <Commentlist
+            blogId={blogId}
+            isAuthor={isAuthor}
+            blog={blog.user_id}
+          />
+          <Relatedblogs user={blog.user_id} />
         </>
       ) : (
         <Bloghidepage user_id={userinfo.id} author_id={blog.user_id.id} />

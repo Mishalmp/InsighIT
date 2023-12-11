@@ -40,7 +40,7 @@ function Blogfilter({ ListBlogs, setBlogs, searchQuery, userId }) {
       let apiCall;
 
       if (userId) {
-        apiCall = await ListBlogs(userId, searchQuery, topic);
+        apiCall = await ListBlogs(userId, searchQuery, topic,'');
       } else {
         apiCall = await ListBlogs(searchQuery, topic);
       }

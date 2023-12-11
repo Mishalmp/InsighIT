@@ -26,4 +26,5 @@ urlpatterns = [
     path('blogs/',include('blogs.urls')),
     path('premium/',include('premium.urls')),
     path('chats/',include('chats.urls')),
+    path('generative_ai/',include('generative_ai.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

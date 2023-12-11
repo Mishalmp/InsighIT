@@ -18,9 +18,9 @@ import {
   // CardBody,
   // Chip,
   // CardFooter,
-  // Tabs,
-  // TabsHeader,
-  // Tab,
+  Tabs,
+  TabsHeader,
+  Tab,
   // Avatar,
   // IconButton,
   // Tooltip,
@@ -31,11 +31,12 @@ function MyBlogs() {
   const { userinfo } = useSelector((state) => state.user);
   const { userId } = useParams();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedfilter,setSelectedfilter]=useState('')
 
   useEffect(() => {
     const Fetchmyblogs = async () => {
       try {
-        const response = await GetBlogsByUser(userId, searchQuery, "");
+        const response = await GetBlogsByUser(userId, searchQuery, "",selectedfilter);
         setBlogs(response.data);
         console.log(response.data, "myblogssss");
       } catch (error) {
@@ -43,12 +44,26 @@ function MyBlogs() {
       }
     };
     Fetchmyblogs();
-  }, [userId, searchQuery]);
+  }, [userId, searchQuery,selectedfilter]);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
     console.log();
   };
+
+  const TABS = [
+    {
+      label: "All",
+      value: "",
+    },
+    {
+      label: "Visible",
+      value: "visible",
+    },
+    {
+      label: "Hidden",
+      value: "hidden",
+    }];
 
   return (
     <div>
@@ -67,6 +82,16 @@ function MyBlogs() {
               />
             </div>
           </div>
+          <Tabs value="all" className="w-full md:w-max ml-10 mt-10">
+              <TabsHeader>
+                {TABS.map(({ label, value }) => (
+                  <Tab key={value} value={value} onClick={()=>setSelectedfilter(value)}>
+                    &nbsp;&nbsp;{label}&nbsp;&nbsp;
+                  </Tab>
+                ))}
+              </TabsHeader>
+            </Tabs>
+
           <Blogfilter
             ListBlogs={GetBlogsByUser}
             userId={userId}
@@ -74,7 +99,7 @@ function MyBlogs() {
             searchQuery={searchQuery}
           />
           <div className='ml-[3rem]'>
-          <div className="h-[60rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5">
+          <div className="h-[75rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5">
             {blogs.length > 0 ? (
               blogs.map((blog) => (
                 <Blogcard

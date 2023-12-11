@@ -31,6 +31,7 @@ import ReportIssue from "../pages/User/ReportIssue/ReportIssue"
 import Sidebar from "../components/sidebar/Sidebar"
 import PremiumRequest from "../pages/Admin/PremiumRequest/PremiumRequest"
 import Technews from "../components/Technews/Technews"
+import Usercardlist from "../components/Userside/usercardlist/Usercardlist"
 
 function UserRoutes() {
     
@@ -57,6 +58,7 @@ function UserRoutes() {
             <Route path="saved/:userId" element={<SavedBlogs/>}/>
             <Route path="editblog/:blogId" element={<EditBlog/>}/>
             <Route path="dummy/" element={<Technews/>}/>    
+            {/* <Route path="dummy/" element={<Usercardlist/>}/>     */}
             <Route path="reportissue/" element={<ReportIssue/>}/>    
             <Route path="community/" element={<Community/>}/>    
             <Route path="chat/" element={<Chat/>}/>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { accountsapi,adminapi,blogsapi,premiumapi } from "../constants/constants";
+import { accountsapi,adminapi,blogsapi,premiumapi,aiurl } from "../constants/constants";
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -57,6 +57,13 @@ PremiumAxiosInstant.interceptors.request.use(async(req)=>{
     return modifiedReq
 })
 
+const GenerativeaiAxiosInstant = CreateAxiosClient(aiurl)
+GenerativeaiAxiosInstant.interceptors.request.use(async(req)=>{
+    const modifiedReq = attachToken(req,'token')
+    return modifiedReq
+})
+
+
 // // Add this to handle global errors
 // const handleGlobalError = (error) => {
 //     // Handle different types of errors
@@ -78,4 +85,4 @@ PremiumAxiosInstant.interceptors.request.use(async(req)=>{
 //   PremiumAxiosInstant.interceptors.response.use((response) => response, handleGlobalError);
   
 
-export {UserAxiosInstant,AdminAxiosInstant,BlogsAxiosInstant,PremiumAxiosInstant}
+export {UserAxiosInstant,AdminAxiosInstant,BlogsAxiosInstant,PremiumAxiosInstant,GenerativeaiAxiosInstant}

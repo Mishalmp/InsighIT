@@ -1,6 +1,6 @@
 import React from "react";
 import { Quill } from "react-quill";
-
+import aiicon from '../assets/blogs/illustrator.png'
 // Custom Undo button icon component for Quill editor. You can import it directly
 // from 'quill/assets/icons/undo.svg' but I found that a number of loaders do not
 // handle them correctly
@@ -89,7 +89,14 @@ export const formats = [
 ];
 
 // Quill Toolbar component
-export const QuillToolbar = () => (
+export const QuillToolbar = ({onaicontent}) =>{
+
+  const handleAiContentClick = () => {
+    // Trigger the AI content generation
+    onaicontent();
+  };
+
+return (
   <div id="toolbar" className="h-[5rem] w-[80%] ml-[10%] mb-10">
     <span className="ql-formats">
       <select className="ql-font" defaultValue="arial">
@@ -153,7 +160,11 @@ export const QuillToolbar = () => (
         <CustomRedo />
       </button>
     </span>
+    <span className="ql-formats">
+      <img onClick={handleAiContentClick} src={aiicon} className="w-5 h-5 hover:bg-gray-200 hover:cursor-pointer" alt="ai icon" />
+    </span>
   </div>
-);
 
+);
+}
 export default QuillToolbar;

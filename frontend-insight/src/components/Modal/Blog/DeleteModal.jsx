@@ -7,18 +7,18 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-function DeleteModal({ isOpen, onClose, onDelete }) {
+function DeleteModal({ isOpen, onClose, onConfirm, action }) {
   const handleConfirm = () => {
     // Call the onDelete function to perform the delete action
-    onDelete();
+    onConfirm();
     onClose(); // Close the modal
   };
 
   return (
     <Dialog open={isOpen} handler={onClose}>
-      <DialogHeader>Confirm Delete</DialogHeader>
+      <DialogHeader>{`Confirm ${action}`}</DialogHeader>
       <DialogBody>
-        Are you sure you want to delete this blog?
+      {`Are you sure you want to ${action} this blog?`}
       </DialogBody>
       <DialogFooter>
         <Button variant="text" color="blue-gray" onClick={onClose}>

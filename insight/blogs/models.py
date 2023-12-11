@@ -25,7 +25,7 @@ class Blogs(models.Model):
     is_premium_blog=models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     updated_at = models.DateTimeField(default=timezone.now, editable=False)
-
+    is_hide = models.BooleanField(default=False)
     def __str__(self):
         return self.title
     

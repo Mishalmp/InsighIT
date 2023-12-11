@@ -58,6 +58,7 @@ import { Input, Checkbox } from "@material-tailwind/react";
 import { Loader } from "../../../components/Loading/Loader";
 import { useSelector, useDispatch } from "react-redux";
 import { setUpdateInfo } from "../../../Redux/UserSlice";
+import {LogoutDetails} from '../../../Redux/UserSlice'
 import {
   UpdateUser,
   CreateSkill,
@@ -65,7 +66,7 @@ import {
   EditSkill,
   DeleteSkill,
 } from "../../../services/UserApi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Bloglistinprofile from "../../../components/blogs/bloglistinprofile";
 import Followlist from "../../../components/followlist/followlist";
 import Subscribelist from "../../../components/subscribelist/Subscribelist";
@@ -79,6 +80,7 @@ import ChangeName from "../../../components/Userside/edituser/ChangeName";
 import ChangePass from "../../../components/Userside/edituser/ChangePass";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 function UserProfile() {
+  const navigate =useNavigate()
   const { userinfo } = useSelector((state) => state.user);
   const { premiumuserinfo } = useSelector((state) => state.user);
   const [skills, setSkills] = useState([]);
@@ -550,7 +552,11 @@ function UserProfile() {
                     </MenuItem>
                     <MenuItem
                       className="flex items-center gap-2 rounded"
-                      onClick={handleToggleChangePass}
+                      onClick={()=>{
+                        dispatch(LogoutDetails())
+                        localStorage.removeItem("token")
+                        navigate("/forgotpassword/")
+                    }}
                     >
                       <EditIcon fontSize="small" />
 

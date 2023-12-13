@@ -46,7 +46,6 @@ function ChangePass({ isOpen, onClose,userinfo }) {
       toast.error("fields empty")
     }
     
-
   }
 
 

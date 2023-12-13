@@ -119,7 +119,7 @@ function UserBlogCreate() {
         
       } catch (error) {
         console.error(error);
-        toast.error("error");
+        toast.error("Write correct topic");
       }
     } else {
       toast.error("field empty");
@@ -170,6 +170,7 @@ function UserBlogCreate() {
               </Option>
             ))}
           </Select>
+          
         </div>
         </div>
         <div className="mt-8">

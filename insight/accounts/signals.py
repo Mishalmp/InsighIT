@@ -5,20 +5,19 @@ from django.db.models import Q
 from django.utils import timezone
 from .models import *
 from django.conf import settings
+from .tasks import send_mail_user_block
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+import json
+
+channel_layer = get_channel_layer()
 
 
-@receiver(post_save,sender=User)
-def send_mail_user_block(sender,instance,created,*args,**kwargs):
-
+@receiver(post_save, sender=User)
+def send_mail_user_block_signal(sender, instance, created, *args, **kwargs):
     if not created:
         if instance.is_active != instance._state.fields_cache.get('is_active', {}).get('original'):
-            subject = 'InsighIT | Account Status Update'
-            message = f'Your insighit account status has been {"activated" if instance.is_active else "deactivated"}.'
-            from_email = settings.DEFAULT_FROM_EMAIL
-            recipient_list = [instance.email]
-
-            send_mail(subject, message, from_email, recipient_list)
-
+            send_mail_user_block.delay(instance.email, instance.is_active)
 
 
 
@@ -90,6 +89,17 @@ def send_notification_wallet(sender, instance, created, **kwargs):
         admin_user = User.objects.filter(is_superuser = True).first()
         Notifications.objects.create(user=admin_user,text=notification_text )
 
+        # Send real-time notification
+        group_name = f"notifications_admin"
+        async_to_sync(channel_layer.group_send)(
+            group_name,
+            {
+                'type': 'send_notification',
+                'message': notification_text
+            }
+        )
+
+
 
 @receiver(post_save, sender=Report_Issue)
 def send_notification_report(sender, instance, created, **kwargs):
@@ -99,3 +109,13 @@ def send_notification_report(sender, instance, created, **kwargs):
         
         admin_user = User.objects.filter(is_superuser = True).first()
         Notifications.objects.create(user=admin_user,text=notification_text )
+
+        # Send real-time notification
+        group_name = f"notifications_admin"
+        async_to_sync(channel_layer.group_send)(
+            group_name,
+            {
+                'type': 'send_notification',
+                'message': notification_text
+            }
+        )

@@ -87,7 +87,7 @@ function Chatfield({userinfo,recipientDetails}) {
 
   return (
     <>
-      <div className="w-2/3 h-[50rem] bg-gray-50 border-[1px] border-gray-400">
+      <div className="w-2/3 h-[50rem]  bg-gray-50 border-[1px] border-gray-400">
         <div className="w-full bg-blue-gray-50 gap-8 h-[5rem] grid grid-cols-5 rounded-sm shadow-md shadow-gray-300">
           <img
             src={recipientDetails?.profile_img?recipientDetails.profile_img:Userico}
@@ -107,7 +107,7 @@ function Chatfield({userinfo,recipientDetails}) {
          
         </div>
 
-        <div className="w-full max-h-[40rem] h-[40rem] overflow-y-auto mb-5 scroll-smooth" style={{backgroundImage:`url(${Chatbg})`}}>
+        <div className="w-full max-h-[40rem] hidescroll h-[40rem] overflow-y-auto mb-5 scroll-smooth" style={{backgroundImage:`url(${Chatbg})`}}>
           {
             messages.length > 0?(
               messages.map((message,index)=>(

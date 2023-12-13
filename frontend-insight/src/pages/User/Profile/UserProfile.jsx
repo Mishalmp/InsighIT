@@ -352,7 +352,7 @@ function UserProfile() {
               )}
               <CameraAltIcon
                 color="info"
-                className="w-52 z-10 absolute mt-[10.6rem] ml-[28.4rem]"
+                className="w-52 z-10 absolute mt-[10.6rem] ml-[28.4rem] cursor-pointer hover:text-blue-800"
                 onClick={() => document.getElementById("dropzone-file").click()}
               />
             </div>
@@ -486,7 +486,7 @@ function UserProfile() {
             </div>
             <CameraAltIcon
               color="info"
-              className="absolute ml-[17.4rem] z-10 mt-[15.9rem]"
+              className="absolute ml-[17.4rem] z-10 mt-[15.9rem] cursor-pointer hover:text-blue-800"
               onClick={() => document.getElementById("pro-file").click()}
             />
             <CardBody className="text-center relative">
@@ -512,7 +512,7 @@ function UserProfile() {
               {/* <span>
             Edit
             </span> */}
-              <InstagramIcon onClick={handleOpen} color="secondary" />
+              <InstagramIcon onClick={handleOpen} color="secondary" className="cursor-pointer" />
               <GitHubIcon />
               <LinkedInIcon color="primary" />
               {userinfo.is_premium && (
@@ -521,6 +521,7 @@ function UserProfile() {
                 <MonetizationOnOutlinedIcon
                   color="success"
                   onClick={() => setmonetizeopen(true)}
+                  className="cursor-pointer hover:text-blue-700"
                 />
                 // </Tooltip>
               )}
@@ -531,7 +532,7 @@ function UserProfile() {
                 // placement="bottom-end"
               >
                 <MenuHandler>
-                  <Cog6ToothIcon className="w-6 h-6" />
+                  <Cog6ToothIcon className="w-6 h-6 cursor-pointer hover:text-blue-700" />
                 </MenuHandler>
                 <MenuList className="p-1">
                   <div>
@@ -552,11 +553,7 @@ function UserProfile() {
                     </MenuItem>
                     <MenuItem
                       className="flex items-center gap-2 rounded"
-                      onClick={()=>{
-                        dispatch(LogoutDetails())
-                        localStorage.removeItem("token")
-                        navigate("/forgotpassword/")
-                    }}
+                     onClick={handleToggleChangePass}
                     >
                       <EditIcon fontSize="small" />
 
@@ -580,7 +577,7 @@ function UserProfile() {
               />
               <ChangePass
                 isOpen={isChangePassOpen}
-                UpdateUser={UpdateUser}
+                
                 userinfo={userinfo}
                 onClose={handleToggleChangePass}
               />
@@ -647,7 +644,7 @@ function UserProfile() {
               Skills{" "}
               <EditIcon
                 fontSize="small"
-                className="-mt-1 hover:cursor-pointer"
+                className="-mt-1 hover:cursor-pointer hover:text-blue-700 cursor-pointer"
                 onClick={handleskillopen}
               />
             </Typography>
@@ -828,7 +825,7 @@ function UserProfile() {
                   <TabPanel key={value} value={value}>
                     {value === "profile" && (
                       <>
-                        <Card className="w-[50rem] h-auto mt-5 bg-gray-100 shadow-2xl">
+                        <Card className="w-[50rem]  h-auto mt-5 bg-gray-100 shadow-2xl">
                           <Typography
                             variant="h5"
                             color="blue-gray"
@@ -837,7 +834,7 @@ function UserProfile() {
                             About Me{" "}
                             <EditIcon
                               fontSize="small"
-                              className="-mt-1"
+                              className="-mt-1 hover:text-blue-700 cursor-pointer"
                               onClick={handleaboutOpen}
                             />
                           </Typography>
@@ -939,7 +936,7 @@ function UserProfile() {
                           </Card>
                         </Dialog>
 
-                        <Card className="w-[50rem] h-auto mt-5 bg-gray-100 shadow-2xl">
+                        <Card className="w-[50rem]  mt-5 bg-gray-100 shadow-2xl">
                           <Typography
                             variant="h5"
                             color="blue-gray"

@@ -6,9 +6,25 @@ from .models import *
 from django.utils import timezone
 
 
+
+
+
+@shared_task
+def send_mail_user_block(user_email, is_active):
+    subject = 'InsighIT | Account Status Update'
+    status = 'activated' if is_active else 'deactivated'
+    message = f'Your insighit account status has been {status}.'
+    from_email = EMAIL_HOST_USER
+    recipient_list = [user_email]
+
+    send_mail(subject, message, from_email, recipient_list)
+
+
+
+
 @shared_task(bind = True)
 def send_mail_func(self):
-    users = get_user_model().objects.all()
+    users = get_user_model().objects.all().exclude(is_superuser=True)
 
     for user in users:
         mail_subject = 'Hi! Good morning'

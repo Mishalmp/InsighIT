@@ -99,7 +99,7 @@ function MyBlogs() {
             searchQuery={searchQuery}
           />
           <div className='ml-[3rem]'>
-          <div className="h-[75rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5">
+          <div className="hidescroll h-[75rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5 ">
             {blogs.length > 0 ? (
               blogs.map((blog) => (
                 <Blogcard

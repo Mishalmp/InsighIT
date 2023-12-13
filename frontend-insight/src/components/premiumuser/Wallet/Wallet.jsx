@@ -49,8 +49,8 @@ function Wallet({ user }) {
   }, []);
   
   return (
-    <>
-      <div className="ml-80 flex">
+    <div className="hidescroll max-h-[48rem] overflow-y-auto">
+      <div className="ml-[22rem] flex">
         <h1 className="font-bold text-2xl text-center">Wallet</h1>
 
         {/* <div className="md:w-56 ml-32">
@@ -173,7 +173,7 @@ function Wallet({ user }) {
       </Dialog>
 
  
-    </>
+    </div>
   );
 }
 

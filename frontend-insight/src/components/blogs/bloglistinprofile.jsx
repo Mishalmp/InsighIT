@@ -61,7 +61,7 @@ function Bloglistinprofile({ userid }) {
           />
         </div>
       </div>
-      <Card className="w-[50rem] min-h-[25rem] max-h-[50rem] overflow-y-auto overflow-x-hidden mt-5 bg-gray-100">
+      <Card className="w-[50rem] min-h-[25rem] hidescroll max-h-[50rem] overflow-y-auto overflow-x-hidden mt-5 bg-gray-100">
         {blogs.length > 0?
         blogs.map((blog) => (
           <Blogcard

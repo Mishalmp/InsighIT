@@ -12,8 +12,8 @@ import {
 
   } from "@material-tailwind/react";
   import { toast } from "react-toastify";
-
-function ChangePass({ isOpen, onClose,userinfo,UpdateUser }) {
+import { ChangeUserPassword } from "../../../services/UserApi";
+function ChangePass({ isOpen, onClose,userinfo }) {
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -25,18 +25,27 @@ function ChangePass({ isOpen, onClose,userinfo,UpdateUser }) {
     if (newPassword !== confirmPassword){
       return toast.error("passwords doesn't match")
     }
-    try {
-      
-      await UpdateUser(userinfo.id,{
-        password: currentPassword,
-        new_password: newPassword,
-      })
+    if (currentPassword.trim() && newPassword.trim() && confirmPassword.trim() ){
 
-      toast.success("password changed succussfully")
-      onClose()
-    } catch (error) {
-      console.error(error)
+      try {
+      
+        const  response = await ChangeUserPassword({
+           current_password: currentPassword,
+           new_password: newPassword,
+           user_id:userinfo.id,
+         })
+   
+         toast.success("password changed succussfully")
+         onClose()
+       } catch (error) {
+         console.error(error)
+         toast.error("error")
+       }
+
+    }else{
+      toast.error("fields empty")
     }
+    
 
   }
 

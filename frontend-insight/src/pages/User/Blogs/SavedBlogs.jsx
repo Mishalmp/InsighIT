@@ -63,7 +63,7 @@ function SavedBlogs() {
           </div>
           <Blogfilter />
           <div className='ml-[3rem]'>
-          <div className="h-[60rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5">
+          <div className="h-[60rem] w-[55rem] hidescroll overflow-x-hidden overflow-y-auto mb-5">
             {saved.map((savedBlog) => (
               <Blogcard
                 key={savedBlog.id}

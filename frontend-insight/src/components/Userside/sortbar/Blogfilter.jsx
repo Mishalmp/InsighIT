@@ -15,7 +15,7 @@ import {
   TabPanel,
 } from "@material-tailwind/react";
 
-function Blogfilter({ ListBlogs, setBlogs, searchQuery, userId }) {
+function Blogfilter({ ListBlogs, setBlogs, searchQuery, userId,sort }) {
   const [topics, setTopics] = useState([]);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function Blogfilter({ ListBlogs, setBlogs, searchQuery, userId }) {
       if (userId) {
         apiCall = await ListBlogs(userId, searchQuery, topic,'');
       } else {
-        apiCall = await ListBlogs(searchQuery, topic);
+        apiCall = await ListBlogs(searchQuery, topic,sort);
       }
 
       setBlogs(apiCall.data);

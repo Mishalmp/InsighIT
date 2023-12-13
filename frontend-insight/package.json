@@ -22,6 +22,7 @@
     "@react-oauth/google": "^0.11.1",
     "@reduxjs/toolkit": "^1.9.7",
     "@tinymce/tinymce-react": "^4.3.0",
+    "agora-react-uikit": "^1.2.0",
     "axios": "^1.6.0",
     "draft-js": "^0.11.7",
     "flowbite": "^2.0.0",

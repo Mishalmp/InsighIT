@@ -81,7 +81,7 @@ function Community() {
           <div className="ml-[3rem]">
             {/* <Sortorder/> */}
 
-            <div className="h-[76rem] w-[50rem]  overflow-x-hidden overflow-y-auto mb-5">
+            <div className="h-[76rem] hidescroll w-[50rem]  overflow-x-hidden overflow-y-auto mb-5">
               {communities.length > 0 ? (
                 communities.map((post) => <CommunityCard
                 key={post.id}

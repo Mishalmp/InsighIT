@@ -43,6 +43,14 @@ const UpdateUser=(id,value)=>{
         }
     )
 }
+const ChangeUserPassword =(data)=>{
+    return UserAxiosInstant.put(
+        "accounts/changePassword/",data,{
+            withCredentials:true
+        }
+    )
+}
+
 
 const CreateSkill=(values)=>{
     return UserAxiosInstant.post("accounts/skills/",values,{
@@ -213,6 +221,6 @@ export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,
     UpdateUser,CreateSkill,ListSkills,EditSkill,DeleteSkill,NotificationCreate,Checkoutsession,
     Notificationsbyuser,CreateSubscription,IsSubscriber,CreateFollowing,Is_follower,Unfollow,Followingslist,Followerslist,
     SubscriptionsList,Subscriberslist,UserWallet,PreviousChat,ChatUsersList,ClearNotificationbyuser,IssueReportView,
-    ListIssuesByUser,ListIssues,CreateReportIssue,PremiumList,Updateissue
+    ListIssuesByUser,ListIssues,CreateReportIssue,PremiumList,Updateissue,ChangeUserPassword
 
 }

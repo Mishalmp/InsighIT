@@ -76,7 +76,7 @@ function Blogcard({
   return (
     <>
       <Link to={blogDetailUrl}>
-        <Card className="rounded-lg ml-4 bg-white w-[52rem] shadow-2xl mb-5">
+        <Card className="rounded-lg ml-4 bg-white w-[52rem] h-[23rem] shadow-2xl mb-5">
           <div className="flex m-[100px] mt-5 ml-10 gap-10">
             {profile_img ? (
               <img src={profile_img} className="w-12 h-12 rounded-full" />
@@ -85,10 +85,28 @@ function Blogcard({
             )}
 
             <div className="mt-3 flex gap-10">
-              <p className="font-semibold text-lg">{author}{user_premium && <VerifiedIcon color="primary" fontSize="small" className="-mt-1 ml-2" />} </p>
-              
+              <p className="font-semibold text-lg">
+                {author}
+                {user_premium && (
+                  <VerifiedIcon
+                    color="primary"
+                    fontSize="small"
+                    className="-mt-1 ml-2"
+                  />
+                )}{" "}
+              </p>
               <p className="text-gray-700">{createdAtAgo}</p>{" "}
-              {is_premium_blog && <StarRateIcon color="warning" />}
+              {is_premium_blog && (
+                <div>
+                  <StarRateIcon color="warning" />
+                  <Typography
+                    color="deep-purple"
+                    className="ml-10 font-serif font-semibold -mt-6 mb-1"
+                  >
+                    Members Only 
+                  </Typography>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex  ml-10 ">
@@ -107,24 +125,19 @@ function Blogcard({
               <div></div>
             </div>
             {/* <img src={blog_image} className='mt-[-50px] max-w-[50rem] max-h-[20rem] object-cover object-center' /> */}
-            <CardHeader
-              shadow={false}
-              floated={false}
-              className="m-0 w-[20rem] -mt-16 ml-1 h-[10rem] shrink-0 rounded-r-none"
-            >
+            <div className="m-0 w-[20rem] -mt-20 ml-10 h-[15rem] shrink-0 rounded-lg">
               <img
                 src={blog_image}
                 alt="card-image"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover rounded-lg"
               />
-            </CardHeader>
+            </div>
           </div>
-          <div className="md:mt-5 md:ml-10 mb-10  max-w-[550px] flex justify-between items-center">
+          <div className="md:-mt-12 md:ml-10 mb-10  max-w-[25rem] flex justify-between items-center">
             <div className="bg-gray-200 md:h-[40px] rounded-[28px] w-[200px] mt-4 flex items-center justify-center">
               <span className="text-xl">{topic}</span>
             </div>
-
-            <ul className="flex space-x-4">
+            <ul className="flex space-x-4 mt-2">
               <li className="flex items-center">
                 <ThumbUpOffAltIcon className="w-8 h-8" />
                 <span className="ml-2 text-gray-700">{likes}</span>
@@ -142,16 +155,6 @@ function Blogcard({
               </li>
             </ul>
           </div>
-          {is_premium_blog ? (
-            <Typography
-              color="deep-purple"
-              className="ml-20 font-serif font-semibold mb-3"
-            >
-              By Premium Author
-            </Typography>
-          ) : (
-            ""
-          )}
         </Card>
       </Link>
     </>

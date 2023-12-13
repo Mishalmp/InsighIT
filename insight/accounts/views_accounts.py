@@ -204,7 +204,7 @@ def reset_validate(request, uidb64, token):
 class ResetPassword(APIView):
     def post(self,request,format=None):
         str_user_id=request.data.get('user_id')
-        print(str_user_id,"111111111")
+        # print(str_user_id,"111111111")
         uid=int(str_user_id)
         password=request.data.get('password')
 
@@ -219,3 +219,21 @@ class UpdateUser(RetrieveUpdateDestroyAPIView):
     queryset=User.objects.all()
     serializer_class=UserInfoSerializer
 
+
+class ChangePassword(APIView):
+
+    def put(self,request):
+
+        old_password = request.data.get('current_password')
+        new_password = request.data.get("new_password")
+        user_id=request.data.get('user_id')
+
+        user = User.objects.get(id=user_id)
+
+        if not user.check_password(old_password):
+            return Response({'error':'Invalid old password'},status=status.HTTP_400_BAD_REQUEST)
+        
+        user.set_password(new_password)
+        user.save()
+
+        return Response({'message':"Password changed successfully"},status=status.HTTP_200_OK)

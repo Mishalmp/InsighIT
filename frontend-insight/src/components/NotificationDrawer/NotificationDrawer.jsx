@@ -75,7 +75,7 @@ function NotificationDrawer({ isOpen,userinfo, onClose }) {
         {loading && <Loader/>}
           <Fragment>
      
-      <Drawer  open={isOpen} onClose={onClose} className="p-4 w-[40rem] overflow-y-auto">
+      <Drawer  open={isOpen} onClose={onClose} className="p-4 w-[40rem] overflow-y-auto hidescroll">
         <div className="mb-6 flex items-center justify-between">
           <Typography variant="h5" color="blue-gray">
             Notifications

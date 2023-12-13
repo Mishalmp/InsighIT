@@ -29,12 +29,13 @@ function Blogs() {
 
   const [blogs,setBlogs]=useState([])
   const [searchQuery, setSearchQuery] = useState('');
+  const [sort, setSort] = useState('latest');
 
 
   useEffect(()=>{
     const FetchBlogs=async ()=>{
       try{
-        const response=await ListBlogs(searchQuery,"")
+        const response=await ListBlogs(searchQuery,"",sort)
         setBlogs(response.data)
         
       }catch (error){
@@ -42,7 +43,7 @@ function Blogs() {
       }
     }
     FetchBlogs()
-  },[searchQuery])
+  },[searchQuery,sort])
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -68,11 +69,11 @@ function Blogs() {
               />
             </div>
           </div>
-      <Blogfilter ListBlogs={ListBlogs} setBlogs={setBlogs} searchQuery={searchQuery} />
+      <Blogfilter ListBlogs={ListBlogs} setBlogs={setBlogs} searchQuery={searchQuery} sort={sort} />
       <div className='ml-[3rem]'>
-      <Sortorder/>
+      <Sortorder setSort={setSort} sort={sort} />
 
-     <div className='h-[75rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5'>
+     <div className='h-[75rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5 hidescroll'>
       {blogs.length > 0 ?
       blogs.map((blog)=>(
         

@@ -15,6 +15,7 @@ urlpatterns=[
     path('reset-validate/<uidb64>/<token>',reset_validate,name='reset_validate'),
     path('reset-passsword/',ResetPassword.as_view(),name='reset-password'),
     path('updateuser/<int:pk>/',UpdateUser.as_view(),name='updateuser'),
+    path('changePassword/',ChangePassword.as_view(),name='changePassword'),
 
     path('skills/',CreateSkills.as_view(),name='skill-create'),
     path('skillview/<int:pk>/',SkillView.as_view(),name='skill-view'),

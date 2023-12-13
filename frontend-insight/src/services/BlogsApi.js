@@ -14,9 +14,9 @@ const CreateCommunity=(values)=>{
     }).catch((error)=>error.response)
 }
 
-const ListBlogs=(searchQuery,topic)=>{
+const ListBlogs=(searchQuery,topic,sort)=>{
 
-        return BlogsAxiosInstant.get(`/blogslist/?search=${searchQuery}&topic=${topic}`,{
+        return BlogsAxiosInstant.get(`/blogslist/?search=${searchQuery}&topic=${topic}&sort=${sort}`,{
        
             withCredentials:true
         }).catch((error)=>error.response)

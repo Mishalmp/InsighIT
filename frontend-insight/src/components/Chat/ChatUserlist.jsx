@@ -44,7 +44,7 @@ function ChatUserlist({ userinfo, setRecipientDetails }) {
 
   return (
     <>
-      <div className="w-1/3 h-[50rem] bg-gray-50 border-[1px] border-gray-400">
+      <div className="w-1/3 h-[50rem] hidescroll bg-gray-50 border-[1px] border-gray-400">
         <div className="flex ml-10 mt-6 justify-between mr-10 mb-10">
           <Typography variant="h2">Chats</Typography>
 

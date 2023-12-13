@@ -103,55 +103,55 @@ class ChatConsumer(AsyncWebsocketConsumer):
             
 
 
-class NotificationConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        user_id = int(self.scope['user'].id)
-        self.room_group_name = f'notifications_{user_id}'
+# class NotificationConsumer(AsyncWebsocketConsumer):
+#     async def connect(self):
+#         user_id = int(self.scope['user'].id)
+#         self.room_group_name = f'notifications_{user_id}'
 
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
+#         await self.channel_layer.group_add(
+#             self.room_group_name,
+#             self.channel_name
+#         )
 
-        await self.accept()
+#         await self.accept()
 
-    async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(
-            self.room_group_name,
-            self.channel_name
-        )
+#     async def disconnect(self, close_code):
+#         await self.channel_layer.group_discard(
+#             self.room_group_name,
+#             self.channel_name
+#         )
 
-    async def receive(self, text_data):
-        data = json.loads(text_data)
-        message = data['message']
-        user_id = self.scope['user'].id
+#     async def receive(self, text_data):
+#         data = json.loads(text_data)
+#         message = data['message']
+#         user_id = self.scope['user'].id
 
-        notification = await self.save_notification(user_id, message)
-        notifications_count = await self.get_unread_notifications_count(user_id)
+#         notification = await self.save_notification(user_id, message)
+#         notifications_count = await self.get_unread_notifications_count(user_id)
 
-        # Broadcast the new notification to the group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'send_notification',
-                'notification': notification,
-                'notifications_count': notifications_count,
-            }
-        )
+#         # Broadcast the new notification to the group
+#         await self.channel_layer.group_send(
+#             self.room_group_name,
+#             {
+#                 'type': 'send_notification',
+#                 'notification': notification,
+#                 'notifications_count': notifications_count,
+#             }
+#         )
 
-    async def send_notification(self, event):
-        notification = event['notification']
-        notifications_count = event['notifications_count']
+#     async def send_notification(self, event):
+#         notification = event['notification']
+#         notifications_count = event['notifications_count']
 
-        await self.send(text_data=json.dumps({
-            'notification': notification,
-            'notifications_count': notifications_count,
-        }))
+#         await self.send(text_data=json.dumps({
+#             'notification': notification,
+#             'notifications_count': notifications_count,
+#         }))
 
-    @database_sync_to_async
-    def save_notification(self, user_id, text):
-        return Notifications.objects.create(user=user_id, text=text)
+#     @database_sync_to_async
+#     def save_notification(self, user_id, text):
+#         return Notifications.objects.create(user=user_id, text=text)
 
-    @database_sync_to_async
-    def get_unread_notifications_count(self, user_id):
-        return Notifications.objects.filter(user=user_id, is_read=False).count()
+#     @database_sync_to_async
+#     def get_unread_notifications_count(self, user_id):
+#         return Notifications.objects.filter(user=user_id, is_read=False).count()

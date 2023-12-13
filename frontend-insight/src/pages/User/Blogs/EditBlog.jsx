@@ -46,7 +46,7 @@ function EditBlog() {
             const BlogData=response.data
             setTitle(BlogData.title)
             setValue(BlogData.content)
-            // setSelectTopic(BlogData.topic)
+            setSelectTopic(BlogData.topic.id)
             console.log(BlogData.topic,'daaaata');
             setImageFile(BlogData.banner_img)
             setisPremium(BlogData.is_premium_blog)
@@ -81,8 +81,9 @@ function EditBlog() {
         formData.append("title",title)
         formData.append("content",value)
         formData.append("topic",selectTopic)
-        formData.append("banner_img",imageFile)
-        formData.append("video_post",videoFile)
+        // console.log(selectTopic.id,selectTopic,'sseeleleelleleleelelelelell');
+        // formData.append("banner_img",imageFile)
+        // formData.append("video_post",videoFile)
 
         try{
             const response = await UpdateBlog(blogId,formData)
@@ -109,7 +110,7 @@ function EditBlog() {
         setImageFile(e.target.files[0])
 
     }
-    
+    console.log(selectTopic,'select topics');
     // console.log(value,'valueeeeeeeees')
     // console.log(title,'title',selectTopic,'selectopics',imageFile,'image',videoFile,'videofile')
   return (
@@ -132,18 +133,23 @@ function EditBlog() {
         </div>
         <div className="w-80 mt-12 mb-10 ml-20 gap-6">
           <Typography className="text-center font-semibold mb-5">Topic</Typography>
-          <Select
+          {/* <Select
             variant="outlined"
             label="Select Version"
             value={selectTopic.topic}
             onChange={(value) => setSelectTopic(value)}
-          >
+          > */}
+          <select 
+       value={selectTopic ? selectTopic.id : ""}
+       onChange={(e) => setSelectTopic(topics.find(topic => topic.id === e.target.value))}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" >
             {topics.map((topic) => (
-              <Option key={topic.id} value={topic.id}>
+              <option  key={topic.id} value={topic.id}>
                 {topic.topic}
-              </Option>
+              </option >
             ))}
-          </Select>
+            </select>
+          {/* </Select> */}
         </div>
         </div>
         <div className="mt-16">
@@ -248,8 +254,8 @@ function EditBlog() {
         {userinfo.is_premium && (
              <div className="mt-20 mb-10 ml-5  flex">
              <Checkbox
-               defaultValue="true"
-               onClick={(e) => setisPremium(!ispremium)}
+               value ={ispremium}
+               onClick={(e) => setisPremium(e.target.value)}
              />
              <Typography className="mt-3 ml-2">Premium Blog </Typography>
            </div>

@@ -92,11 +92,20 @@ class ListBlogsView(ListAPIView):
     def get_queryset(self):
         
         topic=self.request.query_params.get('topic')
+        sort = self.request.query_params.get('sort', 'latest')
+        queryset = Blogs.objects.filter(is_block=False, is_hide=False)
 
         if topic:
-            return Blogs.objects.filter(topic__topic=topic,is_block=False,is_hide=False).order_by('-created_at')
-        else:
-            return Blogs.objects.filter(is_block=False,is_hide=False).order_by('-created_at')
+            queryset = queryset.filter(topic__topic=topic)
+
+        if sort == 'latest':
+            queryset = queryset.order_by('-created_at')
+        elif sort == 'popular':
+            
+            queryset = queryset.order_by('-likes')
+
+        return queryset
+
 
 
 class TrendingBlogsListView(ListAPIView):

@@ -41,9 +41,9 @@ function Technews() {
       {newss.map((news) => (
      
         <Card className="ml-10 w-96 mb-10 h-[28rem]">
-          <CardHeader color="blue-gray" className="relative h-56">
-            <img src={news.urlToImage} className="object-cover" alt="card-image" />
-          </CardHeader>
+         
+            <img src={news.urlToImage} className="object-cover  h-[12rem]" alt="card-image" />
+        
           <CardBody className="h-[11rem]">
             <Typography variant="h5" color="blue-gray" className="mb-2">
               {news.author}

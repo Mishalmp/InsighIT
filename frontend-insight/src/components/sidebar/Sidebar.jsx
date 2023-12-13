@@ -71,7 +71,7 @@ function Sidebar() {
         </Typography>
 
         <CardBody>
-          <ul className="grid grid-cols-2 gap-2">
+          <ul className="grid grid-cols-2 gap-2 ">
             {trendingtopics.length > 0 ? (
               trendingtopics.map((topic) => (
                 <li className="bg-green-200 w-auto  h-[2.3rem] flex justify-center items-center text-blue-900  rounded-lg">
@@ -130,8 +130,8 @@ function Sidebar() {
             Your followings
           </Typography>
 
-          <CardBody className="min-h-[20rem] max-h-[28rem] overflow-y-auto">
-            <ul className="grid grid-cols-1 gap-2">
+          <CardBody className="min-h-[20rem] hidescroll max-h-[28rem] overflow-y-auto">
+            <ul className="grid grid-cols-1 gap-2 ">
               {followingslist.map((premium) => (
                 <div
                   key={premium.id}
@@ -307,7 +307,7 @@ function Sidebar() {
           Trending Author
         </Typography>
 
-        <CardBody className="min-h-[20rem] max-h-[28rem] overflow-y-auto">
+        <CardBody className="min-h-[20rem] hidescroll max-h-[28rem] overflow-y-auto">
           <ul className="grid grid-cols-1 gap-2">
             {premiumlist.map((premium) => (
               <div

@@ -126,7 +126,7 @@ function CommunityCard({
           <div className="flex w-full flex-col gap-0.5">
             <div className="flex items-center justify-between">
               <h5
-                className="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900"
+                className="block font-sans text-xl antialiased cursor-pointer font-semibold leading-snug tracking-normal text-blue-gray-900"
                 onClick={() => {
                   if (isAuthor) {
                     navigate("/User/userprofile");
@@ -142,13 +142,13 @@ function CommunityCard({
                   {is_following ? (
                     <span
                       onDoubleClick={Handleunfollow}
-                      className="bg-green-100 w-24 text-md font-semibold -ml-24 justify-center items-center mt-1 h-[1.6rem] flex text-blue-800  rounded-md"
+                      className="bg-green-100 w-24 cursor-pointer text-md font-semibold -ml-24 justify-center items-center mt-1 h-[1.6rem] flex text-blue-800  rounded-md"
                     >
                       following
                     </span>
                   ) : (
                     <span
-                      className="bg-blue-800 w-20 text-md gap-1 -ml-24 mt-1 h-[1.6rem] flex text-white  rounded-md"
+                      className="bg-blue-800 w-20 text-md gap-1 cursor-pointer -ml-24 mt-1 h-[1.6rem] flex text-white  rounded-md"
                       onClick={Handlefollow}
                     >
                       <AddIcon className="ml-1 mt-[0.1rem]" /> follow
@@ -220,7 +220,7 @@ function CommunityCard({
                 {isAuthor && (
                   <Menu>
                     <MenuHandler>
-                      <MoreVertOutlinedIcon className="w-2 h-2" />
+                      <MoreVertOutlinedIcon className="w-2 h-2 cursor-pointer hover:rounded-full hover:bg-blue-gray-50" />
                     </MenuHandler>
                     <MenuList>
                       <MenuItem

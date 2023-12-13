@@ -84,7 +84,7 @@ function Subscribelist({ user_id, is_subscription }) {
           />
         </div>
       </div>
-      <Card className="w-[50rem] min-h-[25rem] max-h-[50rem] overflow-y-auto overflow-x-hidden mt-5 bg-gray-50">
+      <Card className="w-[50rem] min-h-[25rem] hidescroll max-h-[50rem] overflow-y-auto overflow-x-hidden mt-5 bg-gray-50">
         {subscribes.length > 0 ? (
           subscribes.map((subscribe) => (
             <>

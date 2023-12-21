@@ -19,6 +19,18 @@ def send_mail_user_block(user_email, is_active):
 
     send_mail(subject, message, from_email, recipient_list)
 
+@shared_task
+def send_mail_user_premium(email,is_premium):
+    subject = 'InsighIT | Premium Account Status Update'
+    if is_premium:
+
+        message = 'Thank you for becoming a premium user. Enjoy the premium features!'
+    else:
+        message = 'Your premium features has been blocked. If you have any concerns, please contact support.'
+    from_email = EMAIL_HOST_USER  
+    recipient_list = [email]
+    send_mail(subject, message, from_email, recipient_list)
+
 
 
 

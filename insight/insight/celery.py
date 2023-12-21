@@ -21,13 +21,13 @@ app.conf.beat_schedule = {
 
     'send-mail-every-day-at-8':{
         'task':'accounts.tasks.send_mail_func',
-        'schedule':crontab(hour=18,minute=48),
+        'schedule':crontab(hour=9,minute=0),
         # 'schedule':crontab(),
         # 'args':(2,)
     },
         'check-expiring-subscriptions': {
         'task': 'accounts.tasks.check_expiring_subscription',
-        'schedule': crontab(hour=18, minute=55),  # Run daily at midnight
+        'schedule': crontab(hour=0, minute=0),  # Run daily at midnight
     },
 
 }

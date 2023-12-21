@@ -154,26 +154,7 @@ class Subscription(models.Model):
 
 
 
-    # def save(self,*args,**kwargs):
-
-    #     if self.end_time and self.end_time <= timezone.now():
-    #         self.is_active=False
-        
-    #     super().save(*args,**kwargs)
-    
-    # @staticmethod
-    # @shared_task
-    # def check_subscription_status():
-    #     current_time = timezone.now()
-    #     subscriptions_to_update = Subscription.objects.filter(
-    #         end_time__lte=current_time,
-    #         is_active=True
-    #     )
-    #     for subscription in subscriptions_to_update:
-    #         subscription.is_active = False
-    #         subscription.save()
-
-
+  
 
 
 class Notifications(models.Model):

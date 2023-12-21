@@ -310,14 +310,14 @@ function OtherProfile() {
 
                 {is_following ? (
                   <span
-                    onDoubleClick={Handleunfollow}
-                    className="bg-green-100 w-24 text-md font-semibold justify-center items-center mt-1 h-[1.6rem] flex text-blue-800  rounded-md"
+                    onClick={Handleunfollow}
+                    className="bg-green-100 w-24 text-md cursor-pointer font-semibold justify-center items-center mt-1 h-[1.6rem] flex text-blue-800  rounded-md"
                   >
                     following
                   </span>
                 ) : (
                   <span
-                    className="bg-blue-800 w-20 text-md gap-1 mt-1 h-[1.6rem] flex text-white  rounded-md"
+                    className="bg-blue-800 w-20 text-md gap-1 cursor-pointer mt-1 h-[1.6rem] flex text-white  rounded-md"
                     onClick={Handlefollow}
                   >
                     <AddIcon className="ml-1 mt-[0.1rem]" /> follow
@@ -337,11 +337,11 @@ function OtherProfile() {
               </div>
             </CardBody>
             <CardFooter className="flex justify-center gap-7">
-              <InstagramIcon onClick={handleOpen} />
+              <InstagramIcon onClick={handleOpen} className="cursor-pointer hover:text-blue-600" />
               <GitHubIcon />
               <LinkedInIcon />
               {/* <Cog6ToothIcon className="w-6 h-6" /> */}
-              {is_following && <CommentOutlinedIcon onClick={()=>navigate('/User/chat/')} fontSize="medium" className="hover:cursor-pointer hover:bg-blue-gray-100 hover:rounded-lg"/>}
+              {is_following && <CommentOutlinedIcon onClick={()=>navigate('/User/chat/')} fontSize="medium" className="hover:cursor-pointer  hover:text-blue-800 hover:rounded-lg"/>}
             </CardFooter>
           </Card>
 

@@ -71,7 +71,7 @@ class UserRegister(CreateAPIView):
             return Response({'status':'error','msg':serializer.errors})
 
 
-            
+          
 @api_view(['GET'])
 def activate(request, uidb64, token):
     try:

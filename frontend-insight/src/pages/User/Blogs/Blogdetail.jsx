@@ -163,7 +163,13 @@ function Blogdetail() {
   const sendNotification = (message, receiverId) => {
     const socket = new W3CWebSocket(`${wsurl}ws/notifications/${receiverId}/`);
     socket.onopen = () => {
-      socket.send(JSON.stringify({ message, receiverId }));
+
+      const notification ={
+        type:"create_notification",
+        message:message
+      }
+
+      socket.send(JSON.stringify(notification));
       socket.close();
     };
   };
@@ -215,15 +221,21 @@ function Blogdetail() {
       user: userinfo.id,
     };
 
+    const notificationMessage =  `${userinfo.first_name} UnLiked for your Blog ${blog.title}`
+    const receiverId = blog.user_id.id;
+
     const noti_values = {
       user: blog.user_id.id,
-      text: `${userinfo.first_name} UnLiked for your Blog ${blog.title}`,
+      text:notificationMessage,
     };
     try {
       const response = await UnlikeBlog(values);
       console.log(response);
       const liked = response.data.liked;
       setIsLiked(liked);
+
+      sendNotification(notificationMessage,receiverId)
+
       await NotificationCreate(noti_values);
       toast.warning("UnLiked Blog");
       setBlog((prevBlog) => ({
@@ -281,14 +293,19 @@ function Blogdetail() {
       following: blog.user_id.id,
     };
 
+    const notificationMessage = `${userinfo.first_name} started Follow You`
+
     const noti_values = {
       user: blog.user_id.id,
-      text: `${userinfo.first_name} started Follow You`,
+      text: notificationMessage,
     };
 
     try {
       const resp = await CreateFollowing(values);
       toast.success("followed successfully");
+
+      sendNotification(notificationMessage,blog.user_id.id)
+
       await NotificationCreate(noti_values);
       setIs_following(true);
     } catch (error) {
@@ -298,12 +315,16 @@ function Blogdetail() {
 
   const Handleunfollow = async () => {
     try {
+      const notificationMessage = `${userinfo.first_name}  UnFollowed You`
       const noti_values = {
         user: blog.user_id.id,
-        text: `${userinfo.first_name}  UnFollowed You`,
+        text: notificationMessage,
       };
       const ress = await Unfollow(userinfo.id, blog.user_id.id);
       toast.success("unfollowed successfully");
+
+      sendNotification(notificationMessage,blog.user_id.id)
+
       await NotificationCreate(noti_values);
       setIs_following(false);
     } catch (error) {
@@ -386,13 +407,13 @@ function Blogdetail() {
             <div className="flex m-[50px] gap-10">
               <img
                 src={blog.user_id.profile_img}
-                className="w-14 h-14 rounded-full"
+                className="w-14 h-14 rounded-full cursor-pointer"
                 onClick={handleauthornavigate}
               />
 
               <div className="mt-3 flex gap-10">
                 <p
-                  className="font-semibold text-xl"
+                  className="font-semibold text-xl cursor-pointer"
                   onClick={handleauthornavigate}
                 >
                   {blog.user_id.first_name} {blog.user_id.last_name}
@@ -402,14 +423,14 @@ function Blogdetail() {
                   <>
                     {is_following ? (
                       <span
-                        onDoubleClick={Handleunfollow}
-                        className="bg-green-100 w-24 text-md font-semibold justify-center items-center mt-1 h-[1.6rem] flex text-blue-800  rounded-md"
+                        onClick={Handleunfollow}
+                        className="bg-green-100 w-24 text-md font-semibold cursor-pointer justify-center items-center mt-1 h-[1.6rem] flex text-blue-800  rounded-md"
                       >
                         following
                       </span>
                     ) : (
                       <span
-                        className="bg-blue-800 w-20 text-md gap-1 mt-1 h-[1.6rem] flex text-white  rounded-md"
+                        className="bg-blue-800 w-20 text-md gap-1 cursor-pointer mt-1 h-[1.6rem] flex text-white  rounded-md"
                         onClick={Handlefollow}
                       >
                         <AddIcon className="ml-1 mt-[0.1rem]" /> follow
@@ -610,6 +631,7 @@ function Blogdetail() {
             blogId={blogId}
             isAuthor={isAuthor}
             blog={blog.user_id}
+            sendNotification={sendNotification}
           />
           <Relatedblogs user={blog.user_id} />
         </>

@@ -234,8 +234,6 @@ class ChatUsersList(ListAPIView):
 
         chat_users=User.objects.filter(pk__in=users)
 
-        
-
         serializers=UserSerializer(chat_users,many=True)
         
         return Response({'chat_users': serializers.data})

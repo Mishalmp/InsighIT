@@ -124,7 +124,7 @@ const Reply = ({ reply }) => (
   </div>
 );
 
-const Commentlist = ({ blogId,isAuthor,blog }) => {
+const Commentlist = ({ blogId,isAuthor,blog,sendNotification }) => {
   const [commentContent, setcomment] = useState("");
   const { userinfo } = useSelector((state) => state.user);
   const [comments, setcomments] = useState([]);
@@ -163,23 +163,28 @@ const Commentlist = ({ blogId,isAuthor,blog }) => {
       content: commentContent,
       parent_comment:parent_comment_id
     };
+
+    const notificationMessage = `${userinfo.first_name+" "+userinfo.last_name} commented on your Blog`
     
     const noti_values={
       user:blog.id,
-      text:`${userinfo.first_name+" "+userinfo.last_name} commented on your Blog`
+      text:notificationMessage,
     }
     try {
       const response = await CreateComment(values);
       console.log(response.data);
       toast.success("comment created succussfully")
+      sendNotification(notificationMessage,blog.id)
       await NotificationCreate(noti_values)
 
       if(parentid && userinfo.id !== parentid){
+
+        const replymessage = `${userinfo.first_name+" "+userinfo.last_name} Replied on your comment`
+        sendNotification(replymessage,parentid)
         await NotificationCreate({
           user:parentid,
-          text:`${userinfo.first_name+" "+userinfo.last_name} Replied on your comment`
+          text:replymessage
         })
-
       }
 
       setcomment("");

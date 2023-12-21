@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.utils import timezone
 from .models import *
 from django.conf import settings
-from .tasks import send_mail_user_block
+from .tasks import send_mail_user_block,send_mail_user_premium
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import json
@@ -18,6 +18,16 @@ def send_mail_user_block_signal(sender, instance, created, *args, **kwargs):
     if not created:
         if instance.is_active != instance._state.fields_cache.get('is_active', {}).get('original'):
             send_mail_user_block.delay(instance.email, instance.is_active)
+
+
+
+@receiver(post_save, sender=User)
+def send_mail_premium_status_signal(sender, instance, created, *args, **kwargs):
+    if not created:
+       
+        if instance.is_premium != instance._state.fields_cache.get('is_premium', {}).get('original'):
+            send_mail_user_premium.delay(instance.email,instance.is_premium)
+
 
 
 
@@ -40,6 +50,7 @@ def send_user_created_notification(sender,instance,created,*args,**kwargs):
         
         admin_user = User.objects.filter(is_superuser = True).first()
         Notifications.objects.create(user=admin_user,text=notification_text )
+
 
 
 @receiver(post_save, sender=Subscription)

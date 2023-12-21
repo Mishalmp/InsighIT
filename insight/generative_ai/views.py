@@ -3,15 +3,15 @@ from rest_framework.response import Response
 from django.conf import settings
 from rest_framework import status
 from openai import OpenAI
-# import asyncio
-# from openai import AsyncOpenAI
+import asyncio
+from openai import AsyncOpenAI
 
 
 openAI_client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 class ArticleContentcreationByOpenai(APIView):
 
-    def post(self,request):
+   def post(self,request):
 
         try:
             # topic = self.request.query_params.get('topic')
@@ -28,4 +28,5 @@ class ArticleContentcreationByOpenai(APIView):
         except Exception as e:
 
             return Response(f"{e}:error in content generation",status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
 

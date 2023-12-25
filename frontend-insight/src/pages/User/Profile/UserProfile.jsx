@@ -190,13 +190,20 @@ function UserProfile() {
   };
 
   const handleskilleditsubmit = async () => {
-    try {
-      const res = await EditSkill(selectedskillId, skill);
-      fetchskills();
-    } catch (error) {
-      console.error(error);
+
+    if (skill.skill.trim() && !skill.skill in skills){
+      try {
+        const res = await EditSkill(selectedskillId, skill);
+        fetchskills();
+      } catch (error) {
+        console.error(error);
+      }
+      setskilleditopen(false);
+
+    }else{
+      toast.error("error")
     }
-    setskilleditopen(false);
+   
   };
 
   const handleSkilldelete = async () => {
@@ -213,18 +220,23 @@ function UserProfile() {
   const HandleSkillSubmit = async () => {
     const user_id = userinfo.id;
     const skillData = { ...skill, user_id };
-    try {
-      const response = await CreateSkill(skillData);
-      fetchskills();
-      setSkill({ skill: "", rateofskills: 0 });
-
-      toast.success("Skill created succussfully!");
-      // handleloading()
-      setskillOpen(false);
-    } catch (error) {
-      console.error("error occured during skill creation", error);
-      toast.error("Error occured during skill creation");
+    if (skill.skill.trim() && !skill.skill in skills){
+      try {
+        const response = await CreateSkill(skillData);
+        fetchskills();
+        setSkill({ skill: "", rateofskills: 0 });
+  
+        toast.success("Skill created succussfully!");
+        // handleloading()
+        setskillOpen(false);
+      } catch (error) {
+        console.error("error occured during skill creation", error);
+        toast.error("Error occured during skill creation");
+      }
+    }else{
+      toast.error("error")
     }
+   
   };
 
   const data = [

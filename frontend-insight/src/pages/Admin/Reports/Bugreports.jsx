@@ -94,7 +94,7 @@ function Bugreports() {
           </div>
         </div>
       </CardHeader>
-      <div className="w-[70rem] rounded-lg mt-10 max-h-[35rem] overflow-y-auto min-h-[30rem] bg-white shadow-2xl ">
+      <div className="w-[62rem] rounded-lg mt-10 max-h-[35rem] overflow-y-auto min-h-[30rem] bg-white shadow-2xl ">
           <p className="text-5xl text-center font-serif"> Reported issues</p>
 
           {reports.length > 0 ? (

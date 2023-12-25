@@ -55,13 +55,15 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { ListSkills } from "../../../../services/UserApi";
 
-import { GetUserInfo,IsSubscriber } from "../../../../services/UserApi";
+import { GetUserInfo,IsSubscriber,NotificationCreate } from "../../../../services/UserApi";
 import { useParams } from "react-router-dom";
 
 import Bloglistinprofile from "../../../../components/blogs/bloglistinprofile";
 import Bloghidepage from "../../../../components/premiumuser/premiumBlog/Bloghidepage";
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import { useNavigate } from "react-router-dom";
+import { sendNotification } from "../../../../helpers/Notificationuser";
+
 function OtherProfile() {
   const { authorId } = useParams();
 
@@ -101,13 +103,21 @@ function OtherProfile() {
     FetchData();
   }, [authorId, is_following]);
 
+
+
+
   const Handlefollow = async () => {
-
-
 
     const values = {
       follower: userinfo.id,
       following: authorId,
+    };
+
+    const notificationMessage = `${userinfo.first_name} started Follow You`
+
+    const noti_values = {
+      user: authorId,
+      text: notificationMessage,
     };
     try {
 
@@ -116,7 +126,10 @@ function OtherProfile() {
       }else{
       const resp = await CreateFollowing(values);
       toast.success("followed successfully");
+
       setIs_following(true);
+      sendNotification(notificationMessage,authorId)
+      await NotificationCreate(noti_values);
 
       }
 
@@ -127,10 +140,17 @@ function OtherProfile() {
   };
 
   const Handleunfollow = async () => {
+    const notificationMessage = `${userinfo.first_name}  UnFollowed You`
+    const noti_values = {
+      user: authorId,
+      text: notificationMessage,
+    };
     try {
       const ress = await Unfollow(userinfo.id, authorId);
       toast.success("unfollowed successfully");
       setIs_following(false);
+      sendNotification(notificationMessage,authorId)
+      await NotificationCreate(noti_values);
     } catch (error) {
       console.error(error);
     }

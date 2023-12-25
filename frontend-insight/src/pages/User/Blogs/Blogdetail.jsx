@@ -57,6 +57,8 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { wsurl } from "../../../constants/constants";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import { sendNotification } from "../../../helpers/Notificationuser";
+
 function Blogdetail() {
   const { blogId } = useParams();
   const [blog, setBlog] = useState(null);
@@ -160,19 +162,7 @@ function Blogdetail() {
     }
   };
 
-  const sendNotification = (message, receiverId) => {
-    const socket = new W3CWebSocket(`${wsurl}ws/notifications/${receiverId}/`);
-    socket.onopen = () => {
 
-      const notification ={
-        type:"create_notification",
-        message:message
-      }
-
-      socket.send(JSON.stringify(notification));
-      socket.close();
-    };
-  };
 
   const handlelike = async () => {
     const values = {
@@ -204,12 +194,7 @@ function Blogdetail() {
         likes: prevBlog.likes + 1,
       }));
 
-      clientstate.send(
-        JSON.stringify({
-          type: "send_notification",
-          message: noti_values.text,
-        })
-      );
+
     } catch (error) {
       console.error(error);
     }
@@ -237,7 +222,7 @@ function Blogdetail() {
       sendNotification(notificationMessage,receiverId)
 
       await NotificationCreate(noti_values);
-      toast.warning("UnLiked Blog");
+      toast.success("UnLiked Blog");
       setBlog((prevBlog) => ({
         ...prevBlog,
         likes: prevBlog.likes - 1,
@@ -469,7 +454,7 @@ function Blogdetail() {
                     <BookmarkOutlinedIcon
                       className="w-10 h-10 cursor-pointer"
                       color="primary"
-                      onDoubleClick={HandleSave}
+                      onClick={HandleSave}
                     />
                   ) : (
                     <BookmarkAddIcon

@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import HomePage from '../../pages/HomePage'
 import { jwtDecode } from 'jwt-decode'
 import UnknownUser from '../../pages/UnknownUser/UnknownUser'
+import { connectWebSocket, showAdminNotification } from '../../helpers/NotificationAdmin'
 
 function AdminProtected() {
+    const [notifications, setNotifications] = useState([]);
     
     const token=localStorage.getItem('token')
 
@@ -13,7 +15,17 @@ function AdminProtected() {
 
         if (decode.role === 'user'){
             return <HomePage/>
-        }else if(decode.role === 'admin' && decode.is_superuser){
+        }else if(decode.role === 'admin'){
+            useEffect(() => {
+               
+                const cleanupWebSocket = connectWebSocket(setNotifications, showAdminNotification);
+          
+                return () => {
+                  cleanupWebSocket();
+                };
+          
+            }, []);
+
             return <Outlet/>
         }
         }

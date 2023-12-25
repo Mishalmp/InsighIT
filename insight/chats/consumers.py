@@ -93,14 +93,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def save_message(self,sender,reciever,message,thread_name):
 
-        from .serializers import MessageSerializer
+      
         from .models import Message
        
         Message.objects.create(
             sender=sender,reciever=reciever,message=message,thread_name=thread_name
         )
         
-            
+from accounts.models import Notifications
 
 class NotificationConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -132,6 +132,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         try:
             message = json.loads(text_data)
             print("Recieved Message:",message)
+
+            await self.save_notifications()
         except Exception as e:
             print("Error in recieve :",e)
     
@@ -147,4 +149,52 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
         except Exception as e:
             print("error in create notification",e)
+    
+    @database_sync_to_async
+    def save_notifications(self,user,text):
+        Notifications.objects.create(
+            user=user,text=text
+        )
+    
 
+
+
+class AdminNotifications(AsyncWebsocketConsumer):
+    async def connect(self):
+        try:
+            self.group_name = 'admin_group'
+            await self.channel_layer.group_add(
+                self.group_name,
+                self.channel_name
+            )
+            print('connected ')
+            await self.accept()
+        except Exception as e:
+            print("Error in connect in admin noti", e)
+    async def disconnect(self, close_code):
+        try:
+            await self.channel_layer.group_discard(
+                self.group_name,
+                self.channel_name
+            )
+        except Exception as e:
+            print("Error in disconnect admin notif:", e)
+
+
+    async def receive(self, text_data):
+        try:
+            message = json.loads(text_data)
+            print("admin_Received message:", message)
+        except Exception as e:
+            print("Error in receive admin noti:", e)
+
+
+    async def create_notification(self, event):
+        try:
+            message = event['message']
+            await self.send(json.dumps({
+             
+                'message': message
+            }))
+        except Exception as e:
+            print("Error in create admin notif:", e)

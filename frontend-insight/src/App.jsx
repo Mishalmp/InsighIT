@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import Signup from './pages/User/Signup'
@@ -14,7 +14,6 @@ import { ToastContainer } from 'react-toastify'
 
 function App() {
   
-
   return (
     <>
     <ToastContainer/>

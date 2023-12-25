@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save,post_delete,pre_save
 from django.dispatch import receiver
+
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.utils import timezone
@@ -40,6 +41,15 @@ def send_user_created_notification(sender,instance,created,*args,**kwargs):
         admin_user = User.objects.filter(is_superuser = True).first()
         Notifications.objects.create(user=admin_user,text=notification_text )
 
+              
+        async_to_sync(channel_layer.group_send)(
+            "admin_group",
+            {
+                'type': 'create_notification',
+                'message': notification_text
+            }
+        )
+
 
 
 @receiver(post_save,sender=PremiumUserInfo)
@@ -50,6 +60,15 @@ def send_user_created_notification(sender,instance,created,*args,**kwargs):
         
         admin_user = User.objects.filter(is_superuser = True).first()
         Notifications.objects.create(user=admin_user,text=notification_text )
+
+              
+        async_to_sync(channel_layer.group_send)(
+            "admin_group",
+            {
+                'type': 'create_notification',
+                'message': notification_text
+            }
+        )
 
 
 
@@ -101,11 +120,11 @@ def send_notification_wallet(sender, instance, created, **kwargs):
         Notifications.objects.create(user=admin_user,text=notification_text )
 
         # Send real-time notification
-        group_name = f"notifications_admin"
+      
         async_to_sync(channel_layer.group_send)(
-            group_name,
+            "admin_group",
             {
-                'type': 'send_notification',
+                'type': 'create_notification',
                 'message': notification_text
             }
         )
@@ -122,11 +141,11 @@ def send_notification_report(sender, instance, created, **kwargs):
         Notifications.objects.create(user=admin_user,text=notification_text )
 
         # Send real-time notification
-        group_name = f"notifications_admin"
+       
         async_to_sync(channel_layer.group_send)(
-            group_name,
+           "admin_group",
             {
-                'type': 'send_notification',
+                'type': 'create_notification',
                 'message': notification_text
             }
         )

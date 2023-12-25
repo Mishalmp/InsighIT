@@ -17,29 +17,6 @@ import { ToastContainer, toast } from "react-toastify";
 
 function AdminRoutes() {
 
-  const socket = new W3CWebSocket(`${wsurl}ws/notifications/`);
-
-  socket.onopen = function () {
-    console.log('WebSocket Connection Opened');
-  };
-  
-  socket.onmessage = function (event) {
-    const data = JSON.parse(event.data);
-    console.log('WebSocket Message Received:', data);
-    
-    if (data) {
-      toast.success(data.message);
-    }
-  };
-  
-  socket.onclose = function () {
-    console.log('WebSocket Connection Closed');
-    // Handle reconnection or other logic as needed
-  };
-  
-  socket.onerror = function (error) {
-    console.error('WebSocket Error:', error);
-  };
 
   return (
     <Routes>

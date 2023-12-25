@@ -19,11 +19,11 @@ import AddIcon from "@mui/icons-material/Add";
 import {
   CreateFollowing,
   Is_follower,
-  Unfollow,IsSubscriber
+  Unfollow,IsSubscriber,NotificationCreate
 } from "../../services/UserApi";
 import Bloghidepage from "../premiumuser/premiumBlog/Bloghidepage";
 import VerifiedIcon from "@mui/icons-material/Verified";
-
+import { sendNotification } from "../../helpers/Notificationuser";
 function CommunityCard({
   id,
   author,
@@ -79,12 +79,22 @@ function CommunityCard({
 
   console.log(is_subscriber,author_info,'isssspremiumm,subscriberrrrrrrrr');
 
+
+
   const Handlefollow = async () => {
 
     const values = {
       follower: userinfo.id,
       following: author_id,
     };
+
+    const notificationMessage = `${userinfo.first_name} started Follow You`
+
+    const noti_values = {
+      user: author_id,
+      text: notificationMessage,
+    };
+ 
     try {
 
       if(author_info.is_premium && !is_subscriber){
@@ -92,8 +102,13 @@ function CommunityCard({
         setShowhidepage(true)
       }else{
       const resp = await CreateFollowing(values);
+
+      
+
       toast.success("followed successfully");
       setIs_following(true);
+      sendNotification(notificationMessage,author_id)
+      await NotificationCreate(noti_values);
 
       }
 
@@ -105,10 +120,17 @@ function CommunityCard({
   
 
   const Handleunfollow = async () => {
+    const notificationMessage = `${userinfo.first_name}  UnFollowed You`
+    const noti_values = {
+      user: author_id,
+      text: notificationMessage,
+    };
     try {
       const ress = await Unfollow(userinfo.id, author_id);
       toast.success("unfollowed successfully");
       setIs_following(false);
+      sendNotification(notificationMessage,author_id)
+      await NotificationCreate(noti_values);
     } catch (error) {
       console.error(error);
     }
@@ -141,7 +163,7 @@ function CommunityCard({
                 <>
                   {is_following ? (
                     <span
-                      onDoubleClick={Handleunfollow}
+                      onClick={Handleunfollow}
                       className="bg-green-100 w-24 cursor-pointer text-md font-semibold -ml-24 justify-center items-center mt-1 h-[1.6rem] flex text-blue-800  rounded-md"
                     >
                       following

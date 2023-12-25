@@ -22,6 +22,7 @@ import {
 } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import { timeAgo } from "../../../helpers/Timemanage";
+import { sendNotificationadmin } from "../../../helpers/NotificationAdmin";
 function ReportIssue() {
   const { userinfo } = useSelector((state) => state.user);
 
@@ -40,15 +41,22 @@ function ReportIssue() {
     FetchUserReports();
   }, []);
 
+
+
   const handlesubmit = async () => {
     const values = {
       issue: issue,
       user: userinfo.id,
     };
 
+    const notificationMessage = `${userinfo.first_name+" "+userinfo.last_name} reported issue`
+
     try {
       if (issue.trim()) {
         await CreateReportIssue(values);
+        FetchUserReports()
+        // sendNotificationadmin(notificationMessage)
+
         toast.success("Your Issue recorded succussfully");
         setissue("");
       } else {

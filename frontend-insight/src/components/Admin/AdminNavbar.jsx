@@ -4,7 +4,7 @@ import {
     IconButton,
     Button,
     Input,
-    Avatar
+    Avatar,Badge
   } from "@material-tailwind/react";
   import { BellIcon, Cog6ToothIcon } from "@heroicons/react/24/solid";
   import NotificationDrawer from "../NotificationDrawer/NotificationDrawer";
@@ -57,7 +57,7 @@ import { useSelector } from "react-redux";
               <Cog6ToothIcon className="h-4 w-4" />
             </IconButton>
             <IconButton variant="text" color="white" onClick={()=>setIsNotificationDrawerOpen(true)}>
-              <BellIcon className="h-4 w-4" />
+            <Badge> <BellIcon className="h-4 w-4" /></Badge>
             </IconButton>
             <Avatar
             variant="circular"

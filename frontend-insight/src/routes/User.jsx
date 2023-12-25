@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Routes, Route } from 'react-router-dom'
 import LoginPage from "../pages/User/LoginPage"
 import Signup from "../pages/User/Signup"
@@ -33,7 +33,13 @@ import PremiumRequest from "../pages/Admin/PremiumRequest/PremiumRequest"
 import Technews from "../components/Technews/Technews"
 import Usercardlist from "../components/Userside/usercardlist/Usercardlist"
 import VideoCall from "../components/videocall/VideoCall"
+import { wsurl } from "../constants/constants";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+import { useSelector } from 'react-redux'
 function UserRoutes() {
+    
+   
+    // const [socket, setSocket] = useState(null
     
 
     return(

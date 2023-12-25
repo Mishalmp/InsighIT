@@ -282,7 +282,7 @@ function UserBlogCreate() {
       <div className="grid grid-cols-2 ml-10" >
         <div className="mt-10 mb-10">
           <Typography className="text-center font-semibold">
-            Video Upload (Optional)
+            Video Upload 
           </Typography>
           <input
             className="block w-[23rem] mt-5 text-sm ml-10 text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"

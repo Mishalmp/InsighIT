@@ -191,17 +191,22 @@ function UserProfile() {
 
   const handleskilleditsubmit = async () => {
 
-    if (skill.skill.trim() && !skill.skill in skills){
+    const isSkillExists = skills.some(existingSkill => existingSkill.skill === skill.skill.trim());
+
+    if (skill.skill.trim() && !isSkillExists){
       try {
         const res = await EditSkill(selectedskillId, skill);
         fetchskills();
+        setSkill({ skill: "", rateofskills: 0 });
+        toast.success("Skill edited successfully!");
       } catch (error) {
         console.error(error);
+        toast.error("Error occurred during skill edit");
       }
       setskilleditopen(false);
 
     }else{
-      toast.error("error")
+      toast.error("Skill already exists or invalid skill name");
     }
    
   };
@@ -211,6 +216,7 @@ function UserProfile() {
       const ress = await DeleteSkill(selectedskillId);
       fetchskills();
       toast.success("Skill deleted succussfully!");
+      
     } catch (error) {
       console.error(error);
     }
@@ -220,23 +226,25 @@ function UserProfile() {
   const HandleSkillSubmit = async () => {
     const user_id = userinfo.id;
     const skillData = { ...skill, user_id };
-    if (skill.skill.trim() && !skill.skill in skills){
+    
+    // Check if the skill already exists in the skills array
+    const isSkillExists = skills.some(existingSkill => existingSkill.skill === skill.skill.trim());
+  
+    if (skill.skill.trim() && !isSkillExists) {
       try {
         const response = await CreateSkill(skillData);
         fetchskills();
         setSkill({ skill: "", rateofskills: 0 });
   
-        toast.success("Skill created succussfully!");
-        // handleloading()
+        toast.success("Skill created successfully!");
         setskillOpen(false);
       } catch (error) {
-        console.error("error occured during skill creation", error);
-        toast.error("Error occured during skill creation");
+        console.error("Error occurred during skill creation", error);
+        toast.error("Error occurred during skill creation");
       }
-    }else{
-      toast.error("error")
+    } else {
+      toast.error("Skill already exists or invalid skill name");
     }
-   
   };
 
   const data = [

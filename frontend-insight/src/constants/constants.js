@@ -1,6 +1,6 @@
-export const accountsapi = 'http://127.0.0.1:8000/'
-export const adminapi = 'http://127.0.0.1:8000/dashboard/'
-export const blogsapi ='http://127.0.0.1:8000/blogs/'
-export const premiumapi ='http://127.0.0.1:8000/premium/'
-export const wsurl ='ws://127.0.0.1:8000/'
-export const aiurl = 'http://127.0.0.1:8000/generative_ai/'
+export const accountsapi = import.meta.env.VITE_BASE_URL
+export const adminapi = import.meta.env.VITE_ADMIN_URL
+export const blogsapi =import.meta.env.VITE_BLOGS_URL
+export const premiumapi =import.meta.env.vITE_PREMIUM_URL
+export const wsurl = import.meta.env.VITE_WEBSOCKET_URL
+export const aiurl = import.meta.env.VITE_AI_URL

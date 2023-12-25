@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ng1$01mf_yl7vg!o^#k#+$5s8)yy&6i3l#^9x+&)95lc0$9j)i'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -231,16 +231,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'mishalmp916@gmail.com'
-EMAIL_HOST_PASSWORD = 'bvspramnxxydjsqp'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'mishalmp916@gmail.com'
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 
 
-AWS_ACCESS_KEY_ID = 'AKIAYSUNCWDTMXMITZGH'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'insighit'
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_SIGNATURE_NAME = 's3v4',
 AWS_S3_REGION_NAME = 'ap-south-1'
 AWS_S3_FILE_OVERWRITE = False
@@ -249,11 +249,11 @@ AWS_S3_VERITY = True
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
-STRIPE_SECRET_KEY='sk_test_51ODXutSJIzAHTfhbCRKgdZWdQuHIhCc0ULCZRaSH56Jq2HscZ9sMcdOmi3Fh3YqNWeeFziiz6fNx270SDvy15bhY00ln9lZ22U'
+STRIPE_SECRET_KEY= config('STRIPE_SECRET_KEY')
 
-STRIPE_PUBLIC_KEY = 'pk_test_51ODXutSJIzAHTfhbtbs5Hmu3AG7AYIJRnXtolxzyIswLOWoPRcXRh5GPYqeRAUeApVWbAOFyUBnBxULkyHU84onC00CQZvyYIS'
+STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
 
-STRIPE_SECRET_WEBHOOK='whsec_8d927394f625628baba18b71cd2ee574813460949ce85829e805ccefa2064f40'
+STRIPE_SECRET_WEBHOOK= config('STRIPE_SECRET_WEBHOOK')
 
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
@@ -269,4 +269,4 @@ CELERY_BEAT_SCHEDULER  = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 
 #OpenAI
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = config('OPENAI_API_KEY')

@@ -122,13 +122,7 @@ class BlogDetailView(RetrieveUpdateDestroyAPIView):
     # permission_classes=[IsAuthenticated]
 
 
-class BlogsByTopicListView(ListAPIView):
-    serializer_class = Blogserializer
-    # permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        topic = self.kwargs['topic']
-        return Blogs.objects.filter(topic=topic).order_by('-created_at')
 
 class BlogsByUserListView(ListAPIView):
     serializer_class = Blogserializer

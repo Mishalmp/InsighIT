@@ -27,17 +27,20 @@ import SouthWestIcon from "@mui/icons-material/SouthWest";
 
 import Userico from "../../../assets/user2img.png";
 import { UserWallet } from "../../../services/UserApi";
-import { timeAgo } from "../../../helpers/Timemanage";
+
 import WalletPre from "../../../components/premiumuser/Wallet/Wallet";
-import { jwtDecode } from "jwt-decode";
-import AdminSidebar from "../../../components/Admin/AdminSidebar";
-import AdminNavbar from "../../../components/Admin/AdminNavbar";
-import { GetUserInfo } from "../../../services/UserApi";
+
+
+
 import { Loader } from "../../../components/Loading/Loader";
 import { useSelector } from "react-redux";
 function WalletAdmin() {
 
     const {userinfo} = useSelector((state)=>state.user)
+
+    useEffect(()=>{
+      document.title="InsighIT | Admin Wallet";
+    },[])
 
 
 
@@ -45,26 +48,11 @@ function WalletAdmin() {
     return <Loader />;
   }
 
-  const TABS = [
-    {
-      label: "All",
-      value: "all",
-    },
-    {
-      label: "Active",
-      value: "active",
-    },
-    {
-      label: "Inactive",
-      value: "inactive",
-    },
-  ];
+ 
 
   return (
-    <div className="flex">
-      <AdminSidebar />
-      <Card className="h-2/3 w-2/3 ml-10">
-        <AdminNavbar />
+
+    <>
         <CardHeader floated={false} shadow={false} className="rounded-none">
           <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
             <div>
@@ -86,21 +74,13 @@ function WalletAdmin() {
               </div>
             </div>
           </div>
-          <Tabs value="all" className="w-full md:w-max">
-            <TabsHeader>
-              {TABS.map(({ label, value }) => (
-                <Tab key={value} value={value}>
-                  &nbsp;&nbsp;{label}&nbsp;&nbsp;
-                </Tab>
-              ))}
-            </TabsHeader>
-          </Tabs>
+        
         </CardHeader>
-        <div className="ml-24 max-h-[38rem] overflow-y-auto">
+        <div className="ml-24 max-h-[38rem] hidescroll overflow-y-auto">
           <WalletPre user={userinfo} />
         </div>
-      </Card>
-    </div>
+        </>
+
   );
 }
 

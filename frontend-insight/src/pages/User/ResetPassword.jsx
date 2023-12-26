@@ -8,7 +8,7 @@ import { accountsapi } from '../../constants/constants';
 // import { Loader } from '../../components/Loading/Loader';
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
-import NavBar from '../../components/Userside/NavBarhome/NavBar';
+
 function ResetPassword() {
     const navigate=useNavigate()
     const user_id=localStorage.getItem("user_id")
@@ -18,10 +18,10 @@ function ResetPassword() {
     // const emailInputRef = useRef(null);
     // const passInputRef = useRef(null);
 
-    // useEffect(() => {
-    //     emailInputRef.current.focus();
-    //     document.title = "Reset Password | InsighIT";
-    //   }, []);
+    useEffect(() => {
+       
+      document.title="InsighIT | Reset Password";
+      }, []);
 
 
     

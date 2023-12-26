@@ -50,6 +50,7 @@ function Bugreports() {
     }
 
     useEffect(()=>{
+      document.title="InsighIT | Report";
         fetchreports()
     },[])
 
@@ -67,10 +68,7 @@ function Bugreports() {
     }
 
   return (
-    <div className='flex'>
-    <AdminSidebar/>
-    <Card className='h-2/3 w-2/3 ml-10'>
-    <AdminNavbar/>
+<>
     <CardHeader floated={false} shadow={false} className="rounded-none">
         <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
           <div>
@@ -94,7 +92,7 @@ function Bugreports() {
           </div>
         </div>
       </CardHeader>
-      <div className="w-[62rem] rounded-lg mt-10 max-h-[35rem] overflow-y-auto min-h-[30rem] bg-white shadow-2xl ">
+      <div className="w-[62rem] rounded-lg mt-10 max-h-[35rem] hidescroll  overflow-y-auto min-h-[30rem] bg-white shadow-2xl ">
           <p className="text-5xl text-center font-serif"> Reported issues</p>
 
           {reports.length > 0 ? (
@@ -122,7 +120,7 @@ function Bugreports() {
         </div>
 
 
-    </Card>
+   
 
 
     <Dialog open={isOpen} handler={()=>setOpen(false)}>
@@ -185,7 +183,7 @@ function Bugreports() {
           
         </DialogFooter>
       </Dialog>
-    </div>
+      </>
   )
 }
 

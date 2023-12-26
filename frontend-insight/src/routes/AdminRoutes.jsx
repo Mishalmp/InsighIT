@@ -15,6 +15,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { wsurl } from '../constants/constants';
 import { ToastContainer, toast } from "react-toastify";
 
+import AdminLayout from './layouts/AdminLayout'
 function AdminRoutes() {
 
 
@@ -26,6 +27,7 @@ function AdminRoutes() {
         </Route>
 
         <Route element={<AdminProtected/>}>
+        <Route element={<AdminLayout/>}>
 
             <Route path='/adminhomepage/' element={<AdminHomePage/>} />
             <Route path='/userlist/' element={<UsersList/>} />
@@ -34,6 +36,7 @@ function AdminRoutes() {
             <Route path='/premiumrequestview/:premiumId' element={<PremiumrequestView/>} />
             <Route path='/reportedissues/' element={<Bugreports/>} />
             <Route path='/adminwallet/' element={<WalletAdmin/>} />
+            </Route>
 
         </Route>
 

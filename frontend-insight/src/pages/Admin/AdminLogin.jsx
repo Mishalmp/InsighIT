@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from "@material-tailwind/react";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,10 @@ function AdminLogin() {
     const [form,setForm]=useState({ email:'',password:''})
     const [loading,setLoading]=useState()
     const Handleloading =()=>setLoading((cur)=>!cur)
+
+    useEffect(()=>{
+      document.title="InsighIT | Admin Login";
+    },[])
 
     const ValidateForm=()=>{
         if (form.email.trim() === ''){

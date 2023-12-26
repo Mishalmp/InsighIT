@@ -45,6 +45,7 @@ function Signup() {
 
 
   useEffect(()=>{
+    document.title="InsighIT | Signup";
     const GoogleAuth=async ()=>{
       try{
         if (!guser) return;

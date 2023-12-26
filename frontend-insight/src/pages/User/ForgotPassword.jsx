@@ -17,10 +17,9 @@ function ForgotPassword() {
     // const emailInputRef=useRef(null)
     // // const passInputRef=useRef(null)
 
-    // useEffect(() => {
-    //     emailInputRef.current.focus();
-    //     document.title = "Forgot Password | InsighIT";
-    //   }, []);
+    useEffect(() => {
+        document.title = "InsighIT | Forgot Password";
+      }, []);
 
 
       const validation = () => {

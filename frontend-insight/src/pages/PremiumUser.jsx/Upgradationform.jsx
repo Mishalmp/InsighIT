@@ -23,10 +23,10 @@ function Upgradationform() {
   const handleBack = () => {
     setCurrentStep(currentStep - 1);
   };
-  console.log(premiumuserinfo,'preeeeeeemiiuminfi');
+ 
   return (
     <div>
-      <NavBar />
+    
 
       {premiumuserinfo ? (
         <>
@@ -46,7 +46,7 @@ function Upgradationform() {
       )}
      
 
-      <Footer />
+   
     </div>
   );
 }

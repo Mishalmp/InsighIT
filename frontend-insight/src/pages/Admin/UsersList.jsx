@@ -50,6 +50,7 @@ export default function UsersList() {
     const [selectedfilter,setselectedfilter]=useState('')
 
     useEffect(() => {
+      document.title="InsighIT | Users";
       fetchUsers();
     }, [searchQuery,selectedfilter]);
   
@@ -72,10 +73,7 @@ const handlePageClick = (selectedPage) => {
   const paginatedUsers = users.slice(offset, offset + itemsPerPage);
 
     return (
-      <div className="flex">
-        <AdminSidebar />
-        <Card className="h-2/3 w-2/3 ml-10">
-          <AdminNavbar />
+  <>
           <CardHeader floated={false} shadow={false} className="rounded-none">
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
@@ -282,7 +280,6 @@ const handlePageClick = (selectedPage) => {
             activeClassName={"active"}
           />
         </CardFooter>  */}
-        </Card>
-      </div>
+      </>
     );
   }

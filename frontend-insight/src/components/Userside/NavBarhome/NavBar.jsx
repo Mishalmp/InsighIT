@@ -10,7 +10,7 @@ import insightimg from '../../../assets/insightnew.png'
 function NavBar() {
     const [toggle,setToggle]=useState(false)
     const {userinfo}=useSelector((state)=>state.user)
-    console.log(userinfo,'userrrrrrrrrrrrr');
+    
     const navigate=useNavigate()
     const dispatch=useDispatch()
     const Signout=()=>{
@@ -28,11 +28,11 @@ function NavBar() {
             <ul className='flex gap-10 text-[#039368]'>
             
             
-                <li className='font-semibold text-lg font-serif'>Our Story</li>
-                <li className='font-semibold text-lg font-serif'>Write</li>
-                <li className='font-semibold text-lg font-serif' onClick={Signout}>Logout</li>
+                <li className='font-semibold text-lg font-serif cursor-pointer' onClick={()=>navigate("/User/about/")}>Our Story</li>
                 
-                <Link to="/User/blogs/" className='font-semibold text-lg font-serif'>Blogs</Link>
+                <li className='font-semibold text-lg font-serif cursor-pointer' onClick={()=>navigate("/User/userprofile/")}>Profile</li>
+                
+                <Link to="/User/blogs/" className='font-semibold text-lg font-serif cursor-pointer'>Blogs</Link>
                 
             </ul>
 

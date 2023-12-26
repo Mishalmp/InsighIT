@@ -28,7 +28,7 @@ function BlogReports() {
     const [selectedReport, setSelectedReport] = useState(null); 
 
     useEffect(()=>{
-
+      document.title="InsighIT | Reports";
         const fetchreports=async()=>{
             try{
                 const response=await ReportBlogList()
@@ -51,10 +51,7 @@ function BlogReports() {
  
  
   return (
-    <div className='flex'>
-        <AdminSidebar/>
-        <Card className='h-2/3 w-2/3 ml-10'>
-        <AdminNavbar/>
+<>
       <CardHeader floated={false} shadow={false} className="rounded-none">
         <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
           <div>
@@ -225,11 +222,7 @@ function BlogReports() {
           Next
         </Button>
       </CardFooter>
-    </Card>
-        
-
-      
-    </div>
+      </>
   )
 }
 

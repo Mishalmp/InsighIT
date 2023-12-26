@@ -11,11 +11,14 @@ import PrivateRoutes from './routes/ProtectedRoutes/PrivateRoutes'
 import UserRoutes from './routes/User'
 import AdminRoutes from './routes/AdminRoutes'
 import { ToastContainer } from 'react-toastify'
-
+import { Helmet } from 'react-helmet-async';
+import insighticon from '../src/assets/bginsight.png'
 function App() {
   
   return (
     <>
+      {/* <Helmet> */}
+      {/* <link rel="icon" href={insighticon} /> */}
     <ToastContainer/>
       <Router>
           <Routes>
@@ -36,7 +39,7 @@ function App() {
   
 
       </Router>
-    
+      {/* </Helmet> */}
   
     </>
   )

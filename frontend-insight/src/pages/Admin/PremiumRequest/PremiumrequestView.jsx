@@ -46,6 +46,7 @@ function PremiumrequestView() {
   };
 
   useEffect(() => {
+    document.title="InsighIT | Premium View";
     fetchpremiumInfo();
   }, []);
 
@@ -75,11 +76,8 @@ function PremiumrequestView() {
   console.log(premiuminfo);
 
   return (
-    <div className="flex">
-      <AdminSidebar />
-      <Card className="h-2/3 w-2/3 ml-10">
-        <AdminNavbar />
-
+  
+    <>
         <div className="w-[63rem] h-[42rem] mt- bg-gray-100">
           <Typography
             variant="h3"
@@ -173,8 +171,7 @@ function PremiumrequestView() {
             <Button onClick={handleClick} variant="text" className={` mt-5 float-right ml-[22rem] text-white w-40 ${premiuminfo.is_approved ?"bg-red-600 hover:bg-red-500":"bg-green-600 hover:bg-green-500"}}`}>{premiuminfo.is_approved ?"Block":"Approve" } </Button>
           </Card>
         </div>
-      </Card>
-    </div>
+</>
   );
 }
 

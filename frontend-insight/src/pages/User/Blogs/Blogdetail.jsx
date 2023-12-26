@@ -14,8 +14,7 @@ import { useSelector } from "react-redux";
 import { Card, Typography, Button } from "@material-tailwind/react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { Loader } from "../../../components/Loading/Loader";
-import NavBar from "../../../components/Userside/NavBar/NavBar";
-import Footer from "../../../components/Userside/footer/footer";
+
 import Commentlist from "../../../components/Comment/commentlist";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
@@ -71,6 +70,7 @@ function Blogdetail() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isSaved, SetisSaved] = useState(false);
   const [isContentVisible, setIsContentVisible] = useState(true);
+  
 
   const [ishidemodal, setishidemodal] = useState(false);
 
@@ -119,7 +119,7 @@ function Blogdetail() {
   const closeMenu = () => setIsMenuOpen(false);
 
   useEffect(() => {
-
+    document.title="InsighIT | BlogView";
     FetchBlog();
   }, [blogId, userinfo.id, is_following]);
 
@@ -358,25 +358,26 @@ function Blogdetail() {
   };
 
   return (
-    <>
-      <NavBar />
+    <>  
       <div className="flex">
-        <Breadcrumbs className="ml-24 mt-10">
-          <a href="#" className="opacity-60">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-            </svg>
-          </a>
-          <a href="#" className="opacity-60">
-            <span>Blogs</span>
-          </a>
-          <a href="#">Blog_detail</a>
-        </Breadcrumbs>
+      <Breadcrumbs className="ml-20 w-52 mt-10">
+            <div onClick={() => navigate("/User/Home/")} className="opacity-60">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+              </svg>
+            </div>
+            <div onClick={()=>navigate("/User/blogs/")} className="opacity-60">
+              <span>Blogs</span>
+            </div>
+            <div className="opacity-60">
+              <span>Blog Detail</span>
+            </div>
+          </Breadcrumbs>
         <Typography className="font-bold text-5xl ml-[20%] mt-10">
           Blog Detail
         </Typography>
@@ -624,7 +625,7 @@ function Blogdetail() {
         <Bloghidepage user_id={userinfo.id} author_id={blog.user_id.id} />
       )}
 
-      <Footer />
+     
     </>
   );
 }

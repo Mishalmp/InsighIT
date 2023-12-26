@@ -1,25 +1,26 @@
 import { useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import Navbar from "../../../components/Userside/NavBar/NavBar";
+
 import Blogcard from "../../../components/Userside/blogcard/blogcard";
-import Sidefooter from "../../../components/Userside/footer/Sidefooter";
+
 import Blogfilter from "../../../components/Userside/sortbar/Blogfilter";
 import { ListSaved } from "../../../services/BlogsApi";
-
-import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
-import { useParams } from "react-router-dom";
+import { Breadcrumbs } from "@material-tailwind/react";
+import { useNavigate, useParams } from "react-router-dom";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Input } from "@material-tailwind/react";
 import { Loader } from "../../../components/Loading/Loader";
 import Sidebar from "../../../components/sidebar/Sidebar";
-import Footer from '../../../components/Userside/footer/footer'
+
 function SavedBlogs() {
   const [saved, setSaved] = useState(null);
   const { userinfo } = useSelector((state) => state.user);
   const { userId } = useParams();
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate()
 
   useEffect(() => {
+    document.title="InsighIT | Saved";
     const Fetchmyblogs = async () => {
       try {
         const response = await ListSaved(userId, searchQuery);
@@ -44,10 +45,24 @@ function SavedBlogs() {
   console.log(saved, "my saved");
   return (
     <div>
-      <Navbar />
+     
       <div className="flex">
       <div className='bg-gray-50 mt-5 rounded-lg w-[60rem] ml-[5rem] mb-5 shadow-2xl'>
-          <Breadcrumbs />
+      <Breadcrumbs className="ml-20 w-40 mt-10">
+            <div onClick={() => navigate("/User/Home/")} className="opacity-60">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+              </svg>
+            </div>
+            <div className="opacity-60">
+              <span>Saved Blogs</span>
+            </div>
+          </Breadcrumbs>
           <div className="flex">
             <h1 className="font-bold text-5xl  ml-[25rem] mt-10">
               Saved Blogs
@@ -87,7 +102,7 @@ function SavedBlogs() {
       </div>
       <Sidebar/>
     </div>
-    <Footer/>
+  
     </div>
   );
 }

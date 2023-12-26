@@ -1,9 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Chatfield from "../../../components/Chat/Chatfield";
 import ChatUserlist from "../../../components/Chat/ChatUserlist";
 // import Userico from "../../assets/user2img.png";
-import NavBar from "../../../components/Userside/NavBar/NavBar";
-import Footer from "../../../components/Userside/footer/footer";
+
 
 import { useSelector } from "react-redux";
 import chatimg from '../../../assets/Work chat-cuate.svg'
@@ -13,9 +12,13 @@ function Chat() {
   
   const [recipientDetails, setRecipientDetails] = useState(null);
 
+  useEffect(()=>{
+    document.title="InsighIT | Chat";
+  },[])
+
   return (
     <>
-      <NavBar />
+
       <div className="flex">
         <ChatUserlist
           userinfo={userinfo}
@@ -34,7 +37,7 @@ function Chat() {
         )}
       </div>
       <div className="-mt-10">
-        <Footer />
+       
       </div>
     </>
   );

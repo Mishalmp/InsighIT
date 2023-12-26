@@ -34,16 +34,17 @@ function PremiumRequest() {
         try {
             const res = await GetPremiuminfolist(searchQuery,selectedfilter)
             setPremiuminfos(res.data)
-           
+           console.log(res.data,'preeeemiummm resqqqqq')
         } catch (error) {
             console.error(error);
         }
     }
     useEffect(()=>{
+      document.title="InsighIT | PremiumUsers";
         FetchRequest()
     },[searchQuery,selectedfilter])
 
- 
+    // console.log(premiuminfos,'preeeemiummm reeeeeeeeeeeeeee')
     const TABS = [
         {
           label: "All",
@@ -60,10 +61,7 @@ function PremiumRequest() {
 
     const TABLE_HEAD = ["User ", "Date", "Email","status", ""];
   return (
-    <div className='flex'>
-        <AdminSidebar/>
-        <Card className='h-2/3 w-2/3 ml-10'>
-        <AdminNavbar/>
+    <>
       <CardHeader floated={false} shadow={false} className="rounded-none">
         <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
           <div>
@@ -234,11 +232,7 @@ function PremiumRequest() {
           Next
         </Button>
       </CardFooter>
-    </Card>
-        
-
-      
-    </div>
+</>
   )
 }
 

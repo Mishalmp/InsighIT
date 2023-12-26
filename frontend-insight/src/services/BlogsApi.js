@@ -47,11 +47,7 @@ const DeleteBlog=(blog_id)=>{
     }).catch((error)=>error.response)
 }
 
-const GetBlogsByTopic=(topic_id)=>{
-    return BlogsAxiosInstant.get(`/blogs/by-topic/${topic_id}/`,{
-        withCredentials:true
-    }).catch((error)=>error.response)
-}
+
 
 const GetBlogsByUser=(user_id,searchQuery,topic,selectedfilter)=>{
   
@@ -186,7 +182,7 @@ const Unsave=(user_id,blog_id)=>{
 
 
 
-export {CreateBlog,GetBlogDetail,GetBlogsByTopic,ListBlogs,GetBlogsByUser,
+export {CreateBlog,GetBlogDetail,ListBlogs,GetBlogsByUser,
     CreateTopics,GetTopics,TrendingBlogs,UpdateBlog,DeleteBlog,CreateComment,ListComment,DeleteComment,
     LikeBlog,UnlikeBlog,GetBlogLike,ReportBlogs,ReportBlogList,Reportupdate,CreateSaved,ListSaved,IsSave,Unsave,
     CommunitiesByUser,DeleteCommunity,ListCommunities,CreateCommunity,TrendingTopics

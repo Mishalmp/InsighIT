@@ -5,6 +5,7 @@ import { jwtDecode } from 'jwt-decode'
 import UnknownUser from '../../pages/UnknownUser/UnknownUser'
 import { connectWebSocket, showAdminNotification } from '../../helpers/NotificationAdmin'
 
+
 function AdminProtected() {
     const [notifications, setNotifications] = useState([]);
     

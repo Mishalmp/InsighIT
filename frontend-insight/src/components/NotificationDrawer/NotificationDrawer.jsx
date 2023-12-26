@@ -33,10 +33,13 @@ function NotificationDrawer({ isOpen,userinfo, onClose }) {
     const fetchnotifications=async()=>{
 
         try{
+          if (userinfo.id){
+
             const response = await Notificationsbyuser(userinfo.id);
             const fetchedNotifications = response.data;
-            // handleLoading()
+            
             setNotifications(fetchedNotifications);
+          }
        
         }catch(error){
             console.error(error)
@@ -46,7 +49,7 @@ function NotificationDrawer({ isOpen,userinfo, onClose }) {
 
  },[userinfo.id])
 
- const handleLoading=()=>setLoading((cur)=>!cur)
+
 
 //  console.log(notifications,'nottificaations');
  

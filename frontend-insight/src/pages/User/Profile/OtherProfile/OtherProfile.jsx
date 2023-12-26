@@ -81,6 +81,7 @@ function OtherProfile() {
   const navigate=useNavigate()
 
   useEffect(() => {
+    document.title="InsighIT | Author";
     const FetchData = async () => {
       try {
         const response = await GetUserInfo(authorId);
@@ -179,7 +180,7 @@ function OtherProfile() {
   return (
     <div className="">
       {/* {loading && <Loader />} */}
-      <NavBar />
+    
       <div className="flex ml-12 mt-[1rem] h-auto  max-w-[80rem] ">
         <div className="w-[40rem] min-h-[50rem] mt-8 bg-white shadow-2xl">
           <Card className="w-[30rem]  m-3 -mt-2.5 bg-gray-100 shadow-2xl">
@@ -506,7 +507,7 @@ function OtherProfile() {
       </div>
       {showhidepage && <Bloghidepage user_id={userinfo.id} author_id={authorId} />}
 
-      <Footer />
+     
     </div>
   );
 }

@@ -9,7 +9,7 @@ import PrivateRoutes from "./ProtectedRoutes/PrivateRoutes"
 import HomePage from "../pages/HomePage"
 import Blogs from "../pages/User/Blogs/Blogs"
 import UserProfile from "../pages/User/Profile/UserProfile"
-import UserproEdit from "../pages/User/Profile/UserproEdit"
+
 import UserBlogCreate from "../pages/User/Blogs/UserBlogCreate"
 import Blogdetail from "../pages/User/Blogs/Blogdetail"
 import MyBlogs from "../pages/User/Blogs/MyBlogs"
@@ -26,16 +26,18 @@ import SavedBlogs from "../pages/User/Blogs/SavedBlogs"
 
 import Chat from "../pages/User/Chat/Chat"
 import Community from "../pages/User/Community/Community"
-import SearchUser from "../components/searchuser/SearchUser"
+
 import ReportIssue from "../pages/User/ReportIssue/ReportIssue"
-import Sidebar from "../components/sidebar/Sidebar"
-import PremiumRequest from "../pages/Admin/PremiumRequest/PremiumRequest"
+
+
 import Technews from "../components/Technews/Technews"
-import Usercardlist from "../components/Userside/usercardlist/Usercardlist"
+
 import VideoCall from "../components/videocall/VideoCall"
-import { wsurl } from "../constants/constants";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
-import { useSelector } from 'react-redux'
+
+import About from "../pages/User/About"
+
+import UserLayout from "./layouts/UserLayout"
+
 function UserRoutes() {
     
    
@@ -54,10 +56,11 @@ function UserRoutes() {
         </Route>
 
         <Route exact element={<UserProtected/>}>
-            <Route path="/Home" element={<HomePage/>} />
+        <Route exact element={<UserLayout/>}>
+            <Route path="/Home/" element={<HomePage/>} />
             <Route path="/blogs" element={<Blogs/>} />
             <Route path="/userprofile" element={<UserProfile/>}/>
-            <Route path="/userprofileedit" element={<UserproEdit/>}/>
+           
             <Route path="usercreateblog" element={<UserBlogCreate/>}/>
             <Route path="detailblog/:blogId" element={<Blogdetail/>}/>
             <Route path="myblogs/:userId" element={<MyBlogs/>}/>
@@ -65,6 +68,7 @@ function UserRoutes() {
             <Route path="editblog/:blogId" element={<EditBlog/>}/>
             {/* <Route path="dummy/" element={<VideoCall/>}/>     */}
             {/* <Route path="dummy/" element={<Usercardlist/>}/>     */}
+             <Route path="about/" element={<About/>}/>     
             <Route path="reportissue/" element={<ReportIssue/>}/>    
             <Route path="community/" element={<Community/>}/>    
             <Route path="chat/" element={<Chat/>}/>
@@ -73,6 +77,7 @@ function UserRoutes() {
             <Route path="authorprofile/:authorId" element={<OtherProfile/>}/>
           
             
+        </Route>
         </Route>
         
         

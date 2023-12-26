@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../../../components/Userside/NavBar/NavBar";
-import Footer from "../../../components/Userside/footer/footer";
+import { Breadcrumbs } from "@material-tailwind/react";
 import { useSelector } from "react-redux";
 import {
   IssueReportView,
@@ -23,8 +22,10 @@ import {
 import { toast } from "react-toastify";
 import { timeAgo } from "../../../helpers/Timemanage";
 import { sendNotificationadmin } from "../../../helpers/NotificationAdmin";
+import { useNavigate } from "react-router-dom";
 function ReportIssue() {
   const { userinfo } = useSelector((state) => state.user);
+  const navigate = useNavigate()
 
   const [prevreports, setPrevreports] = useState([]);
 
@@ -38,6 +39,7 @@ function ReportIssue() {
   };
 
   useEffect(() => {
+    document.title="InsighIT | Report";
     FetchUserReports();
   }, []);
 
@@ -70,13 +72,29 @@ function ReportIssue() {
 
   return (
     <div>
-      <NavBar />
+    
       <div className="flex-col">
         <div
-          className="w-full h-[25rem] rounded-lg shadow-2xl"
+          className="w-full h-[25rem] rounded-lg shadow-2xl -mt-10"
           style={{ backgroundImage: `url(${helpcenter})` }}
         >
+                <Breadcrumbs className="ml-20 w-44 mt-10">
+            <div onClick={() => navigate("/User/Home/")} className="opacity-60">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+              </svg>
+            </div>
+            <div className="opacity-60">
+              <span>Report Issue</span>
+            </div>
+          </Breadcrumbs>
           <p className="text-5xl text-center font-serif">Report Issues</p>
+
 
           <div className="w-[40rem] h-[6rem] ml-[28rem] mt-28 flex">
             <Input
@@ -125,7 +143,7 @@ function ReportIssue() {
         </div>
       </div>
 
-      <Footer />
+   
     </div>
   );
 }

@@ -28,6 +28,8 @@ function Paymentresult() {
 
     
     const { data, isError, error } = useQuery('subscription', async () => {
+
+      
       if (isSuccess) {
         const sub_type = searchparams.get('subscription_type');
         const currentdate = new Date();

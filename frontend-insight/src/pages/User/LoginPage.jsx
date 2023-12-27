@@ -14,7 +14,10 @@ import NavBar from '../../components/Userside/NavBarhome/NavBar';
 import { setUserInfo,setPremiumUserInfo } from '../../Redux/UserSlice';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import {
+  Card,CardBody,
 
+} from "@material-tailwind/react";
 function LoginPage() {
 
   const navigate=useNavigate()
@@ -236,12 +239,13 @@ function LoginPage() {
 
 
 
-<div className="min-h-screen flex">
-<div className="w-1/2 bg-cover flex items-center justify-center" >
-  <img className='max-h-[500px] m-5 w-[600px] ' src={Bloggingimg}  alt="Blog img" />
+<Card className="bg-gray-100 h-screen">
+<CardBody className='grid grid-cols-2 bg-white shadow-2xl rounded-lg w-[80rem] mt-32 ml-32 h-[35rem]'>
+<div className="bg-cover flex items-center justify-center" >
+  <img className='h-[30rem] m-5 w-[35rem] ' src={Bloggingimg}  alt="Blog img" />
 </div>
-<div className="w-1/2 flex items-center justify-center bg-white-100">
-  <div className="bg-white p-8 rounded shadow-md w-[60%]">
+
+  <div className="bg-white w-[30rem] h-[29rem] ml-10 mt-10 p-8 rounded shadow-2xl">
   <h2 className="text-2xl font-semibold text-center text-indigo-600">Login</h2>
       <form className="mt-4" onSubmit={FormHandlerLogin}>
         <div className="mb-4">
@@ -302,9 +306,9 @@ function LoginPage() {
       </p>
             </Link>
   </div>
-</div>
+  </CardBody>
 
-</div>
+</Card>
 
     </>
   )

@@ -33,7 +33,7 @@ import insightimg from "../../assets/insightnew.png";
 import { FaWallet } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { LogoutDetails } from "../../Redux/UserSlice";
-
+import TopicIcon from '@mui/icons-material/Topic';
 export default function AdminSidebar() {
   const [open, setOpen] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
@@ -161,7 +161,7 @@ export default function AdminSidebar() {
         className={location.pathname === "/admin/topics/" ? "bg-gray-200" : ""}
         >
           <ListItemPrefix>
-            <Cog6ToothIcon className="h-5 w-5" />
+            <TopicIcon className="h-5 w-5" />
           </ListItemPrefix>
           Topics
         </ListItem>

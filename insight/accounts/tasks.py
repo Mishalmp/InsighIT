@@ -5,10 +5,6 @@ from django.contrib.auth import get_user_model
 from .models import * 
 from django.utils import timezone
 
-
-
-
-
 @shared_task
 def send_mail_user_block(user_email, is_active):
     subject = 'InsighIT | Account Status Update'
@@ -18,6 +14,7 @@ def send_mail_user_block(user_email, is_active):
     recipient_list = [user_email]
 
     send_mail(subject, message, from_email, recipient_list)
+
 
 @shared_task
 def send_mail_user_premium(email,is_premium):

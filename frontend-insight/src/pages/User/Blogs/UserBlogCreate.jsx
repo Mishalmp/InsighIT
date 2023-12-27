@@ -58,34 +58,59 @@ function UserBlogCreate() {
     }
   };
 
-  const handleBlogSubmit = async () => {
-    handleLoading();
-    const blogvalues = {
-      title: title,
-      content: value,
-      user_id: userinfo.id,
-      topic: selectTopic,
-    };
-
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("content", value);
-    formData.append("user_id", userinfo.id);
-    formData.append("topic", selectTopic);
-    formData.append("banner_img", imageFile);
-    formData.append("video_post", videoFile);
-    formData.append("is_premium_blog", ispremium);
-
-    try {
-      // console.log(blogvalues, "blogvalues");
-      const response = await CreateBlog(formData);
-
-      toast.success("Blog created successfully");
-      navigate("/User/blogs");
-    } catch (error) {
-      console.error("error! creating blog", error);
-      toast.error("error! creating blog");
+  const validation = () => {
+    // Check if title and value are not empty and not numbers
+    if (!title.trim() || !value.trim() || selectTopic === '') {
+      toast.error("values should not be empty");
+      return false;
     }
+    if (!isNaN(title) || !isNaN(value)){
+      toast.error("Values must be characters")
+      return false
+    }
+  
+    // Check if image and video are selected
+    if (!imageFile) {
+      toast.error("Please select an image");
+      return false;
+    }
+  
+    if (!videoFile) {
+      toast.error("Please select a video");
+      return false;
+    }
+  
+    return true;
+  }
+
+  const handleBlogSubmit = async () => {
+
+    if (validation()){
+      handleLoading();
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", value);
+      formData.append("user_id", userinfo.id);
+      formData.append("topic", selectTopic);
+      formData.append("banner_img", imageFile);
+      formData.append("video_post", videoFile);
+      formData.append("is_premium_blog", ispremium);
+  
+      try {
+        // console.log(blogvalues, "blogvalues");
+        const response = await CreateBlog(formData);
+  
+        toast.success("Blog created successfully");
+        navigate("/User/blogs");
+      } catch (error) {
+        console.error("error! creating blog", error);
+        toast.error("error! creating blog");
+      }
+
+    }else{
+      console.error("validation error")
+    }
+   
   };
 
   const handleImageChange = (e) => {
@@ -246,6 +271,7 @@ function UserBlogCreate() {
               id="dropzone-file"
               type="file"
               className="hidden"
+              accept="image/*" 
               onChange={handleImageChange}
             />
           </label>
@@ -304,6 +330,7 @@ function UserBlogCreate() {
             className="block w-[23rem] mt-5 text-sm ml-10 text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
             id="file_input"
             type="file"
+            accept="video/*"
             onChange={handleVideoChange}
           />
         </div>

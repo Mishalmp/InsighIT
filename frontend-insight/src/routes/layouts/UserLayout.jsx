@@ -9,7 +9,7 @@ function UserLayout() {
 
     const location = useLocation();
 
-    const isHomePage = location.pathname === '/User/Home/'
+    const isHomePage = location.pathname === '/User/Home/' || location.pathname === '/User/about/'
 
   return (
     <>

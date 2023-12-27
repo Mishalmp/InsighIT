@@ -19,7 +19,10 @@ import { UserSignin,UserGoogleSignin,GetUserInfo } from '../../services/UserApi'
 import { setUserInfo,setPremiumUserInfo } from '../../Redux/UserSlice';
 import { useDispatch } from 'react-redux';
 // Redux
+import {
+  Card,CardBody,
 
+} from "@material-tailwind/react";
 function Signup() {
   const navigate=useNavigate()
   const location = useLocation()
@@ -270,12 +273,13 @@ function Signup() {
     {loading && <Loader />}
    
    
-     <div className="min-h-screen flex ">
-     <div className="w-1/2 bg-cover flex items-center justify-center" >
-    <img className='max-h-[600px] m-5  w-[600px]  ' src={Bloggingimg} alt="Blog img" />
+    <Card className="bg-gray-100 h-screen">
+<CardBody className='grid grid-cols-2 bg-white shadow-2xl rounded-lg w-[80rem] mt-20 ml-32 h-[40rem]'>
+     <div className="bg-cover flex items-center justify-center" >
+    <img className='h-[30rem] m-5 w-[35rem]' src={Bloggingimg} alt="Blog img" />
     </div>
-      <div className="w-1/2 flex items-center justify-center bg-white-100 shadow-lg">
-        <div className="bg-white p-8 rounded shadow-md w-[70%] mt-[-80px]">
+      <div className="bg-white w-[30rem] h-[36rem] ml-10 mt-2 p-8 rounded shadow-2xl">
+       
           <h2 className="text-2xl font-semibold text-center text-indigo-600">Sign Up</h2>
           <form className="mt-4" onSubmit={FormHandlerSignup}>
           <div className="mb-4">
@@ -384,8 +388,9 @@ function Signup() {
       </p>
             </Link>
         </div>
-      </div>
-    </div>
+     
+    </CardBody>
+    </Card>
 
     </>
   );

@@ -78,8 +78,35 @@ function EditBlog() {
     }
   };
 
+  const validation = () => {
+    // Check if title and value are not empty and not numbers
+    if (!Data.title.trim() || !Data.content.trim() || Data.topic === '') {
+      toast.error("values should not be empty");
+      return false;
+    }
+    if (!isNaN(Data.title) || !isNaN(Data.content)){
+      toast.error("Values must be characters")
+      return false
+    }
+  
+    // Check if image and video are selected
+    // if (!imageFile) {
+    //   toast.error("Please select an image");
+    //   return false;
+    // }
+  
+    // if (!videoFile) {
+    //   toast.error("Please select a video");
+    //   return false;
+    // }
+  
+    return true;
+  }
+
   const HandleBlogUpdate = async () => {
-    handleLoading();
+
+    if (validation()){
+      handleLoading();
 
     const formDataToSend = new FormData();
     formDataToSend.append("title", Data.title);
@@ -98,6 +125,10 @@ function EditBlog() {
       console.error("error while updating blog", error);
       toast.error("error occurred while updating");
     }
+    }else{
+      console.error("validation error")
+    }
+    
   };
 
   const handleChange = (e) => {
@@ -246,6 +277,7 @@ function EditBlog() {
                   id="dropzone-file"
                   type="file"
                   className="hidden"
+                  accept="image/*" 
                   onChange={handleImageChange}
                 />
               </label>
@@ -287,6 +319,7 @@ function EditBlog() {
               className="block w-[23rem] mt-5 ml-10 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
               id="file_input"
               type="file"
+              accept="video/*"
               // value={Data.video_post}
               // onChange={handleVideoChange}
             />

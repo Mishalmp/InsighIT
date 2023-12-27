@@ -330,6 +330,7 @@ function UserProfile() {
                   <input
                     id="dropzone-file"
                     type="file"
+                    accept="image/*" 
                     className="hidden"
                     onChange={(e) => handlecoverimgUpload(e.target.files[0])}
                   />
@@ -366,6 +367,7 @@ function UserProfile() {
                     <input
                       id="dropzone-file"
                       type="file"
+                      accept="image/*" 
                       className="hidden"
                       onChange={(e) => handlecoverimgUpload(e.target.files[0])}
                     />
@@ -438,6 +440,7 @@ function UserProfile() {
                         id="pro-file"
                         type="file"
                         class="hidden"
+                        accept="image/*" 
                         onChange={(e) =>
                           handleprofileimgUpload(e.target.files[0])
                         }
@@ -475,6 +478,7 @@ function UserProfile() {
                         id="pro-file"
                         type="file"
                         class="hidden"
+                        accept="image/*" 
                         onChange={(e) =>
                           handleprofileimgUpload(e.target.files[0])
                         }
@@ -658,7 +662,7 @@ function UserProfile() {
                 {skills.map((skill) => (
                   <li
                     className="bg-green-200 w-auto hover:cursor-pointer hover:bg-green-300  h-[2.5rem] flex justify-center items-center text-blue-900  rounded-md"
-                    onDoubleClick={() => handleskilledit(skill)}
+                    onClick={() => handleskilledit(skill)}
                   >
                     {skill.skill}
                   </li>

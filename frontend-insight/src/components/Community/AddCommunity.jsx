@@ -24,8 +24,25 @@ function AddCommunity({userinfo,isOpen,onClose,FetchCommunityposts}) {
         setImage(e.target.files[0]);
       };    
 
+
+      const validation = (text,image) => {
+        if (!(text.trim()) || !(image)){
+            toast.error("fields cannot be empty")
+          
+            return false
+        }
+        if (!isNaN(text)){
+            toast.error("it Should Characters")
+           
+            return false
+        }
+   
+      return true; 
+    }
+
     const handlesubmit=async()=>{
 
+      if (validation(text,image)){
         const formData=new FormData()
         formData.append("user",userinfo.id)
         formData.append("text",text)
@@ -41,6 +58,11 @@ function AddCommunity({userinfo,isOpen,onClose,FetchCommunityposts}) {
             console.error(error);
             toast.error("failed to create community post")
         }
+      }else{
+        console.error("validation error")
+      }
+
+       
     }
 
   return (
@@ -82,6 +104,7 @@ function AddCommunity({userinfo,isOpen,onClose,FetchCommunityposts}) {
                 aria-describedby="file_input_help"
                 id="file_input"
                 type="file"
+                accept="image/*" 
               />
             </div>
           </CardBody>

@@ -15,7 +15,7 @@ import VerifiedIcon from "@mui/icons-material/Verified";
 import Myslider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import WhatshotIcon from "@mui/icons-material/Whatshot";
 import { PremiumList } from "../../../services/UserApi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -50,8 +50,12 @@ function Usercardlist() {
   }, []);
 
   return (
-    <div>
-        <Typography variant="h4" className="ml-10 mt-10">Trending Authors</Typography>
+    <div className="">
+      <div className="flex gap-4 mt-32 ">
+
+      <WhatshotIcon fontSize="large" />
+        <Typography variant="h4" className="">Trending Authors</Typography>
+      </div>
     <div
       className="mt-10 h-[25rem] flex gap-4 max-w-[80rem] overflow-x-auto hidescroll"
     >
@@ -114,66 +118,66 @@ function Usercardlist() {
             </p>
           </div>
         </Card>
-      ))
+      )))}
 
-      // <Card className="w-[18rem] h-[20rem] m-2 hover:bg-gray-100 cursor-pointer shadow-xl">
-      //   <img
-      //     alt="candice"
-      //     src="https://docs.material-tailwind.com/img/face-1.jpg"
-      //     className=" h-16 w-16 !rounded-full  object-cover object-center ml-5 mt-5"
-      //   />
-      //   <div className="ml-5 mt-5">
-      //     <Typography variant="h6" color="blue-gray" className="mb-2 ">
-      //       Mishal Mp
-      //       <VerifiedIcon
-      //         fontSize="small"
-      //         className="-mt-1 ml-1"
-      //         color="primary"
-      //       />
-      //     </Typography>
-      //     <p className="text-base -mt-2 text-gray-600 font-serif">
-      //       Web developer
-      //     </p>
-      //   </div>
-      //   <p className="text-sm min-h-[3.6rem] text-gray-500 ml-5 mr-5 mt-4 ">
-      //     Web developer wormisdf asdnlasd asdljn zdfg dfgsdfg xdfgxdfg zff...
-      //   </p>
+      <Card className="w-[18rem] h-[20rem] m-2 hover:bg-gray-100 cursor-pointer shadow-xl">
+        <img
+          alt="candice"
+          src="https://docs.material-tailwind.com/img/face-1.jpg"
+          className=" h-16 w-16 !rounded-full  object-cover object-center ml-5 mt-5"
+        />
+        <div className="ml-5 mt-5">
+          <Typography variant="h6" color="blue-gray" className="mb-2 ">
+            Mishal Mp
+            <VerifiedIcon
+              fontSize="small"
+              className="-mt-1 ml-1"
+              color="primary"
+            />
+          </Typography>
+          <p className="text-base -mt-2 text-gray-600 font-serif">
+            Web developer
+          </p>
+        </div>
+        <p className="text-sm min-h-[3.6rem] text-gray-500 ml-5 mr-5 mt-4 ">
+          Web developer wormisdf asdnlasd asdljn zdfg dfgsdfg xdfgxdfg zff...
+        </p>
 
-      //   <div className="w-40 h-8 mt-10 bg-blue-800 ml-16 rounded-2xl cursor-pointer hover:bg-blue-700">
-      //     <p className="text-white text-center mt-[0.2rem] text-lg">View Profile</p>
-      //   </div>
-      // </Card>
+        <div className="w-40 h-8 mt-10 bg-blue-800 ml-16 rounded-2xl cursor-pointer hover:bg-blue-700">
+          <p className="text-white text-center mt-[0.2rem] text-lg">View Profile</p>
+        </div>
+      </Card>
 
-      // <Card className="w-[18rem] h-[20rem] m-2 hover:bg-gray-100 cursor-pointer shadow-xl">
-      //   <img
-      //     alt="candice"
-      //     src="https://docs.material-tailwind.com/img/face-1.jpg"
-      //     className=" h-16 w-16 !rounded-full  object-cover object-center ml-5 mt-5"
-      //   />
-      //   <div className="ml-5 mt-5">
-      //     <Typography variant="h6" color="blue-gray" className="mb-2 ">
-      //       Mishal Mp
-      //       <VerifiedIcon
-      //         fontSize="small"
-      //         className="-mt-1 ml-1"
-      //         color="primary"
-      //       />
-      //     </Typography>
-      //     <p className="text-base -mt-2 text-gray-600 font-serif">
-      //       Web developer
-      //     </p>
-      //   </div>
-      //   <p className="text-sm min-h-[3.6rem] text-gray-500 ml-5 mr-5 mt-4 ">
-      //     Web developer wormisdf asdnlasd asdljn zdfg dfgsdfg xdfgxdfg zff...
-      //   </p>
+      <Card className="w-[18rem] h-[20rem] m-2 hover:bg-gray-100 cursor-pointer shadow-xl">
+        <img
+          alt="candice"
+          src="https://docs.material-tailwind.com/img/face-1.jpg"
+          className=" h-16 w-16 !rounded-full  object-cover object-center ml-5 mt-5"
+        />
+        <div className="ml-5 mt-5">
+          <Typography variant="h6" color="blue-gray" className="mb-2 ">
+            Mishal Mp
+            <VerifiedIcon
+              fontSize="small"
+              className="-mt-1 ml-1"
+              color="primary"
+            />
+          </Typography>
+          <p className="text-base -mt-2 text-gray-600 font-serif">
+            Web developer
+          </p>
+        </div>
+        <p className="text-sm min-h-[3.6rem] text-gray-500 ml-5 mr-5 mt-4 ">
+          Web developer wormisdf asdnlasd asdljn zdfg dfgsdfg xdfgxdfg zff...
+        </p>
 
-      //   <div className="w-40 h-8 mt-10 bg-blue-800 ml-16 rounded-2xl cursor-pointer hover:bg-blue-700">
-      //     <p className="text-white text-center mt-[0.2rem] text-lg">View Profile</p>
-      //   </div>
-      // </Card>
+        <div className="w-40 h-8 mt-10 bg-blue-800 ml-16 rounded-2xl cursor-pointer hover:bg-blue-700">
+          <p className="text-white text-center mt-[0.2rem] text-lg">View Profile</p>
+        </div>
+      </Card>
 
    
-)}
+
 
      
     </div>

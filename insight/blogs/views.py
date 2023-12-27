@@ -36,7 +36,7 @@ class MostUsedtopics(ListAPIView):
     serializer_class=TopicsSerializer
 
     def get_queryset(self):
-        return Topics.objects.annotate(blog_count=Count('blogs')).order_by('-blog_count')[:5]
+        return Topics.objects.annotate(blog_count=Count('blogs')).order_by('-blog_count')[:4]
 
 
 

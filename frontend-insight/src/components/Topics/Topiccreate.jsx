@@ -28,19 +28,19 @@ function Topiccreate({isOpen,onClose,fetchTopics,onSubmit,topics}) {
 
 
     const validation = (topic) => {
-        if (!(topic.topic.trim()) || !(topic.topic.trim())){
+        if (!(topic.topic.trim()) || !(topic.desc.trim())){
             toast.error("fields cannot be empty")
-           console.log("fields cannot be empty")
+          
             return false
         }
         if (!isNaN(topic.topic) || !isNaN(topic.desc) ){
             toast.error("it Should Characters")
-            console.log("it Should Characters")
+            
             return false
         }
         if (topics.some(existingtopics => existingtopics.topic === topic.topic.trim())) {
             toast.error("already exist")
-            console.log("already exist")
+            
           return false;
       };
       return true; 
@@ -100,13 +100,14 @@ function Topiccreate({isOpen,onClose,fetchTopics,onSubmit,topics}) {
             </Typography>
             <div className="w-72">
               <input
-          
+            
               onChange={handleImageChange}
             //   value={formdata.image}
                 className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 "
                 aria-describedby="file_input_help"
                 id="file_input"
                 type="file"
+                accept="image/*" 
                 
               />
             </div>

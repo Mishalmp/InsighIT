@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Bloggingimg from '../../assets/Forgot password-bro.png'
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,7 +7,10 @@ import { accountsapi } from '../../constants/constants';
 // import { Loader } from '../../components/Loading/Loader';
 import axios from 'axios';
 import "react-toastify/dist/ReactToastify.css";
-import NavBar from '../../components/Userside/NavBarhome/NavBar';
+import {
+  Card,CardBody,
+
+} from "@material-tailwind/react";
 function ForgotPassword() {
 
     const navigate=useNavigate()
@@ -69,11 +72,13 @@ function ForgotPassword() {
     {/* {loading && <Loader/>} */}
 
 
-<div className="min-h-screen flex">
-<div className="w-1/2 outward-shadow bg-cover flex items-center justify-center" >
-  <img className='max-h-[600px] m-5 w-[600px] ' src={Bloggingimg} alt="Blog img" />
+
+  <Card className="bg-gray-100 h-screen">
+<CardBody className='grid grid-cols-2 bg-white shadow-2xl rounded-lg w-[80rem] mt-32 ml-32 h-[35rem]'>
+<div className="outward-shadow bg-cover flex items-center justify-center" >
+  <img className='h-[30rem] m-5 w-[35rem]' src={Bloggingimg} alt="Blog img" />
 </div>
-<div className="w-1/2 flex items-center justify-center bg-white-100">
+<div className="w-[30rem] h-[29rem] ml-20 flex items-center justify-center rounded shadow-2xl bg-white-100">
   <div className="bg-white p-8 rounded shadow-md w-96">
   <h2 className="text-2xl font-semibold text-center text-indigo-600">Forgot Password</h2>
       <form className="mt-4" onSubmit={FormHandlerLogin}>
@@ -113,7 +118,8 @@ function ForgotPassword() {
   </div>
 </div>
 
-</div>
+</CardBody>
+</Card>
 
     </>
   )

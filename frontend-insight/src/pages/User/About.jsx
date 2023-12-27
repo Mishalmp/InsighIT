@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { Carousel, Typography, Button,Card, CardHeader, CardBody, } from "@material-tailwind/react";
-
+import { Carousel, Typography, Button,Card, CardHeader, CardBody,Breadcrumbs } from "@material-tailwind/react";
+import banner_img1 from "../../assets/bannergif2.gif";
 import { useNavigate } from 'react-router-dom';
 
 function About() {
@@ -10,93 +10,85 @@ function About() {
     },[])
   return (
     <div>
-        <Carousel
-      className="rounded"
-      navigation={({ setActiveIndex, activeIndex, length }) => (
-        <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
-          {new Array(length).fill("").map((_, i) => (
-            <span
-              key={i}
-              className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
-              }`}
-              onClick={() => setActiveIndex(i)}
-            />
-          ))}
-        </div>
-      )}
-    >
-      <div className="relative h-[40rem] w-full">
-        <img
-          src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-          alt="image 1"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 grid h-full w-full items-center bg-black/75">
-          <div className="w-3/4 pl-12 md:w-2/4 md:pl-20 lg:pl-32">
-            <Typography
-              variant="h1"
-              color="white"
-              className="mb-4 text-3xl md:text-4xl lg:text-5xl"
-            >
-              The Beauty of Nature
-            </Typography>
-            <Typography
-              variant="lead"
-              color="white"
-              className="mb-12 opacity-80"
-            >
-              It is not so much for its beauty that the forest makes a claim
-              upon men&apos;s hearts, as for that subtle something, that quality
-              of air that emanation from old trees, that so wonderfully changes
-              and renews a weary spirit.
-            </Typography>
-            <div className="flex gap-2">
-              <Button onClick={()=>navigate('/User/blogs/')} size="lg" color="white">
-                Explore
-              </Button>
-           
+        
+     <Carousel
+          className="rounded"
+          navigation={({ setActiveIndex, activeIndex, length }) => (
+            <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
+              {new Array(length).fill("").map((_, i) => (
+                <span
+                  key={i}
+                  className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+                    activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
+                  }`}
+                  onClick={() => setActiveIndex(i)}
+                />
+              ))}
+            </div>
+          )}
+        >
+      
+          <div
+            className="h-[35rem] m-auto grid md:grid-cols-2"
+            style={{ backgroundImage: `url(${banner_img1})` }}
+          >
+            <div className="flex-col md:ml-[10rem] space-y-4 md:space-y-10 mt-10 md:mt-[150px]">
+              <h1 className="text-4xl text-white md:text-7xl font-serif font-bold text-center md:text-left">
+                Stay{" "}
+                <span className="text-4xl text-[#039368] md:text-7xl font-bold">
+                  Curious.
+                </span>
+              </h1>
+              <p className="font-serif text-lg text-center text-white md:text-left max-w-[30rem] md:w-[100%]">
+                Discover stories, thinking, and expertise from writers on any
+                Tech Related topic.Can unlock long-term value and drive economic
+                growth
+              </p>
+              <button className="px-6 py-3 rounded-[25px] bg-[#039368] text-white block mx-auto md:mx-0">
+                Start Reading
+              </button>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="relative h-[40rem] w-full">
-        <img
-          src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-          alt="image 2"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 grid h-full w-full items-center bg-black/75">
-          <div className="w-3/4 pl-12 md:w-2/4 md:pl-20 lg:pl-32">
-            <Typography
-              variant="h1"
-              color="white"
-              className="mb-4 text-3xl md:text-4xl lg:text-5xl"
-            >
-              The Beauty of Nature
-            </Typography>
-            <Typography
-              variant="lead"
-              color="white"
-              className="mb-12 opacity-80"
-            >
-              It is not so much for its beauty that the forest makes a claim
-              upon men&apos;s hearts, as for that subtle something, that quality
-              of air that emanation from old trees, that so wonderfully changes
-              and renews a weary spirit.
-            </Typography>
-            <div className="flex gap-2">
-              <Button onClick={()=>navigate('/User/blogs/')} size="lg" color="white">
-                Explore
-              </Button>
-           
+          <div
+            className="h-[35rem] m-auto grid md:grid-cols-2"
+            style={{ backgroundImage: `url(${banner_img1})` }}
+          >
+            <div className="flex-col md:ml-[10rem] space-y-4 md:space-y-10 mt-10 md:mt-[150px]">
+              <h1 className="text-2xl text-white md:text-6xl font-serif font-bold text-center md:text-left">
+                We invest in the world's{" "}
+                <span className="text-4xl text-[#039368] md:text-6xl font-bold">
+                  {" "}
+                  potential{" "}
+                </span>
+              </h1>
+              <p className="font-serif text-lg text-center text-white md:text-left max-w-[40rem] md:w-[100%]">
+                Here at{" "}
+                <span className="font-semibold text-[#039368]"> InsighIT </span>{" "}
+                we focus on markets where technology, innovation, and capital
+                can unlock long-term value and drive economic growth.
+              </p>
+              <button className="px-6 py-3 rounded-[25px] bg-[#039368] text-white block mx-auto md:mx-0">
+                Start Reading
+              </button>
             </div>
           </div>
-        </div>
-      </div>
-
-    </Carousel>
-    <Card className="w-full max-w-[60rem] h-[25rem] mt-5 ml-[14em] flex-row">
+        </Carousel>
+        <Breadcrumbs className="ml-32 w-36 mt-10">
+            <div onClick={() => navigate("/User/Home/")} className="opacity-60">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+              </svg>
+            </div>
+            <div className="opacity-60">
+              <span>About</span>
+            </div>
+          </Breadcrumbs>
+    <Card className="w-full max-w-[60rem] h-[25rem] mt-20 ml-[14em] flex-row">
       <CardHeader
         shadow={false}
         floated={false}
@@ -141,6 +133,54 @@ function About() {
           </Button>
         </a>
       </CardBody>
+    </Card>
+
+    <Card className="w-full max-w-[60rem] h-[25rem] mt-20 ml-[14em] flex-row">
+
+      <CardBody>
+        <Typography variant="h6" color="gray" className="mb-4 uppercase">
+          startups
+        </Typography>
+        <Typography variant="h4" color="blue-gray" className="mb-2">
+          Lyft launching cross-platform service this week
+        </Typography>
+        <Typography color="gray" className="mb-8 font-normal">
+          Like so many organizations these days, Autodesk is a company in
+          transition. It was until recently a traditional boxed software company
+          selling licenses. Yet its own business model disruption is only part
+          of the story
+        </Typography>
+        <a className="inline-block mt-10">
+          <Button variant="text" className="flex items-center gap-2">
+            Learn More
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="h-4 w-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+              />
+            </svg>
+          </Button>
+        </a>
+      </CardBody>
+      <CardHeader
+        shadow={false}
+        floated={false}
+        className="m-0 w-2/5 shrink-0 rounded-r-none"
+      >
+        <img
+          src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
+          alt="card-image"
+          className="h-full w-full object-cover"
+        />
+      </CardHeader>
     </Card>
 
     <div className="w-[60rem] ml-56 mt-10 h-[15rem] bg-white border border-gray-200 rounded-lg shadow ">

@@ -23,7 +23,7 @@ import {
   // IconButton,
   // Tooltip,
 } from "@material-tailwind/react";
-
+import { ImagePlacehoderSkeleton } from "../../../components/Skeletons/Blogcards";
 import Sortorder from "../../../components/Userside/sortbar/sortorder";
 import Sidebar from "../../../components/sidebar/Sidebar";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +31,7 @@ function Blogs() {
   const [blogs, setBlogs] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sort, setSort] = useState("latest");
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,7 +44,16 @@ function Blogs() {
         console.error("error! fetching blogs", error);
       }
     };
-    FetchBlogs();
+    const fetchDataWithDelay = async () => {
+      // Show skeleton for 1 second
+      setShowSkeleton(true);
+      setTimeout(() => {
+        setShowSkeleton(false);
+        FetchBlogs();
+      }, 1000);
+    };
+
+    fetchDataWithDelay();
   }, [searchQuery, sort]);
 
   const handleSearchChange = (event) => {
@@ -93,30 +103,36 @@ function Blogs() {
             <Sortorder setSort={setSort} sort={sort} />
 
             <div className="h-[75rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5 hidescroll">
-              {blogs.length > 0 ? (
-                blogs.map((blog) => (
-                  <Blogcard
-                    key={blog.id}
-                    id={blog.id}
-                    profile_img={blog.user_id.profile_img}
-                    user_premium={blog.user_id.is_premium}
-                    author={
-                      blog.user_id.first_name + " " + blog.user_id.last_name
-                    }
-                    date={blog.created_at}
-                    title={blog.title}
-                    content={blog.content}
-                    blog_image={blog.banner_img}
-                    topic={blog.topic.topic}
-                    likes={blog.likes}
-                    is_premium_blog={blog.is_premium_blog}
-                  />
-                ))
-              ) : (
-                <Typography variant="h3" className="text-center">
-                  No Data Found
-                </Typography>
-              )}
+            {showSkeleton ? (
+            <>
+              <ImagePlacehoderSkeleton />
+              <ImagePlacehoderSkeleton />
+              <ImagePlacehoderSkeleton />
+            </>
+          ) : blogs.length > 0 ? (
+            blogs.map((blog) => (
+              <Blogcard
+                key={blog.id}
+                id={blog.id}
+                profile_img={blog.user_id.profile_img}
+                user_premium={blog.user_id.is_premium}
+                author={
+                  blog.user_id.first_name + " " + blog.user_id.last_name
+                }
+                date={blog.created_at}
+                title={blog.title}
+                content={blog.content}
+                blog_image={blog.banner_img}
+                topic={blog.topic.topic}
+                likes={blog.likes}
+                is_premium_blog={blog.is_premium_blog}
+              />
+            ))
+          ) : (
+            <Typography variant="h3" className="text-center">
+              No Data Found
+            </Typography>
+          )}
             </div>
           </div>
         </div>

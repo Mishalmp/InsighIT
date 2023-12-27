@@ -27,7 +27,7 @@ function footer() {
     const currentYear = new Date().getFullYear();
 
   return (
-   <div className='w-[full] m-1 mt-10 bg-gray-100'>
+   <div className='w-[full] m-1 mt-10 bg-gray-300'>
     <footer className="relative w-full">
       <div className="mx-auto w-full max-w-7xl px-8">
         <div className="mx-auto grid w-full grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-4">

@@ -10,11 +10,13 @@ import Trending from "../assets/Reading book-bro.png";
 import { TrendingBlogs } from "../services/BlogsApi";
 import Usercardlist from "../components/Userside/usercardlist/Usercardlist";
 import Technews from "../components/Technews/Technews";
-
-import { Carousel, Typography, Button,Card, CardHeader, CardBody, } from "@material-tailwind/react";
+import './Home.css'
+import { Carousel, Typography, Button,Card, CardHeader, CardBody } from "@material-tailwind/react";
+import { ImagePlacehoderSkeleton } from "../components/Skeletons/Blogcards";
 export default function HomePage() {
   // const [toggle,setToggle]=useState(false)
   const [blogs, setBlogs] = useState([]);
+  const [showSkeleton, setShowSkeleton] = useState(true);
 
   useEffect(() => {
     document.title="InsighIT | Home";
@@ -27,11 +29,22 @@ export default function HomePage() {
         console.error("Error! fetching trending blogs", error);
       }
     };
-    FetchTrendingBlogs();
+    const fetchDataWithDelay = async () => {
+      // Show skeleton for 1 second
+      setShowSkeleton(true);
+      setTimeout(() => {
+        setShowSkeleton(false);
+        FetchTrendingBlogs();
+      }, 1000);
+    };
+
+    fetchDataWithDelay();
   }, []);
 
   return (
     <div>
+
+      
    
       <div className="w-full h-1 bg-white"></div>
       <div className="w-full bg-black">
@@ -122,7 +135,19 @@ export default function HomePage() {
           </div>
 
           <div className="mt-10 ">
-            {blogs.map((blog) => (
+            {showSkeleton ? (
+            <>
+              <ImagePlacehoderSkeleton />
+              <ImagePlacehoderSkeleton />
+              <ImagePlacehoderSkeleton />
+              <ImagePlacehoderSkeleton />
+              <ImagePlacehoderSkeleton />
+            </>
+          ):blogs.length > 0 ?(
+
+          
+            
+            blogs.map((blog) => (
               <Blogcard
                 key={blog.id}
                 id={blog.id}
@@ -135,7 +160,12 @@ export default function HomePage() {
                 topic={blog.topic.topic}
                 likes={blog.likes}
               />
-            ))}
+            ))):(
+              <Typography variant="h3" className="text-center">
+              No Data Found
+            </Typography>
+            )}
+               
           </div>
         </div>
       </div>

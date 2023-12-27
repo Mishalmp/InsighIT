@@ -157,6 +157,14 @@ export default function AdminSidebar() {
           </ListItemPrefix>
           Premium Users
         </ListItem>
+        <ListItem onClick={() => navigate("/admin/topics/")}
+        className={location.pathname === "/admin/topics/" ? "bg-gray-200" : ""}
+        >
+          <ListItemPrefix>
+            <Cog6ToothIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          Topics
+        </ListItem>
         <ListItem>
           <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5" />

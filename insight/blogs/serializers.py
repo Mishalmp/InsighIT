@@ -3,11 +3,12 @@ from .models import *
 from accounts.serializers import UserSerializer 
 
 class TopicsSerializer(serializers.ModelSerializer):
-
+    num_blogs = serializers.SerializerMethodField()
     class Meta:
         model=Topics
-        fields=['id','topic','is_block']
-    
+        fields='__all__'
+    def get_num_blogs(self, topic):
+        return topic.blogs.count() 
 
 
 class Blogserializer(serializers.ModelSerializer):

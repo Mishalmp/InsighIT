@@ -34,7 +34,7 @@ import { useSelector } from "react-redux";
       >
         <div className="flex flex-wrap items-center justify-between gap-y-4 text-white">
           
-          <div className="relative flex w-full gap-2 md:w-max">
+          {/* <div className="relative flex w-full gap-2 md:w-max">
             <Input
               type="search"
               color="white"
@@ -51,7 +51,7 @@ import { useSelector } from "react-redux";
             >
               Search
             </Button>
-          </div>
+          </div> */}
           <div className="ml-auto flex gap-1 md:mr-4">
             <IconButton variant="text" color="white">
               <Cog6ToothIcon className="h-4 w-4" />

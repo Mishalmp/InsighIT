@@ -6,6 +6,8 @@ from django.utils import timezone
 class Topics(models.Model):
     topic=models.CharField(max_length=100)
     is_block=models.BooleanField(default=False)
+    desc = models.CharField(max_length=100,default = 'topic desc')
+    img = models.ImageField(upload_to='topic_img/',null=True,blank=True)
 
     
     def __str__(self):
@@ -18,7 +20,7 @@ class Blogs(models.Model):
     title=models.CharField(max_length=200)
     banner_img=models.ImageField(upload_to='post_banner_img/',null=True,blank=True)
     content=models.TextField()
-    topic=models.ForeignKey(Topics,on_delete=models.CASCADE,null=True)
+    topic=models.ForeignKey(Topics,on_delete=models.CASCADE,related_name='blogs',null=True)
     video_post=models.FileField(upload_to='blog_video/',null=True,blank=True)
     is_block=models.BooleanField(default=False)
     likes=models.IntegerField(default=0)

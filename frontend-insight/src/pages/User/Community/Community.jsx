@@ -28,19 +28,30 @@ import { toast } from "react-toastify";
 import Sidebar from "../../../components/sidebar/Sidebar";
 import { Breadcrumbs } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
+import { CardPlacehoderSkeleton } from "../../../components/Skeletons/Community";
 function Community() {
   const { userinfo } = useSelector((state) => state.user);
 
   const [communities, setCommunities] = useState([]);
 
   const [isaddformopen, setIsaddformopen] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   
   const handleToggleaddform = () => setIsaddformopen((prev) => !prev);
   const navigate = useNavigate()
 
   useEffect(() => {
     document.title="InsighIT | Community";
-    FetchCommunityposts();
+    const fetchDataWithDelay = async () => {
+      // Show skeleton for 1 second
+      setShowSkeleton(true);
+      setTimeout(() => {
+        setShowSkeleton(false);
+        FetchCommunityposts();
+      }, 1000);
+    };
+
+    fetchDataWithDelay();
   }, []);
 
   const FetchCommunityposts = async () => {
@@ -96,7 +107,16 @@ function Community() {
             {/* <Sortorder/> */}
 
             <div className="h-[76rem] hidescroll w-[50rem]  overflow-x-hidden overflow-y-auto mb-5">
-              {communities.length > 0 ? (
+              {showSkeleton ? (
+                 <>
+                 <CardPlacehoderSkeleton/>
+                 <CardPlacehoderSkeleton/>
+                 <CardPlacehoderSkeleton/>
+                 </>
+              ):
+              
+              
+              communities.length > 0 ? (
                 communities.map((post) => <CommunityCard
                 key={post.id}
                 id={post.id}
@@ -115,6 +135,7 @@ function Community() {
                 <Typography variant="h3" className="text-center">
                   No Data Found
                 </Typography>
+               
               )}
             </div>
           </div>

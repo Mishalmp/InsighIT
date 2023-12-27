@@ -5,12 +5,13 @@ import Blogcard from "../../../components/Userside/blogcard/blogcard";
 
 import Blogfilter from "../../../components/Userside/sortbar/Blogfilter";
 import { ListSaved } from "../../../services/BlogsApi";
-import { Breadcrumbs } from "@material-tailwind/react";
+import { Breadcrumbs, Typography } from "@material-tailwind/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Input } from "@material-tailwind/react";
 import { Loader } from "../../../components/Loading/Loader";
 import Sidebar from "../../../components/sidebar/Sidebar";
+import { ImagePlacehoderSkeleton } from "../../../components/Skeletons/Blogcards";
 
 function SavedBlogs() {
   const [saved, setSaved] = useState(null);
@@ -18,6 +19,7 @@ function SavedBlogs() {
   const { userId } = useParams();
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate()
+  const [showSkeleton, setShowSkeleton] = useState(true);
 
   useEffect(() => {
     document.title="InsighIT | Saved";
@@ -30,12 +32,19 @@ function SavedBlogs() {
         console.error("error! fetching my blogs", error);
       }
     };
-    Fetchmyblogs();
+    const fetchDataWithDelay = async () => {
+      // Show skeleton for 1 second
+      setShowSkeleton(true);
+      setTimeout(() => {
+        setShowSkeleton(false);
+        Fetchmyblogs();
+      }, 1000);
+    };
+
+    fetchDataWithDelay();
   }, [userId, searchQuery]);
 
-  if (!saved) {
-    return <Loader />;
-  }
+
 
 
   const handleSearchChange = (event) => {
@@ -79,7 +88,16 @@ function SavedBlogs() {
           <Blogfilter />
           <div className='ml-[3rem]'>
           <div className="h-[60rem] w-[55rem] hidescroll overflow-x-hidden overflow-y-auto mb-5">
-            {saved.map((savedBlog) => (
+            {showSkeleton ? (
+            <>
+              <ImagePlacehoderSkeleton />
+              <ImagePlacehoderSkeleton />
+              <ImagePlacehoderSkeleton />
+            </>
+          ) :saved && saved.length > 0 ? (
+
+          
+            saved.map((savedBlog) => (
               <Blogcard
                 key={savedBlog.id}
                 id={savedBlog.blog.id}
@@ -94,7 +112,11 @@ function SavedBlogs() {
                 is_premium_blog={savedBlog.blog.is_premium_blog}
                 is_saved={true}
               />
-            ))}
+            ))):(
+              <Typography variant="h3" className="text-center">
+              No Data Found
+            </Typography>
+            )}
           </div>
         </div>
 

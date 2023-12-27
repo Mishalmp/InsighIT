@@ -16,6 +16,7 @@ import { wsurl } from '../constants/constants';
 import { ToastContainer, toast } from "react-toastify";
 
 import AdminLayout from './layouts/AdminLayout'
+import Topics from '../pages/Admin/Topics'
 function AdminRoutes() {
 
 
@@ -36,6 +37,7 @@ function AdminRoutes() {
             <Route path='/premiumrequestview/:premiumId' element={<PremiumrequestView/>} />
             <Route path='/reportedissues/' element={<Bugreports/>} />
             <Route path='/adminwallet/' element={<WalletAdmin/>} />
+            <Route path='/topics/' element={<Topics/>} />
             </Route>
 
         </Route>

@@ -10,7 +10,9 @@ import {
 import Myslider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import '../../pages/Home.css'
 
+import { CardPlacehoderSkeleton } from "../Skeletons/News";
 function Technews() {
   const [newss, setNews] = useState([]);
 
@@ -32,15 +34,21 @@ function Technews() {
   return (
     <div >
        <Typography variant="h4" className="ml-10">Tech News Daily</Typography>
+       {/* <div className="scrolling-wrapper"> */}
+       {newss.length > 0 ?(
                <Myslider
               slidesToShow={4}
               slidesToScroll={4}
               infinite
-              className=" mt-10 h-[25rem]  gap-5 max-w-[80rem] mb-10"
+              className=" mt-10 h-[25rem]   gap-5 max-w-[80rem] mb-10   "
             >
+              {/* scrolling-content */}
+      
+
+      
       {newss.map((news) => (
      
-        <Card className="ml-10 w-96 mb-10 h-[28rem]">
+        <Card className="ml-10 !w-[20rem] mb-10 h-[28rem]">
          
             <img src={news.urlToImage} className="object-cover  h-[12rem]" alt="card-image" />
         
@@ -57,6 +65,14 @@ function Technews() {
         
       ))}
       </Myslider>
+      ):(
+        
+        <CardPlacehoderSkeleton/>
+    
+     
+      )}
+     
+      {/* </div> */}
     </div>
   );
 }

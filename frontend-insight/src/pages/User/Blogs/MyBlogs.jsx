@@ -26,12 +26,14 @@ import {
   // Tooltip,
 } from "@material-tailwind/react";
 import Sidebar from "../../../components/sidebar/Sidebar";
+import { ImagePlacehoderSkeleton } from "../../../components/Skeletons/Blogcards";
 function MyBlogs() {
   const [blogs, setBlogs] = useState([]);
   const { userinfo } = useSelector((state) => state.user);
   const { userId } = useParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedfilter,setSelectedfilter]=useState('')
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -45,7 +47,16 @@ function MyBlogs() {
         console.error("error! fetching my blogs", error);
       }
     };
-    Fetchmyblogs();
+    const fetchDataWithDelay = async () => {
+      // Show skeleton for 1 second
+      setShowSkeleton(true);
+      setTimeout(() => {
+        setShowSkeleton(false);
+        Fetchmyblogs();
+      }, 1000);
+    };
+
+    fetchDataWithDelay();
   }, [userId, searchQuery,selectedfilter]);
 
   const handleSearchChange = (event) => {
@@ -116,7 +127,14 @@ function MyBlogs() {
           />
           <div className='ml-[3rem]'>
           <div className="hidescroll h-[75rem] w-[55rem] overflow-x-hidden overflow-y-auto mb-5 ">
-            {blogs.length > 0 ? (
+            {showSkeleton ? (
+            <>
+              <ImagePlacehoderSkeleton />
+              <ImagePlacehoderSkeleton />
+              <ImagePlacehoderSkeleton />
+            </>
+          ) :
+            blogs.length > 0 ? (
               blogs.map((blog) => (
                 <Blogcard
                   key={blog.id}

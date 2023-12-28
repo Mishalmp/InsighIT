@@ -46,15 +46,22 @@ class TopicsList(ListAPIView):
     search_fields=['topic']
 
     def get_queryset(self):
-        
-        filter_value = self.request.query_params.get('filter')
+        filter_value = self.request.query_params.get('filter', 'active')
+        sort = self.request.query_params.get('sort', 'latest')
+
+        queryset = Topics.objects.all()
 
         if filter_value == 'active':
-            return Topics.objects.filter(is_block = False).order_by('-id')
+            queryset = queryset.filter(is_block=False)
         elif filter_value == 'inactive':
-            return Topics.objects.filter(is_block = True).order_by('-id')
-        else:
-            return Topics.objects.all().order_by('-id')
+            queryset = queryset.filter(is_block=True)
+
+        if sort == 'popular':
+            queryset = queryset.annotate(num_blogs=Count('blogs')).order_by('-num_blogs')
+        elif sort == 'latest':
+            queryset = queryset.order_by('-id')
+
+        return queryset
 
 
 class UserBlockUnblock(UpdateAPIView):

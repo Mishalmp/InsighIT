@@ -19,6 +19,20 @@ class TopicsListCreateView(ListCreateAPIView):
     queryset=Topics.objects.filter(is_block = False)
     serializer_class=TopicsSerializer
 
+
+    # def get_queryset(self):
+        
+    #     queryset=Topics.objects.filter(is_block = False).order_by('-id')
+
+    #     sort = self.request.query_params.get('sort')
+    #     if sort:
+    #         if sort == 'popular':
+    #             queryset = Topics.objects.filter(is_block=False).order_by('-num_blogs')
+            
+    #     return queryset
+
+
+
     # permission_classes=[IsAuthenticated]
 
 

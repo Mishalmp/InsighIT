@@ -12,8 +12,8 @@ const ListUser = (searchQuery,filter)=>{
     }).catch((error)=>error.response)
 }
 
-const ListTopics = (searchQuery,filter)=>{
-    return AdminAxiosInstant.get(`/topicsList/?search=${searchQuery}&filter=${filter}`,{
+const ListTopics = (searchQuery,filter,sort)=>{
+    return AdminAxiosInstant.get(`/topicsList/?search=${searchQuery}&filter=${filter}&sort=${sort}`,{
         withCredentials:true
     }).catch((error)=>error.response)
 }

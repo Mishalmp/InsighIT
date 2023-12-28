@@ -38,6 +38,7 @@ import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import SearchUser from '../../searchuser/SearchUser';
+import TopicIcon from '@mui/icons-material/Topic';
 const profileMenuItems = [
   {
     label: "My Profile",
@@ -144,9 +145,10 @@ function NavBar() {
 
     
   </div>
-  <ul className='hidden md:flex space-x-20 mr-[100px]'>
+  <ul className='hidden md:flex space-x-16 mr-[100px]'>
    <Link to="/User/usercreateblog/"> <li className='flex items-center hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl mt-2'><NoteAltIcon fontSize='medium'/><span>Write</span></li></Link>
   <Link to="/User/blogs">  <li className='flex items-center mt-2 hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl'><ArticleIcon fontSize='medium'/><span>Blogs</span></li></Link>
+  <Link to="/User/topics">  <li className='flex items-center mt-2 hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl'><TopicIcon fontSize='medium'/><span>Topics</span></li></Link>
   <Link to="/User/community/"> <li className='flex items-center mt-2 hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl'><NewspaperIcon fontSize='medium'/><span> Community</span></li></Link>
     
     <li className='flex items-center hover:cursor-pointer hover:bg-blue-gray-50 rounded-3xl' onClick={handleOpenNotificationDrawer}><Badge> <NotificationsActiveIcon fontSize='medium'/></Badge> <span>Notifs</span></li>

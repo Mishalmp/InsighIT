@@ -4,7 +4,7 @@ import Sidebar from '../../components/sidebar/Sidebar'
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Sortorder from "../../components/Userside/sortbar/sortorder";
 import { useNavigate } from 'react-router-dom';
-import { GetTopics } from '../../services/BlogsApi';
+import { ListTopics } from "../../services/AdminApi";
 import { DefaultSkeleton } from '../../components/Skeletons/Usercard';
 function Topics() {
     const navigate = useNavigate()
@@ -20,7 +20,6 @@ function Topics() {
             setTimeout(() => {
               setShowSkeleton(false);
               fetchTopics();
-              
             }, 1000);
           };
           fetchDataWithDelay()
@@ -28,7 +27,7 @@ function Topics() {
     
       const fetchTopics = async () => {
         try {
-          const ress = await GetTopics();
+          const ress = await ListTopics(searchQuery,'active',sort);
           settopics(ress.data);
         } catch (error) {
           console.error(error);

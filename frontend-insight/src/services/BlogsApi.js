@@ -87,7 +87,7 @@ const CreateTopics=(values)=>{
 }
 
 const GetTopics=()=>{
-    return BlogsAxiosInstant.get("topics/",{
+    return BlogsAxiosInstant.get(`topics/`,{
         withCredentials:true
     }).catch((error)=>error.response)
 }

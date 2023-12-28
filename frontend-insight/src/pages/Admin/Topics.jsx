@@ -27,9 +27,10 @@ import Topiccreate from "../../components/Topics/Topiccreate";
 import Topicedit from "../../components/Topics/Topicedit";
 import { ListTopics } from "../../services/AdminApi";
 import { DefaultSkeleton } from "../../components/Skeletons/Usercard";
-
+import Sortorder from "../../components/Userside/sortbar/sortorder";
 function Topics() {
   const [topics, settopics] = useState([]);
+  const [sort, setSort] = useState("latest");
   const [selectedtopic, setselectedtopic] = useState({
     topic: "",
     desc: "",
@@ -52,11 +53,11 @@ function Topics() {
         }, 1000);
       };
       fetchDataWithDelay()
-  }, [searchQuery,filter]);
+  }, [searchQuery,filter,sort]);
 
   const fetchTopics = async () => {
     try {
-      const ress = await ListTopics(searchQuery,filter);
+      const ress = await ListTopics(searchQuery,filter,sort);
       settopics(ress.data);
     } catch (error) {
       console.error(error);
@@ -115,7 +116,8 @@ function Topics() {
             <EditIcon fontSize="inherit" /> Create
           </Button>
         </div>
-        <Tabs value="all" className="w-full md:w-max">
+        
+        <Tabs value="all" className="w-full md:w-max mt-10">
               <TabsHeader>
                 {TABS.map(({ label, value }) => (
                   <Tab key={value} value={value} onClick={()=>setfilter(value)}>
@@ -124,6 +126,9 @@ function Topics() {
                 ))}
               </TabsHeader>
             </Tabs>
+            <div className="-mt-10">
+            <Sortorder setSort={setSort} sort={sort} />
+            </div>
       </CardHeader>
       <div className="ml-24 mt-10 mb-5 h-[38rem] grid grid-cols-2 hidescroll overflow-y-auto">
         {showSkeleton?(

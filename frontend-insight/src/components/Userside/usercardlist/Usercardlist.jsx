@@ -72,7 +72,7 @@ function Usercardlist() {
 
       premiumlist.map((premium, index) => (
         <Card
-          className={`w-[18rem] h-[20rem] m-2 hover:bg-gray-100 cursor-pointer shadow-xl${
+          className={`w-[18rem] h-[20rem] m-2 bg-[#eff5fb] hover:bg-gray-100 cursor-pointer shadow-xl${
             index < premiumlist.length - 1 ? " mr-2" : ""
           }`}
           key={premium.id}
@@ -120,7 +120,7 @@ function Usercardlist() {
         </Card>
       )))}
 
-      <Card className="w-[18rem] h-[20rem] m-2 hover:bg-gray-100 cursor-pointer shadow-xl">
+      <Card className="w-[18rem] h-[20rem] m-2 bg-[#eff5fb] hover:bg-gray-100 cursor-pointer shadow-xl">
         <img
           alt="candice"
           src="https://docs.material-tailwind.com/img/face-1.jpg"
@@ -148,7 +148,7 @@ function Usercardlist() {
         </div>
       </Card>
 
-      <Card className="w-[18rem] h-[20rem] m-2 hover:bg-gray-100 cursor-pointer shadow-xl">
+      <Card className="w-[18rem] h-[20rem] bg-[#eff5fb] m-2 hover:bg-gray-100 cursor-pointer shadow-xl">
         <img
           alt="candice"
           src="https://docs.material-tailwind.com/img/face-1.jpg"

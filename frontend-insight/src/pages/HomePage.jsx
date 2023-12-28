@@ -64,7 +64,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <div className="w-full h-1 bg-white"></div>
+    
       <div className="w-full bg-black">
         <Carousel
           className="rounded-xl"
@@ -146,7 +146,7 @@ export default function HomePage() {
             </>
           ) : topics.length > 0 ? (
             topics.map((topic) => (
-              <div className="w-[18rem] h-[16rem] mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow ">
+              <div className="w-[18rem] h-[16rem] mt-5 p-6 bg-[#eff5fb] border shadow-lg  border-gray-200 rounded-lg ">
                 <div className="grid grid-cols-2 h-20">
                   <div>
                     <img

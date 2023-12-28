@@ -163,6 +163,9 @@ function UserProfile() {
   const handleaboutOpen = () => setaboutOpen((cur) => !cur);
 
   const Handlesavebio = async () => {
+    if (bio.trim() && isNaN(bio)){
+
+    
     try {
       const response = await UpdateUser(userinfo.id, { bio });
 
@@ -181,6 +184,9 @@ function UserProfile() {
       // handleloading()
       console.error(error);
     }
+  }else{
+    toast.error("Invalid Input")
+  }
   };
 
   const handleSkillEditOpen = () => setskilleditopen(true);
@@ -195,7 +201,7 @@ function UserProfile() {
 
     const isSkillExists = skills.some(existingSkill => existingSkill.skill === skill.skill.trim());
 
-    if (skill.skill.trim() && !isSkillExists){
+    if (skill.skill.trim() && !isSkillExists && isNaN(skill.skill)){
       try {
         const res = await EditSkill(selectedskillId, skill);
         fetchskills();
@@ -232,7 +238,7 @@ function UserProfile() {
     // Check if the skill already exists in the skills array
     const isSkillExists = skills.some(existingSkill => existingSkill.skill === skill.skill.trim());
   
-    if (skill.skill.trim() && !isSkillExists) {
+    if (skill.skill.trim() && !isSkillExists && isNaN(skill.skill)) {
       try {
         const response = await CreateSkill(skillData);
         fetchskills();
@@ -640,9 +646,13 @@ function UserProfile() {
             ) : (
               <Link to="/User/upgradeform/">
                 {" "}
-                <Typography className="mt-4 ml-64 font-thin text-lg text-blue-800">
-                  need to upgrage?
-                </Typography>
+                <Button
+                  // variant="gradient"
+                  size="sm"
+                  className="float-right mt-4 mr-5 mb-2 font-thin text-xs "
+                >
+                  Need to Upgrade?
+                </Button>
               </Link>
             )}
           </Card>
@@ -930,8 +940,7 @@ function UserProfile() {
                                 className="mt-4 flex justify-center"
                               >
                                 <Typography
-                                  as="a"
-                                  href="#Aboutme"
+                                
                                   variant="small"
                                   color="black"
                                   className="ml-1 font-bold"

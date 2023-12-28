@@ -17,7 +17,7 @@ import EditBlog from "../pages/User/Blogs/EditBlog"
 import Dummy from "../pages/User/Blogs/Dummy"
 import Upgradationform from "../pages/PremiumUser.jsx/Upgradationform"
 
-
+import Topics from "../pages/User/Topics"
 
 
 import Paymentresult from "../components/Payment/Paymentresult"
@@ -59,6 +59,8 @@ function UserRoutes() {
         <Route exact element={<UserLayout/>}>
             <Route path="/Home/" element={<HomePage/>} />
             <Route path="/blogs" element={<Blogs/>} />
+            <Route path="/topics" element={<Topics/>} />
+
             <Route path="/userprofile" element={<UserProfile/>}/>
            
             <Route path="usercreateblog" element={<UserBlogCreate/>}/>

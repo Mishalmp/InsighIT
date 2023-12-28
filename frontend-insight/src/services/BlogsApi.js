@@ -92,6 +92,13 @@ const GetTopics=()=>{
     }).catch((error)=>error.response)
 }
 
+
+const UpdateTopic=(id,values)=>{
+    return BlogsAxiosInstant.patch(`topicsview/${id}/`,values,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
 const TrendingTopics=()=>{
     return BlogsAxiosInstant.get("trendingtopics/",{
         withCredentials:true
@@ -183,7 +190,7 @@ const Unsave=(user_id,blog_id)=>{
 
 
 export {CreateBlog,GetBlogDetail,ListBlogs,GetBlogsByUser,
-    CreateTopics,GetTopics,TrendingBlogs,UpdateBlog,DeleteBlog,CreateComment,ListComment,DeleteComment,
+    CreateTopics,GetTopics,UpdateTopic,TrendingBlogs,UpdateBlog,DeleteBlog,CreateComment,ListComment,DeleteComment,
     LikeBlog,UnlikeBlog,GetBlogLike,ReportBlogs,ReportBlogList,Reportupdate,CreateSaved,ListSaved,IsSave,Unsave,
     CommunitiesByUser,DeleteCommunity,ListCommunities,CreateCommunity,TrendingTopics
 

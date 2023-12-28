@@ -16,7 +16,7 @@ from django.db.models import Count
 
 
 class TopicsListCreateView(ListCreateAPIView):
-    queryset=Topics.objects.all()
+    queryset=Topics.objects.filter(is_block = False)
     serializer_class=TopicsSerializer
 
     # permission_classes=[IsAuthenticated]
@@ -27,16 +27,20 @@ class TopicsListCreateView(ListCreateAPIView):
     #     serializer = self.get_serializer(topics, many=True)
     #     return Response(serializer.data)
 
+
+
+
 class TopicsView(RetrieveUpdateDestroyAPIView):
     queryset=Topics.objects.all()
     serializer_class=TopicsSerializer
     # permission_classes=[IsAuthenticated]
 
+
 class MostUsedtopics(ListAPIView):
     serializer_class=TopicsSerializer
 
     def get_queryset(self):
-        return Topics.objects.annotate(blog_count=Count('blogs')).order_by('-blog_count')[:4]
+        return Topics.objects.filter(is_block=False).annotate(blog_count=Count('blogs')).order_by('-blog_count')[:4]
 
 
 

@@ -184,7 +184,7 @@ export default function AdminSidebar() {
       </List>
       <Alert
         open={openAlert}
-        className="mt-auto"
+        className="mt-auto mb-10"
         onClose={() => setOpenAlert(false)}
       >
         <CubeTransparentIcon className="mb-4 h-12 w-12" />

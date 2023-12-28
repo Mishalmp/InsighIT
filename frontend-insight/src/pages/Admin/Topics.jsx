@@ -15,28 +15,66 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
-  Button, Chip
+  Button,
+  Chip,
+  Tabs,
+  Tab,
+  TabsHeader,
 } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { CreateTopics, GetTopics } from "../../services/BlogsApi";
+import { CreateTopics, UpdateTopic } from "../../services/BlogsApi";
 import Topiccreate from "../../components/Topics/Topiccreate";
+import Topicedit from "../../components/Topics/Topicedit";
+import { ListTopics } from "../../services/AdminApi";
+import { DefaultSkeleton } from "../../components/Skeletons/Usercard";
+
 function Topics() {
   const [topics, settopics] = useState([]);
-  const [modalopen,setmodalopen] =useState(false)
+  const [selectedtopic, setselectedtopic] = useState({
+    topic: "",
+    desc: "",
+    img: null,
+  });
+  const [modalopen, setmodalopen] = useState(false);
+  const [modalopenedit, setmodalopenedit] = useState(false);
+  const [searchQuery,setSearchQuery] = useState("")
+  const [filter,setfilter] = useState("")
+  const [showSkeleton, setShowSkeleton] = useState(true);
 
   useEffect(() => {
-    fetchTopics();
-  }, []);
+    const fetchDataWithDelay = async () => {
+        // Show skeleton for 1 second
+        setShowSkeleton(true);
+        setTimeout(() => {
+          setShowSkeleton(false);
+          fetchTopics();
+          
+        }, 1000);
+      };
+      fetchDataWithDelay()
+  }, [searchQuery,filter]);
 
   const fetchTopics = async () => {
     try {
-      const ress = await GetTopics();
+      const ress = await ListTopics(searchQuery,filter);
       settopics(ress.data);
     } catch (error) {
       console.error(error);
     }
   };
-
+  const TABS = [
+    {
+      label: "All",
+      value: "all",
+    },
+    {
+      label: "Active",
+      value: "active",
+    },
+    {
+      label: "Inactive",
+      value: "inactive",
+    }];
   return (
     <>
       <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -53,79 +91,113 @@ function Topics() {
             <div className="w-full md:w-72">
               <Input
                 label="Search"
-                // value={searchQuery}
-                // onChange={(e)=>setSearchQuery(e.target.value)}
+                value={searchQuery}
+                onChange={(e)=>setSearchQuery(e.target.value)}
                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
               />
             </div>
           </div>
         </div>
         <div className="flex justify-between mt-5">
-        <Typography className="text-center ml-[40%]" variant="h2" color="blue-gray">
-              Topics
-            </Typography>
-            
-        <Button
-              variant="gradient"
-              className="w-28 h-10  float-right mr-20"
-              onClick={()=>setmodalopen(true)}
-            >
-              <EditIcon fontSize="inherit"/> Create
-            </Button>
-            </div>
+          <Typography
+            className="text-center ml-[40%]"
+            variant="h2"
+            color="blue-gray"
+          >
+            Topics
+          </Typography>
+
+          <Button
+            variant="gradient"
+            className="w-28 h-10  float-right mr-20"
+            onClick={() => setmodalopen(true)}
+          >
+            <EditIcon fontSize="inherit" /> Create
+          </Button>
+        </div>
+        <Tabs value="all" className="w-full md:w-max">
+              <TabsHeader>
+                {TABS.map(({ label, value }) => (
+                  <Tab key={value} value={value} onClick={()=>setfilter(value)}>
+                    &nbsp;&nbsp;{label}&nbsp;&nbsp;
+                  </Tab>
+                ))}
+              </TabsHeader>
+            </Tabs>
       </CardHeader>
       <div className="ml-24 mt-10 mb-5 h-[38rem] grid grid-cols-2 hidescroll overflow-y-auto">
-        {topics.length > 0 ?(
-            topics.map((topic)=>(
-
-                <div className="max-w-sm h-[14rem] mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow ">
-                <div className="grid grid-cols-2">
-                    <div>
-                        <img className="w-16 h-16 rounded-full object-contain"  src={topic.img} alt={topic.topic} />
-                    </div>
+        {showSkeleton?(
+            <>
+            <DefaultSkeleton />
+              <DefaultSkeleton />
+              <DefaultSkeleton />
+              <DefaultSkeleton />
+            </>
+        ):
+        
+        topics.length > 0 ? (
+          topics.map((topic) => (
+            <div className="max-w-sm h-[14rem] mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow ">
+              <div className="grid grid-cols-4">
                 <div>
-                  <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 ">
-                   {topic.topic}
+                  <img
+                    className="w-16 h-16 rounded-full object-contain"
+                    src={topic.img}
+                    alt={topic.topic}
+                  />
+                </div>
+                <div className="flex col-span-3 justify-between gap-2">
+                  <h5 className="mb-2 ml-4 mt-2 text-center text-2xl font-semibold tracking-tight text-gray-900 ">
+                    {topic.topic}
                   </h5>
+                  <EditIcon
+                    onClick={() => {
+                      setselectedtopic(topic);
+                      setmodalopenedit(true);
+                    }}
+                  />
                 </div>
-         
-                </div>
-                <p className="mb-3 font-normal text-gray-500 ">
-                 {topic.desc}
-                </p>
-                <div className="grid grid-cols-2 mt-10">
-                <a
-                 
-                  className="inline-flex items-center text-blue-800"
-                >
-                  No of Blogs Created :{topic.num_blogs}
-             
+              </div>
+              <p className="mb-3 font-normal text-gray-500 ">{topic.desc}</p>
+              <div className="grid grid-cols-2 mt-10">
+                <a className="inline-flex items-center text-blue-800">
+                  Blogs Created :{topic.num_blogs}
                 </a>
                 <div className="ml-10">
-                    
-                    <h6 className="mb-2 text-xl font-semibold text-center tracking-tight text-gray-900 ">
+                  <h6 className="mb-2 text-xl font-semibold text-center tracking-tight text-gray-900 ">
                     <Chip
-                              variant="ghost"
-                              size="sm"
-                              value={topic.is_block ? "Inactive" : "Active"}
-                              color={topic.is_block ? "red" : "green"}
-                            />
-                    </h6>
-                  </div>
-                  </div>
+                      variant="ghost"
+                      size="sm"
+                      value={topic.is_block ? "Inactive" : "Active"}
+                      color={topic.is_block ? "red" : "green"}
+                    />
+                  </h6>
+                </div>
               </div>
-
-            ))
-        ):(
-            <Typography variant="h3" className="text-center">
+            </div>
+          ))
+        ) : (
+          <Typography variant="h3" className="text-center">
             No Topics Found
           </Typography>
-        )
-
-        }
-
-        <Topiccreate isOpen={modalopen} onClose={()=>setmodalopen(false)} fetchTopics={fetchTopics} onSubmit={CreateTopics} topics={topics} />
-     
+        )}
+        <Topicedit
+          isOpen={modalopenedit}
+          onClose={() => setmodalopenedit(false)}
+          fetchTopics={fetchTopics}
+          onSubmit={UpdateTopic}
+          topics={topics}
+          topic={selectedtopic}
+          settopic={setselectedtopic}
+          prevtopic={selectedtopic.topic}
+        />
+        <Topiccreate
+          isOpen={modalopen}
+          onClose={() => setmodalopen(false)}
+          fetchTopics={fetchTopics}
+          onSubmit={CreateTopics}
+          topics={topics}
+        />
       </div>
     </>
   );

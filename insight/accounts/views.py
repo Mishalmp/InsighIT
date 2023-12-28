@@ -137,12 +137,6 @@ class SubscriptionList(ListCreateAPIView):
 
 
 
-
-
-
-
-
-
 class SubscriptionListByUser(ListAPIView):
     serializer_class=SubscriptionlistSerializer
     

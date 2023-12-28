@@ -22,12 +22,12 @@ function NavBar() {
   return (
     <div className='w-full h-[70px] bg-black border-b'>
     <div className='md:max-w-[1480px] max-w-[600px]  m-auto w-full h-full flex justify-between items-center'>
-        <img src={bginsight} className='h-[70px]'/>
+        <img src={bginsight} onClick={()=>navigate("/User/Home/")} className='h-[70px] ml-20'/>
 
         <div className='hidden md:flex items-center'>
             <ul className='flex gap-10 text-[#039368]'>
             
-            
+            <li className='font-semibold text-lg font-serif cursor-pointer' onClick={()=>navigate("/User/Home/")}>Home</li>
                 <li className='font-semibold text-lg font-serif cursor-pointer' onClick={()=>navigate("/User/about/")}>Our Story</li>
                 
                 <li className='font-semibold text-lg font-serif cursor-pointer' onClick={()=>navigate("/User/userprofile/")}>Profile</li>
@@ -46,7 +46,7 @@ function NavBar() {
             </button>
          </Link>  */}
        <Link to="/User/blogs/">
-            <button className='px-6 py-2 rounded-[25px]  bg-[#039368] text-white'>
+            <button className='px-6 py-2 mr-10 rounded-[25px]  bg-[#039368] text-white'>
                 Get Started
             </button></Link> 
             

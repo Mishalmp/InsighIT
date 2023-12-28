@@ -95,7 +95,7 @@ function PremiumRequest() {
               </TabsHeader>
             </Tabs>
       </CardHeader>
-      <CardBody className="overflow-scroll px-0">
+      <CardBody className="h-[38rem] overflow-y-auto overflow-x-hidden hidescroll px-0">
         <table className="w-full min-w-max table-auto text-left">
           <thead>
             <tr>

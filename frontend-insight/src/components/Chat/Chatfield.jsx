@@ -1,142 +1,177 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import {
-
-  Input,
-
-} from "@material-tailwind/react";
+import { Input } from "@material-tailwind/react";
 import Userico from "../../assets/user2img.png";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
-import { wsurl } from '../../constants/constants';
-import { useQuery } from 'react-query';
+import { wsurl } from "../../constants/constants";
+import { useQuery } from "react-query";
 import { PreviousChat } from "../../services/UserApi";
 import { timeAgo } from "../../helpers/Timemanage";
-import Chatbg from '../../assets/chatbg.jpg'
-import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
-import AddIcCallOutlinedIcon from '@mui/icons-material/AddIcCallOutlined';
-function Chatfield({userinfo,recipientDetails}) {
-    const messageRef = useRef();
-    const [messages, setMessages] = useState([]);
-    const [clientstate, setClientState] = useState("");
-    const [senderdetails, setSenderDetails] = useState(userinfo);
-    
-   
+import Chatbg from "../../assets/chatbg.jpg";
+import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
+import AddIcCallOutlinedIcon from "@mui/icons-material/AddIcCallOutlined";
+function Chatfield({ userinfo, recipientDetails }) {
+  const messageRef = useRef();
+  const [messages, setMessages] = useState([]);
+  const [clientstate, setClientState] = useState("");
+  const [senderdetails, setSenderDetails] = useState(userinfo);
 
-    const onButtonClicked = (e) => {
-      e.preventDefault();
-        if (messageRef.current.value.trim() == "" ) {
-          return;
+  const onButtonClicked = (e) => {
+    e.preventDefault();
+    if (messageRef.current.value.trim() == "") {
+      return;
+    }
+    clientstate.send(
+      JSON.stringify({
+        message: messageRef.current.value,
+        senderUsername: senderdetails.email,
+        recieverUsername: recipientDetails.email,
+      })
+    );
+    messageRef.current.value = "";
+  };
+
+  const setUpChat = async () => {
+    await PreviousChat(senderdetails.id, recipientDetails.id).then(
+      (response) => {
+        if (response.status == 200) {
+          setMessages(response.data);
         }
-        clientstate.send(
-          JSON.stringify({
-            message: messageRef.current.value,
-            senderUsername: senderdetails.email,
-            recieverUsername: recipientDetails.email,
-          })
-        );
-        messageRef.current.value = "";
-      };
+      }
+    );
+    const client = new W3CWebSocket(
+      `${wsurl}ws/chat/${senderdetails.id}/?${recipientDetails.id}`
+    );
+    setClientState(client);
+    client.onopen = () => {
+      console.log("WebSocket Client Connected");
+    };
+    client.onmessage = (message) => {
+      const dataFromServer = JSON.parse(message.data);
 
-      const setUpChat =async () => {
-        
-       await PreviousChat(senderdetails.id,recipientDetails.id).then((response) => {
-            if (response.status == 200) {
-              setMessages(response.data);
-            }
-          });
-        const client = new W3CWebSocket(
-          `${wsurl}ws/chat/${senderdetails.id}/?${recipientDetails.id}`
-        );
-        setClientState(client);
-        client.onopen = () => {
-          console.log("WebSocket Client Connected");
-        };
-        client.onmessage = (message) => {
-          const dataFromServer = JSON.parse(message.data);
-         
-          if (dataFromServer) {
-            setMessages((prevMessages) => [
-              ...prevMessages,
-              {
-                message: dataFromServer.message,
-                sender_email: dataFromServer.senderUsername,
-              },
-            ]);
-          }
-        };
-    
-        client.onclose = () => {
-          console.log("Websocket disconnected", event.reason);
-        };
-    
-        return () => {
-          client.close();
-        };
-      };
+      if (dataFromServer) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            message: dataFromServer.message,
+            sender_email: dataFromServer.senderUsername,
+          },
+        ]);
+      }
+    };
 
-      
-      useEffect(() => {
-         if (senderdetails.id != null && recipientDetails.id != null) {
-          setUpChat();
-         }
-        if (messageRef.current) {
-          messageRef.current.scrollTop = messageRef.current.scrollHeight;
-        }
-      }, [senderdetails,recipientDetails]);
+    client.onclose = () => {
+      console.log("Websocket disconnected", event.reason);
+    };
 
+    return () => {
+      client.close();
+    };
+  };
+
+  useEffect(() => {
+    if (senderdetails.id != null && recipientDetails.id != null) {
+      setUpChat();
+    }
+    if (messageRef.current) {
+      messageRef.current.scrollTop = messageRef.current.scrollHeight;
+    }
+  }, [senderdetails, recipientDetails]);
 
   return (
     <>
       <div className="w-2/3 h-[50rem]  bg-gray-50 border-[1px] border-gray-400">
         <div className="w-full bg-blue-gray-50 gap-8 h-[5rem] grid grid-cols-5 rounded-sm shadow-md shadow-gray-300">
-          <img
-            src={recipientDetails?.profile_img?recipientDetails.profile_img:Userico}
-            className="w-[3.5rem] h-[3.5rem] rounded-full mt-3 ml-5 hover:bg-blue-gray-100 hover:cursor-pointer"
-            alt="user_img"
-          />
+          {recipientDetails.profile_img ? (
+            <img
+              src={recipientDetails.profile_img}
+              className="w-[3.5rem] h-[3.5rem] rounded-full mt-3 ml-5 hover:bg-blue-gray-100 hover:cursor-pointer"
+              alt="user_img"
+            />
+          ) : (
+            <svg
+              className="w-[3.5rem] h-[3.5rem] rounded-full mt-3 ml-5 hover:bg-blue-gray-100 hover:cursor-pointer text-gray-300 "
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
+            </svg>
+          )}
           <div className="col-span-3">
-            <p className="mt-4 -ml-10 font-semibold text-lg">{recipientDetails.first_name+" "+recipientDetails.last_name}</p>
+            <p className="mt-4 -ml-10 font-semibold text-lg">
+              {recipientDetails.first_name + " " + recipientDetails.last_name}
+            </p>
             <p className="text-sm mt-1 -ml-10 text-gray-500">
               Active few minutes ago
             </p>
           </div>
           <div className="col-span-1 mt-5 flex gap-4 ">
-          <AddIcCallOutlinedIcon className="hover:bg-blue-gray-100 rounded-full hover:cursor-pointer" fontSize="large"/>
-          <VideocamOutlinedIcon className="hover:bg-blue-gray-100 rounded-full hover:cursor-pointer"  fontSize="large"/>
+            <AddIcCallOutlinedIcon
+              className="hover:bg-blue-gray-100 rounded-full hover:cursor-pointer"
+              fontSize="large"
+            />
+            <VideocamOutlinedIcon
+              className="hover:bg-blue-gray-100 rounded-full hover:cursor-pointer"
+              fontSize="large"
+            />
           </div>
-         
         </div>
 
-        <div className="w-full max-h-[40rem] hidescroll h-[40rem] overflow-y-auto mb-5 scroll-smooth" style={{backgroundImage:`url(${Chatbg})`}}>
+        <div
+          className="w-full max-h-[40rem] hidescroll h-[40rem] overflow-y-auto mb-5 scroll-smooth"
+          style={{ backgroundImage: `url(${Chatbg})` }}
+        >
           {
-            messages.length > 0?(
-              messages.map((message,index)=>(
-                <>
-                <div className={`flex mt-10 ${message.sender_email === userinfo.email ? 'justify-end' : 'justify-start'}`}  key={index}>
-                {message.sender_email !== userinfo.email && (
-                <img
-                  src={recipientDetails?.profile_img?recipientDetails.profile_img:Userico}
-                  className="w-12 h-12 rounded-full mt-6 ml-2"
-                  alt="user_img"
-                />
-                )}
-                <div className={`rounded-t-xl mt-5 max-w-2xl  min-h-[2.5rem] w-auto h-auto ${message.sender_email === userinfo.email ? 'bg-[#5bdb6c] hover:cursor-pointer mr-2 rounded-bl-xl' : 'bg-[#218aff] ml-2  rounded-br-xl'}`}>
-                  <p className="ml-3 mr-3 mt-2 mb-2">
-                    {message.message}
-                  </p>
-                  
-                </div>
-            
-              </div>
-              <p className={`text-xs mt-2 text-gray-800 ${message.sender_email === userinfo.email ? 'float-right mr-5' : 'ml-16'}`}>{timeAgo(message.timestamp) == 'NaN years ago' ? 'just now': timeAgo(message.timestamp) }</p>
-             </>
-              ))
-            ):
-            ""
+            messages.length > 0
+              ? messages.map((message, index) => (
+                  <>
+                    <div
+                      className={`flex mt-10 ${
+                        message.sender_email === userinfo.email
+                          ? "justify-end"
+                          : "justify-start"
+                      }`}
+                      key={index}
+                    >
+                      {message.sender_email !== userinfo.email && (
+                        <img
+                          src={
+                            recipientDetails?.profile_img
+                              ? recipientDetails.profile_img
+                              : Userico
+                          }
+                          className="w-12 h-12 rounded-full mt-6 ml-2"
+                          alt="user_img"
+                        />
+                      )}
+                      <div
+                        className={`rounded-t-xl mt-5 max-w-2xl  min-h-[2.5rem] w-auto h-auto ${
+                          message.sender_email === userinfo.email
+                            ? "bg-[#5bdb6c] hover:cursor-pointer mr-2 rounded-bl-xl"
+                            : "bg-[#218aff] ml-2  rounded-br-xl"
+                        }`}
+                      >
+                        <p className="ml-3 mr-3 mt-2 mb-2">{message.message}</p>
+                      </div>
+                    </div>
+                    <p
+                      className={`text-xs mt-2 text-gray-800 ${
+                        message.sender_email === userinfo.email
+                          ? "float-right mr-5"
+                          : "ml-16"
+                      }`}
+                    >
+                      {timeAgo(message.timestamp) == "NaN years ago"
+                        ? "just now"
+                        : timeAgo(message.timestamp)}
+                    </p>
+                  </>
+                ))
+              : ""
             // <p className="mt-4  font-semibold text-5xl">Chat not started </p>
           }
-       
-         
 
           {/* <div className="flex mt-5 justify-end">
             <div className="rounded-t-xl rounded-bl-xl mt-5 max-w-2xl w-auto h-auto min-h-[2.5rem] bg-[#5bdb6c] mr-2">

@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../../../../components/Userside/NavBar/NavBar";
-import Footer from "../../../../components/Userside/footer/footer";
 
 // import EditIcon from "@mui/icons-material/Edit";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -55,12 +53,16 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { ListSkills } from "../../../../services/UserApi";
 
-import { GetUserInfo,IsSubscriber,NotificationCreate } from "../../../../services/UserApi";
+import {
+  GetUserInfo,
+  IsSubscriber,
+  NotificationCreate,
+} from "../../../../services/UserApi";
 import { useParams } from "react-router-dom";
 
 import Bloglistinprofile from "../../../../components/blogs/bloglistinprofile";
 import Bloghidepage from "../../../../components/premiumuser/premiumBlog/Bloghidepage";
-import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
+import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import { useNavigate } from "react-router-dom";
 import { sendNotification } from "../../../../helpers/Notificationuser";
 
@@ -77,11 +79,11 @@ function OtherProfile() {
   const [skills, setSkills] = useState([]);
   const [opencover, setOpencover] = useState(false);
   const handleOpen = () => setOpencover((cur) => !cur);
-  const [showhidepage,setShowhidepage]=useState(false)
-  const navigate=useNavigate()
+  const [showhidepage, setShowhidepage] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    document.title="InsighIT | Author";
+    document.title = "InsighIT | Author";
     const FetchData = async () => {
       try {
         const response = await GetUserInfo(authorId);
@@ -93,9 +95,8 @@ function OtherProfile() {
         const res_follow = await Is_follower(userinfo.id, authorId);
         setIs_following(res_follow.data.is_follower);
 
-        const res_sub=await IsSubscriber(userinfo.id, authorId)
-        setIs_subscriber(res_sub.data.is_subscriber)
-
+        const res_sub = await IsSubscriber(userinfo.id, authorId);
+        setIs_subscriber(res_sub.data.is_subscriber);
       } catch (error) {
         console.error(error);
       }
@@ -104,44 +105,36 @@ function OtherProfile() {
     FetchData();
   }, [authorId, is_following]);
 
-
-
-
   const Handlefollow = async () => {
-
     const values = {
       follower: userinfo.id,
       following: authorId,
     };
 
-    const notificationMessage = `${userinfo.first_name} started Follow You`
+    const notificationMessage = `${userinfo.first_name} started Follow You`;
 
     const noti_values = {
       user: authorId,
       text: notificationMessage,
     };
     try {
+      if (author.is_premium && !is_subscriber) {
+        setShowhidepage(true);
+      } else {
+        const resp = await CreateFollowing(values);
+        toast.success("followed successfully");
 
-      if(author.is_premium && !is_subscriber){
-        setShowhidepage(true)
-      }else{
-      const resp = await CreateFollowing(values);
-      toast.success("followed successfully");
-
-      setIs_following(true);
-      sendNotification(notificationMessage,authorId)
-      await NotificationCreate(noti_values);
-
+        setIs_following(true);
+        sendNotification(notificationMessage, authorId);
+        await NotificationCreate(noti_values);
       }
-
-      
     } catch (error) {
       console.error(error);
     }
   };
 
   const Handleunfollow = async () => {
-    const notificationMessage = `${userinfo.first_name}  UnFollowed You`
+    const notificationMessage = `${userinfo.first_name}  UnFollowed You`;
     const noti_values = {
       user: authorId,
       text: notificationMessage,
@@ -150,7 +143,7 @@ function OtherProfile() {
       const ress = await Unfollow(userinfo.id, authorId);
       toast.success("unfollowed successfully");
       setIs_following(false);
-      sendNotification(notificationMessage,authorId)
+      sendNotification(notificationMessage, authorId);
       await NotificationCreate(noti_values);
     } catch (error) {
       console.error(error);
@@ -166,21 +159,19 @@ function OtherProfile() {
       label: "Profile",
       value: "profile",
       icon: UserCircleIcon,
-    
     },
 
     {
       label: "Blogs",
       value: "blogs",
       icon: Square3Stack3DIcon,
-     
     },
   ];
 
   return (
     <div className="">
       {/* {loading && <Loader />} */}
-    
+
       <div className="flex ml-12 mt-[1rem] h-auto  max-w-[80rem] ">
         <div className="w-[40rem] min-h-[50rem] mt-8 bg-white shadow-2xl">
           <Card className="w-[30rem]  m-3 -mt-2.5 bg-gray-100 shadow-2xl">
@@ -195,28 +186,22 @@ function OtherProfile() {
                 </>
               ) : (
                 <div className="absolute top-0 left-0 mt-2 w-full h-48 flex items-center justify-center">
-                  <label
-                    htmlFor="dropzone-file"
-                    className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                  >
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <svg
-                        className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 16"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                        />
-                      </svg>
-                    </div>
-                  </label>
+                  <div className="grid h-48 w-full place-items-center rounded-lg bg-gray-200">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="h-12 w-12 text-gray-500"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                      />
+                    </svg>
+                  </div>
                 </div>
               )}
             </div>
@@ -259,62 +244,25 @@ function OtherProfile() {
             <div className="flex relative">
               <CardHeader
                 floated={false}
-                className="h-32 w-32 ml-[36%] mt-36 relative z-10"
+                className="h-32 w-32 ml-[36%] mt-36 rounded-full relative z-10"
               >
                 {author.profile_img ? (
-                  <div>
-                    <img
-                      className="w-32"
-                      src={author.profile_img}
-                      alt="profile-picture"
-                    />
-                    <label
-                      htmlFor="pro-file"
-                      className="flex flex-col items-center justify-center w-32 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                    >
-                      <div class="flex flex-col items-center h-32 w-32 justify-center -mt-20">
-                        <svg
-                          class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 20 16"
-                        >
-                          <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                          />
-                        </svg>
-                      </div>
-                    </label>
-                  </div>
+                  <img
+                    className="w-32"
+                    src={author.profile_img}
+                    alt="profile-picture"
+                  />
                 ) : (
                   <div className="flex relative ">
-                    <label
-                      htmlFor="pro-file"
-                      className="flex flex-col items-center justify-center w-32 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                    <svg
+                      className="w-32 h-32 text-gray-300  dark:text-gray-700"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
                     >
-                      <div class="flex flex-col items-center h-32 w-32 justify-center -mt-20">
-                        <svg
-                          class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 20 16"
-                        >
-                          <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                          />
-                        </svg>
-                      </div>
-                    </label>
+                      <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
+                    </svg>
                   </div>
                 )}
               </CardHeader>
@@ -350,19 +298,28 @@ function OtherProfile() {
               </Typography>
               <div className="flex gap-6 ml-24 -mb-4">
                 <Typography className="mt-4 font-semibold text-lg text-blue-800">
-                  100 Followers
+                  {author.followers_count} Followers
                 </Typography>
                 <Typography className="mt-4  font-semibold text-lg text-blue-800">
-                  50 Following
+                  {author.followings_count} Following
                 </Typography>
               </div>
             </CardBody>
             <CardFooter className="flex justify-center gap-7">
-              <InstagramIcon onClick={handleOpen} className="cursor-pointer hover:text-blue-600" />
+              <InstagramIcon
+                onClick={handleOpen}
+                className="cursor-pointer hover:text-blue-600"
+              />
               <GitHubIcon />
               <LinkedInIcon />
               {/* <Cog6ToothIcon className="w-6 h-6" /> */}
-              {is_following && <CommentOutlinedIcon onClick={()=>navigate('/User/chat/')} fontSize="medium" className="hover:cursor-pointer  hover:text-blue-800 hover:rounded-lg"/>}
+              {is_following && (
+                <CommentOutlinedIcon
+                  onClick={() => navigate("/User/chat/")}
+                  fontSize="medium"
+                  className="hover:cursor-pointer  hover:text-blue-800 hover:rounded-lg"
+                />
+              )}
             </CardFooter>
           </Card>
 
@@ -407,7 +364,7 @@ function OtherProfile() {
                 ))}
               </TabsHeader>
               <TabsBody>
-                {data.map(({ value}) => (
+                {data.map(({ value }) => (
                   <TabPanel key={value} value={value}>
                     {value === "profile" && (
                       <>
@@ -421,12 +378,12 @@ function OtherProfile() {
                           </Typography>
 
                           <Typography
-                            className="text-md max-w-2xl ml-10 text-gray-600 container"
+                            className="text-md max-w-2xl h-[10rem] ml-10 text-gray-600 container"
                             textGradient
                           >
                             {author.bio}
                           </Typography>
-                          <div className="grid grid-cols-2">
+                          {/* <div className="grid grid-cols-2">
                             <div>
                               <Typography
                                 variant="h6"
@@ -456,7 +413,7 @@ function OtherProfile() {
                                 3 years experience in web development
                               </Typography>
                             </div>
-                          </div>
+                          </div> */}
                         </Card>
 
                         <Card className="w-[50rem] h-auto mt-5 bg-gray-100 shadow-2xl">
@@ -492,22 +449,20 @@ function OtherProfile() {
                           )}
                         </Card>
                       </>
-
                     )}
-                    {value === 'blogs' && (
+                    {value === "blogs" && (
                       <Bloglistinprofile userid={authorId} />
                     )}
                   </TabPanel>
                 ))}
               </TabsBody>
-              
             </Tabs>
           </div>
         </div>
       </div>
-      {showhidepage && <Bloghidepage user_id={userinfo.id} author_id={authorId} />}
-
-     
+      {showhidepage && (
+        <Bloghidepage user_id={userinfo.id} author_id={authorId} />
+      )}
     </div>
   );
 }

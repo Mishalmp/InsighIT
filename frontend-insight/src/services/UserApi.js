@@ -215,12 +215,19 @@ const PremiumList=()=>{
     }).catch((error)=>error.response)
 }
 
+const TrendingUsers=()=>{
+    return UserAxiosInstant.get(`accounts/trendingUsers/`,{
+        withCredentials:true
+    }).catch((error)=>error.response)
+}
+
+
 
 
 export {UserSignin,UserGoogleSignin,UserGoogleSignup,GetUserInfo,
     UpdateUser,CreateSkill,ListSkills,EditSkill,DeleteSkill,NotificationCreate,Checkoutsession,
     Notificationsbyuser,CreateSubscription,IsSubscriber,CreateFollowing,Is_follower,Unfollow,Followingslist,Followerslist,
     SubscriptionsList,Subscriberslist,UserWallet,PreviousChat,ChatUsersList,ClearNotificationbyuser,IssueReportView,
-    ListIssuesByUser,ListIssues,CreateReportIssue,PremiumList,Updateissue,ChangeUserPassword
+    ListIssuesByUser,ListIssues,CreateReportIssue,PremiumList,Updateissue,ChangeUserPassword,TrendingUsers
 
 }

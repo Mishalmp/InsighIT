@@ -11,6 +11,9 @@ urlpatterns=[
     path('activate/<uidb64>/<token>',activate, name='activate'),
     path('GoogleUser/',GoogleUser.as_view(), name='GoogleUser'),
     path('userinfo/<int:pk>/',SingleUserInfo.as_view(),name='userinfo'),
+    path('trendingUsers/',TrendingUsers.as_view(),name='TrendingUsers'),
+
+
     path('forgotpassword/',ForgotPassword.as_view(),name='forgotpassword'),
     path('reset-validate/<uidb64>/<token>',reset_validate,name='reset_validate'),
     path('reset-passsword/',ResetPassword.as_view(),name='reset-password'),

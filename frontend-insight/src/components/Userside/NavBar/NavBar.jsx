@@ -53,48 +53,48 @@ import TopicIcon from '@mui/icons-material/Topic';
 const profileMenuItems = [
   {
     label: "My Profile",
-    description: "Meet and learn about our dedication",
+    description: "Your Profile",
     icon: AccountCircleIcon,
   },
   {
     label: "Blogs",
-    description: "Meet and learn about our dedication",
+    description: "Read insightful articles, tips, and expert opinions.",
     icon: ArticleIcon,
   },
   {
     label: "Write Blog",
-    description: "Meet and learn about our dedication",
+    description: "Write Your Own thoughts in article",
     icon: NoteAltIcon,
   },
   {
     label: "My Blogs",
-    description: "Meet and learn about our dedication",
+    description: "Blogs Posted By You",
     icon: ArticleIcon,
   },
 
   {
     label: "Topics",
-    description: "Meet and learn about our dedication",
+    description: "Tech topics in InsighIT",
     icon: TopicIcon,
   },
   {
     label: "Communtiy",
-    description: "Meet and learn about our dedication",
+    description: "Community of InsighIT Users",
     icon: NewspaperIcon,
   },
   {
     label: "Notifications",
-    description: "Meet and learn about our dedication",
+    description: "your Unread Notifications",
     icon: NotificationsActiveIcon,
   },
   {
     label: "Saved",
-    description: "Meet and learn about our dedication",
+    description: "Your Saved Blogs",
     icon:BookmarksIcon, 
   },
   {
     label: "Chat",
-    description: "Meet and learn about our dedication",
+    description: "Chat with your connections",
     icon: MoveToInboxIcon,
   },
   {
@@ -104,12 +104,12 @@ const profileMenuItems = [
   },
   {
     label: "Help",
-    description: "Meet and learn about our dedication",
+    description: "Find the perfect solution for your needs.",
     icon: GlobeAmericasIcon,
   },
   {
     label: "Sign Out",
-    description: "Meet and learn about our dedication",
+    description: "Log out from the site",
     icon: PowerSettingsNewIcon,
   },
 ];

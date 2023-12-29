@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from django.db.models import Q
 from django.utils import timezone
 from .models import *
+from blogs.models import *
 from django.conf import settings
 from .tasks import send_mail_user_block,send_mail_user_premium
 from channels.layers import get_channel_layer
@@ -149,3 +150,34 @@ def send_notification_report(sender, instance, created, **kwargs):
                 'message': notification_text
             }
         )
+
+@receiver(post_save, sender=Blogs)
+def create_blog_notification(sender, instance, created, **kwargs):
+    if created:
+        admin_user = User.objects.filter(is_superuser = True).first()
+        Notifications.objects.create(
+            user=admin_user,
+            text=f'{instance.user.first_name} {instance.user.last_name} created a new blog: {instance.title}'
+        )
+        followers = Followings.objects.filter(following=instance.user)
+        for follower in followers:
+            Notifications.objects.create(
+                user=follower.follower,
+                text=f'{instance.user.first_name} {instance.user.last_name} created a new blog: {instance.title}'
+            )
+
+@receiver(post_save, sender=Community)
+def create_community_notification(sender, instance, created, **kwargs):
+    if created:
+        admin_user = User.objects.filter(is_superuser = True).first()
+        Notifications.objects.create(
+            user=admin_user,
+            text=f'{instance.user.first_name} {instance.user.last_name} created a new community post: {instance.text}'
+        )
+        followers = Followings.objects.filter(following=instance.user)
+        for follower in followers:
+            Notifications.objects.create(
+                user=follower.follower,
+                text=f'{instance.user.first_name} {instance.user.last_name} created a new community post: {instance.text}'
+            )
+            

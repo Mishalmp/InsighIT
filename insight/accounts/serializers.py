@@ -50,9 +50,19 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
     
 class UserInfoSerializer(serializers.ModelSerializer):
+    followers_count = serializers.SerializerMethodField()
+    followings_count = serializers.SerializerMethodField()
+
+    def get_followers_count(self, obj):
+        return obj.followers.count()
+
+    def get_followings_count(self, obj):
+        return obj.following.count()
+
     class Meta:
         model=User
-        fields='__all__'
+        # fields='__all__'
+        exclude = ['password','username','user_permissions','groups','is_staff']
         
 
 

@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../../../components/Userside/NavBar/NavBar";
-import Footer from "../../../components/Userside/footer/footer";
-
 import EditIcon from "@mui/icons-material/Edit";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
@@ -80,11 +77,16 @@ import ChangeName from "../../../components/Userside/edituser/ChangeName";
 import ChangePass from "../../../components/Userside/edituser/ChangePass";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { GetUserInfo } from "../../../services/UserApi";
 function UserProfile() {
   const navigate =useNavigate()
   const { userinfo } = useSelector((state) => state.user);
   const { premiumuserinfo } = useSelector((state) => state.user);
   const [skills, setSkills] = useState([]);
+  const [follows,setfollows]=useState({
+    followers:0,
+    followings:0
+  })
 
   const [skillopen, setskillOpen] = useState(false);
   const [skill, setSkill] = useState({ skill: "", rateofskills: 0 });
@@ -92,7 +94,7 @@ function UserProfile() {
 
   const [skilleditopen, setskilleditopen] = useState(false);
   const [selectedskillId, setselectedskillId] = useState(null);
-  //   console.log(userinfo, "ddddddddddd");
+  
   const fetchskills = async () => {
     try {
       const response = await ListSkills(userinfo.id);
@@ -101,9 +103,23 @@ function UserProfile() {
       console.error("error ! couldn't fectch skills ", error);
     }
   };
+
+  const fetchfollows=async()=>{
+    try {
+      const ress = await GetUserInfo(userinfo.id)
+      setfollows({
+        followers:ress.data.followers_count,
+        followings:ress.data.followings_count
+      })
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
   useEffect(() => {
     document.title="InsighIT | Profile";
     fetchskills();
+    fetchfollows()
   }, [userinfo]);
 
   const [loading, setLoading] = useState(false);
@@ -191,15 +207,18 @@ function UserProfile() {
 
   const handleSkillEditOpen = () => setskilleditopen(true);
 
+  const [prevskill ,setprevskill] = useState("")
   const handleskilledit = (selectedSkill) => {
     setSkill({ ...selectedSkill });
+    setprevskill(selectedSkill.skill)
     setselectedskillId(selectedSkill.id);
+    
     handleSkillEditOpen();
   };
 
   const handleskilleditsubmit = async () => {
 
-    const isSkillExists = skills.some(existingSkill => existingSkill.skill === skill.skill.trim());
+    const isSkillExists = skills.some(existingSkill => existingSkill.skill === skill.skill.trim() && prevskill !== existingSkill.skill );
 
     if (skill.skill.trim() && !isSkillExists && isNaN(skill.skill)){
       try {
@@ -515,10 +534,10 @@ function UserProfile() {
               </Typography>
               <div className="flex gap-6 ml-24 -mb-4">
                 <Typography className="mt-4 font-semibold text-lg text-blue-800">
-                  100 Followers
+                  {follows.followers} Followers
                 </Typography>
                 <Typography className="mt-4  font-semibold text-lg text-blue-800">
-                  50 Following
+                  {follows.followings} Following
                 </Typography>
               </div>
             </CardBody>
@@ -858,12 +877,12 @@ function UserProfile() {
                           </Typography>
 
                           <Typography
-                            className="text-md max-w-2xl ml-10 text-gray-600 container"
+                            className="text-md max-w-2xl h-[10rem] ml-10 text-gray-600 container"
                             textGradient
                           >
                             {userinfo.bio}
                           </Typography>
-                          <div className="grid grid-cols-2">
+                          {/* <div className="grid grid-cols-2">
                             <div>
                               <Typography
                                 variant="h6"
@@ -893,7 +912,7 @@ function UserProfile() {
                                 3 years experience in web development
                               </Typography>
                             </div>
-                          </div>
+                          </div> */}
                         </Card>
                         <Dialog
                           size="xs"

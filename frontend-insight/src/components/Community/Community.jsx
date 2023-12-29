@@ -140,11 +140,26 @@ function CommunityCard({
     <div className="relative m-20 mt-0 ml-32  flex w-full max-w-[40rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-2xl">
       <div className="m-5">
         <div className="relative flex  items-center gap-4 pt-0 pb-8 mx-0 mt-4 overflow-hidden text-gray-700 bg-white shadow-none rounded-xl bg-clip-border">
-          <img
-            src={author_info.profile_img}
-            alt={author}
-            className="relative inline-block h-[58px] w-[58px] !rounded-full  object-cover object-center"
-          />
+          {author_info.profile_img?(
+                      <img
+                      src={author_info.profile_img}
+                      alt={author}
+                      className="relative inline-block h-[58px] w-[58px] !rounded-full  object-cover object-center"
+                    />
+          ):(
+            <svg
+            className="relative inline-block h-[58px] w-[58px] !rounded-full  object-cover object-center text-gray-300"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
+          </svg>
+          )
+
+          }
+
           <div className="flex w-full flex-col gap-0.5">
             <div className="flex items-center justify-between">
               <h5

@@ -129,7 +129,7 @@ export default function HomePage() {
         </Carousel>
       </div>
       {/* <div className="w-full h-[1.5px] bg-[#039368]"></div> */}
-      <div className="max-w-[1480px] m-10 md:ml-[10rem]">
+      <div className="max-w-[1480px] m-10 md:ml-[7rem]">
         <div className="flex flex-col md:flex-row mt-4 md:mt-[5rem] gap-4">
           <WhatshotIcon fontSize="large" />
           <h2 className="text-2xl md:text-3xl  font-normal mt-2 md:mt-0">

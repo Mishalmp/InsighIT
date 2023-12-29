@@ -20,8 +20,10 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from decimal import Decimal
-from django.db.models import Sum,Q
+from django.db.models import Sum,Q,Count, F, Q
 from dashboard.serializers import *
+
+from django.db.models.functions import Coalesce
 
 stripe.api_key=settings.STRIPE_SECRET_KEY
 
@@ -73,8 +75,6 @@ class Notificationbyuser(ListAPIView):
 class ClearAllNotifications(APIView):
     serializer_class=NotificationSerializer
     lookup_field = 'user_id'
-    
-
     def get_queryset(self):
         user_id = self.kwargs.get('user_id')
 
@@ -88,7 +88,19 @@ class ClearAllNotifications(APIView):
         return Response({'message': 'All notifications cleared successfully.'}, status=status.HTTP_204_NO_CONTENT)
         
     
+class TrendingUsers(APIView):
+    def get(self, request, format=None):
+       
+        premium_users = User.objects.filter(is_premium=True).annotate(
+            followers_count=Coalesce(Count('followers'), 0),
+            followings_count=Coalesce(Count('following'), 0),
+        ).order_by('-followers_count')[:4]
 
+        # Serialize the data
+        serializer = UserInfoSerializer(premium_users, many=True)
+
+       
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
 
 

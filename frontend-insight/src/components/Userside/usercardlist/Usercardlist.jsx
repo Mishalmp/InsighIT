@@ -16,7 +16,7 @@ import Myslider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
-import { PremiumList } from "../../../services/UserApi";
+import { TrendingUsers } from "../../../services/UserApi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { DefaultSkeleton } from "../../Skeletons/Usercard";
@@ -29,7 +29,7 @@ function Usercardlist() {
 
   const fetchPremiumList = async () => {
     try {
-      const res = await PremiumList();
+      const res = await TrendingUsers();
       setPremiumlist(res.data);
     } catch (error) {
       console.error(error);
@@ -77,15 +77,28 @@ function Usercardlist() {
           }`}
           key={premium.id}
         >
-          <img
-            alt="candice"
-            src={`${
-              premium.profile_img
-                ? premium.profile_img
-                : "https://docs.material-tailwind.com/img/face-1.jpg"
-            }`}
-            className=" h-16 w-16 !rounded-full  object-cover object-center ml-5 mt-5"
-          />
+          {premium.profile_img?(
+                 <img
+                 alt="candice"
+                 src={
+                   premium.profile_img
+                    }
+                 className=" h-16 w-16 !rounded-full  object-cover object-center ml-5 mt-5"
+               />
+          ):(
+            <svg
+            className=" h-16 w-16 !rounded-full  object-cover object-center ml-5 mt-5 text-gray-300"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
+          </svg>
+          )
+
+          }
+     
           <div className="ml-5 mt-5">
             <Typography variant="h6" color="blue-gray" className="mb-2 ">
               {premium.first_name + " " + premium.last_name}{" "}
@@ -99,12 +112,20 @@ function Usercardlist() {
               {premium.tag_name}
             </p>
           </div>
-          <p className="text-sm min-h-[3.6rem] text-gray-500 ml-5 mr-5 mt-4 ">
+          <div className="flex gap-6 ml-5 -mb-4">
+                <Typography className="mt-2 font-semibold text-md text-blue-800">
+                  {premium.followers_count} Followers
+                </Typography>
+                <Typography className="mt-2  font-semibold text-md text-blue-800">
+                  {premium.followings_count} Following
+                </Typography>
+              </div>
+          <p className="text-sm min-h-[3.6rem] text-gray-500 ml-5 mr-5 mt-8 ">
             {premium.bio && premium.bio.substring(0, 70) + "..."}
           </p>
 
           <div
-            className="w-40 h-8 mt-10 bg-blue-800 ml-16 rounded-2xl cursor-pointer hover:bg-blue-700"
+            className="w-40 h-8 mt-2 bg-blue-800 ml-16 rounded-2xl cursor-pointer hover:bg-blue-700"
             onClick={() => {
               if (premium.id === userinfo.id) {
                 navigate("/User/userprofile");
@@ -120,7 +141,7 @@ function Usercardlist() {
         </Card>
       )))}
 
-      <Card className="w-[18rem] h-[20rem] m-2 bg-[#eff5fb] hover:bg-gray-100 cursor-pointer shadow-xl">
+<Card className="w-[18rem] h-[20rem] bg-[#eff5fb] m-2 hover:bg-gray-100 cursor-pointer shadow-xl">
         <img
           alt="candice"
           src="https://docs.material-tailwind.com/img/face-1.jpg"
@@ -139,11 +160,21 @@ function Usercardlist() {
             Web developer
           </p>
         </div>
-        <p className="text-sm min-h-[3.6rem] text-gray-500 ml-5 mr-5 mt-4 ">
+        <div className="flex gap-6 ml-5 -mb-4">
+                <Typography className="mt-2 font-semibold text-md text-blue-800">
+                  100 Followers
+                </Typography>
+                <Typography className="mt-2  font-semibold text-md text-blue-800">
+                  50 Following
+                </Typography>
+              </div>
+
+        <p className="text-sm min-h-[3.6rem] text-gray-500 ml-5 mr-5 mt-8 ">
           Web developer wormisdf asdnlasd asdljn zdfg dfgsdfg xdfgxdfg zff...
         </p>
+    
 
-        <div className="w-40 h-8 mt-10 bg-blue-800 ml-16 rounded-2xl cursor-pointer hover:bg-blue-700">
+        <div className="w-40 h-8 mt-2 bg-blue-800 ml-16 rounded-2xl cursor-pointer hover:bg-blue-700">
           <p className="text-white text-center mt-[0.2rem] text-lg">View Profile</p>
         </div>
       </Card>
@@ -167,11 +198,21 @@ function Usercardlist() {
             Web developer
           </p>
         </div>
-        <p className="text-sm min-h-[3.6rem] text-gray-500 ml-5 mr-5 mt-4 ">
+        <div className="flex gap-6 ml-5 -mb-4">
+                <Typography className="mt-2 font-semibold text-md text-blue-800">
+                  100 Followers
+                </Typography>
+                <Typography className="mt-2  font-semibold text-md text-blue-800">
+                  50 Following
+                </Typography>
+              </div>
+
+        <p className="text-sm min-h-[3.6rem] text-gray-500 ml-5 mr-5 mt-8 ">
           Web developer wormisdf asdnlasd asdljn zdfg dfgsdfg xdfgxdfg zff...
         </p>
+    
 
-        <div className="w-40 h-8 mt-10 bg-blue-800 ml-16 rounded-2xl cursor-pointer hover:bg-blue-700">
+        <div className="w-40 h-8 mt-2 bg-blue-800 ml-16 rounded-2xl cursor-pointer hover:bg-blue-700">
           <p className="text-white text-center mt-[0.2rem] text-lg">View Profile</p>
         </div>
       </Card>

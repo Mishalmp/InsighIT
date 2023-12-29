@@ -30,8 +30,6 @@ import Community from "../pages/User/Community/Community"
 import ReportIssue from "../pages/User/ReportIssue/ReportIssue"
 
 
-import Technews from "../components/Technews/Technews"
-
 import VideoCall from "../components/videocall/VideoCall"
 
 import About from "../pages/User/About"
@@ -68,8 +66,8 @@ function UserRoutes() {
             <Route path="myblogs/:userId" element={<MyBlogs/>}/>
             <Route path="saved/:userId" element={<SavedBlogs/>}/>
             <Route path="editblog/:blogId" element={<EditBlog/>}/>
-            {/* <Route path="dummy/" element={<VideoCall/>}/>     */}
-            {/* <Route path="dummy/" element={<Usercardlist/>}/>     */}
+            <Route path="dummy/" element={<VideoCall/>}/>    
+          
              <Route path="about/" element={<About/>}/>     
             <Route path="reportissue/" element={<ReportIssue/>}/>    
             <Route path="community/" element={<Community/>}/>    

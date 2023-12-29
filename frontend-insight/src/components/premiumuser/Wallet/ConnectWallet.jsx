@@ -30,7 +30,7 @@ function ConnectWallet({ openwallet, setOpenwallet }) {
     size="xxl"
       open={openwallet}
       handler={()=>setOpenwallet(false)}
-      className="pointer-events-none fixed inset-0 z-[999]  grid place-items-center bg-black bg-opacity-60 opacity-0 backdrop-blur-sm transition-opacity duration-300"
+      className="pointer-events-none fixed inset-0 z-[999]  grid place-items-center bg-black bg-opacity-30 opacity-0 backdrop-blur-sm transition-opacity duration-300"
     >
       <div
         class="relative bg-white m-4 rounded-lg shadow-2xl text-blue-gray-500 antialiased font-sans text-base font-light leading-relaxed w-1/4 min-w-[25%] max-w-[25%]"

@@ -16,6 +16,7 @@ class ArticleContentcreationByOpenai(APIView):
         try:
             # topic = self.request.query_params.get('topic')
             topic = self.request.data['topic']
+            print(topic,'toppicsssssssss')
 
             prompt = f"Create a essay about {topic}.Include Main Points. Limit with 100 words.Respond Only to valid tech Topics which is given.Do not respond to other topics.Response should be bullet point format."
 

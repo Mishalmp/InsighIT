@@ -16,10 +16,21 @@ import NotificationDrawer from '../../NotificationDrawer/NotificationDrawer';
 import { Loader } from '../../../components/Loading/Loader';
 
 import {
-
   ChevronDownIcon,
-  
+  Bars3Icon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import {
+  Bars4Icon,
+  GlobeAmericasIcon,
+  PhoneIcon,
+  RectangleGroupIcon,
+  SquaresPlusIcon,
+  SunIcon,
+  TagIcon,
+  UserGroupIcon,
 } from "@heroicons/react/24/solid";
+
 import {
 
   Typography,
@@ -42,31 +53,63 @@ import TopicIcon from '@mui/icons-material/Topic';
 const profileMenuItems = [
   {
     label: "My Profile",
+    description: "Meet and learn about our dedication",
     icon: AccountCircleIcon,
   },
   {
-    label: "My Blogs",
+    label: "Blogs",
+    description: "Meet and learn about our dedication",
     icon: ArticleIcon,
   },
-  // {
-  //   label: "Edit Profile",
-  //   icon: SettingsIcon,
-  // },
+  {
+    label: "Write Blog",
+    description: "Meet and learn about our dedication",
+    icon: NoteAltIcon,
+  },
+  {
+    label: "My Blogs",
+    description: "Meet and learn about our dedication",
+    icon: ArticleIcon,
+  },
 
   {
+    label: "Topics",
+    description: "Meet and learn about our dedication",
+    icon: TopicIcon,
+  },
+  {
+    label: "Communtiy",
+    description: "Meet and learn about our dedication",
+    icon: NewspaperIcon,
+  },
+  {
+    label: "Notifications",
+    description: "Meet and learn about our dedication",
+    icon: NotificationsActiveIcon,
+  },
+  {
     label: "Saved",
+    description: "Meet and learn about our dedication",
     icon:BookmarksIcon, 
   },
   {
     label: "Chat",
+    description: "Meet and learn about our dedication",
     icon: MoveToInboxIcon,
   },
   {
+    label: "About Us",
+    description: "Meet and learn about our dedication",
+    icon: UserGroupIcon,
+  },
+  {
     label: "Help",
-    icon: HelpIcon,
+    description: "Meet and learn about our dedication",
+    icon: GlobeAmericasIcon,
   },
   {
     label: "Sign Out",
+    description: "Meet and learn about our dedication",
     icon: PowerSettingsNewIcon,
   },
 ];
@@ -178,8 +221,11 @@ function NavBar() {
           />
         </Button>
       </MenuHandler>
-      <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon }, key) => {
+      <MenuList className="p-1 w-[50rem] mt-2 rounded-xl lg:block">
+      <ul className="grid grid-cols-3 gap-y-2 outline-none outline-0">
+
+      
+        {profileMenuItems.map(({ label,description, icon }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
 
           const handlemenuitemclick=()=>{
@@ -201,33 +247,59 @@ function NavBar() {
             }
             else if (label === 'Help'){
               navigate(`/User/reportissue/`)
+            }else if (label == 'About Us'){
+              navigate(`/User/about/`)
+            }
+            else if (label == 'Communtiy'){
+              navigate(`/User/community/`)
+            }
+            else if (label == 'Topics'){
+              navigate(`/User/topics`)
+            }
+            else if (label == 'Write Blog'){
+              navigate(`/User/usercreateblog`)
+            }
+            else if (label == 'Blogs'){
+              navigate(`/User/blogs`)
+            }
+            else if (label == 'Notifications'){
+              handleOpenNotificationDrawer()
             }
           }
           return (
-            <MenuItem
-              key={label}
-              onClick={handlemenuitemclick}
-              className={`flex items-center gap-2 rounded ${
-                isLastItem
+            <MenuItem  key={label} onClick={handlemenuitemclick} className={`flex items-center gap-3 rounded-lg ${
+                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                  : ""
-              }`}
-            >
+                   : ""
+               }`} >
+
+            <div className="flex items-center justify-center rounded-lg !bg-blue-gray-50 p-2 ">
+              {" "}
               {React.createElement(icon, {
-                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
                 strokeWidth: 2,
+                className: `h-6 text-gray-900 w-6 ${isLastItem ? "text-red-500" : ""}`,
               })}
+            </div>
+            <div>
               <Typography
-                as="span"
-                variant="small"
-                className="font-normal"
-                color={isLastItem ? "red" : "inherit"}
+                variant="h6"
+                color={isLastItem ? "red" : "blue-gray"}
+                className="flex items-center text-sm font-bold"
               >
                 {label}
               </Typography>
-            </MenuItem>
+              <Typography
+                variant="paragraph"
+                className="text-xs !font-medium"
+                color={isLastItem ? "red" : "blue-gray"}
+              >
+                {description}
+              </Typography>
+            </div>
+          </MenuItem>
           );
         })}
+        </ul>
       </MenuList>
       <NotificationDrawer isOpen={isNotificationDrawerOpen} userinfo={userinfo} onClose={() => setIsNotificationDrawerOpen(false)} />
     </Menu>
@@ -239,7 +311,7 @@ function NavBar() {
 </div>
 
 <div className={toggle?"absolute z-10 p-4 bg-white w-full px-8 md:hidden":"hidden"}>
-        <ul>
+        {/* <ul>
             <li className='p-5 flex hover:bg-gray-50'><NoteAltIcon fontSize='medium'/><span className='m-auto text-xl font-normal'>Write</span> </li>
             <li className='p-5 flex hover:bg-gray-100'><ArticleIcon fontSize='medium'/><span className='m-auto text-xl font-normal'>Docs</span></li>
             <li className='p-5 flex hover:bg-gray-100'><BookmarksIcon fontSize='medium'/><span className='m-auto text-xl font-normal'>Saved</span></li>
@@ -251,7 +323,7 @@ function NavBar() {
           
             </div>
 
-        </ul>
+        </ul> */}
     </div>
 
 <div className='w-full h-[1px] bg-gray-600'></div>

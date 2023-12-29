@@ -69,7 +69,7 @@ function LoginPage() {
       fetchUserInfo(decoded)
       if (decoded.role === 'user'){
         localStorage.setItem("token",token)
-        navigate("/user/Home/")
+        navigate("/User/Home/")
       }
     } catch(error){
       if (error.response){

@@ -12,3 +12,4 @@ const CreateContentai=(data)=>{
 export {
     CreateContentai
 }
+
